@@ -1172,6 +1172,207 @@ function App() {
                 </Card>
               </div>
             )}
+            )}
+
+            {/* Member Comparison */}
+            {comparisonType === 'member' && (
+              <Card>
+                <CardHeader>
+                  <CardTitle>Compare Family Members</CardTitle>
+                  <CardDescription>Compare spending and income between two family members for {months[selectedMonth - 1]} {selectedYear}</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {/* Member 1 */}
+                    <div className="space-y-4 p-4 border rounded-lg bg-blue-50">
+                      <h3 className="font-semibold text-blue-900">Member 1</h3>
+                      <div>
+                        <Label>Select Member</Label>
+                        <Select value={compareMember1} onValueChange={setCompareMember1}>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Choose a member" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {family?.members?.map((member) => (
+                              <SelectItem key={member.user_id} value={member.user_id}>
+                                {PROFILE_ICONS[member.profile_icon]} {member.name}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+
+                    {/* Member 2 */}
+                    <div className="space-y-4 p-4 border rounded-lg bg-green-50">
+                      <h3 className="font-semibold text-green-900">Member 2</h3>
+                      <div>
+                        <Label>Select Member</Label>
+                        <Select value={compareMember2} onValueChange={setCompareMember2}>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Choose a member" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {family?.members?.map((member) => (
+                              <SelectItem key={member.user_id} value={member.user_id}>
+                                {PROFILE_ICONS[member.profile_icon]} {member.name}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+                  </div>
+
+                  <Button onClick={loadMemberComparison} className="w-full mt-6">
+                    Compare Members
+                  </Button>
+                </CardContent>
+              </Card>
+            )}
+
+            {/* Member Comparison Results */}
+            {memberComparison && (
+              <div className="space-y-6">
+                <h3 className="text-2xl font-bold">Member Comparison Results</h3>
+                
+                {/* Get member names */}
+                {(() => {
+                  const member1 = family?.members?.find(m => m.user_id === compareMember1);
+                  const member2 = family?.members?.find(m => m.user_id === compareMember2);
+                  
+                  return (
+                    <>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        {/* Member 1 Summary */}
+                        <Card className="border-2 border-blue-200">
+                          <CardHeader className="bg-blue-50">
+                            <CardTitle className="flex items-center space-x-2">
+                              <span className="text-2xl">{PROFILE_ICONS[member1?.profile_icon]}</span>
+                              <span>{member1?.name}</span>
+                            </CardTitle>
+                          </CardHeader>
+                          <CardContent className="space-y-4 pt-6">
+                            <div className="flex justify-between items-center">
+                              <span className="text-sm text-gray-600">Income</span>
+                              <span className="text-lg font-bold text-green-600">
+                                ${memberComparison.member1.total_income?.toLocaleString()}
+                              </span>
+                            </div>
+                            <div className="flex justify-between items-center">
+                              <span className="text-sm text-gray-600">Expenses</span>
+                              <span className="text-lg font-bold text-red-600">
+                                ${memberComparison.member1.total_expense?.toLocaleString()}
+                              </span>
+                            </div>
+                            <div className="flex justify-between items-center pt-2 border-t">
+                              <span className="text-sm font-semibold">Net</span>
+                              <span className={`text-xl font-bold ${memberComparison.member1.profit >= 0 ? 'text-blue-600' : 'text-red-600'}`}>
+                                ${memberComparison.member1.profit?.toLocaleString()}
+                              </span>
+                            </div>
+                          </CardContent>
+                        </Card>
+
+                        {/* Member 2 Summary */}
+                        <Card className="border-2 border-green-200">
+                          <CardHeader className="bg-green-50">
+                            <CardTitle className="flex items-center space-x-2">
+                              <span className="text-2xl">{PROFILE_ICONS[member2?.profile_icon]}</span>
+                              <span>{member2?.name}</span>
+                            </CardTitle>
+                          </CardHeader>
+                          <CardContent className="space-y-4 pt-6">
+                            <div className="flex justify-between items-center">
+                              <span className="text-sm text-gray-600">Income</span>
+                              <span className="text-lg font-bold text-green-600">
+                                ${memberComparison.member2.total_income?.toLocaleString()}
+                              </span>
+                            </div>
+                            <div className="flex justify-between items-center">
+                              <span className="text-sm text-gray-600">Expenses</span>
+                              <span className="text-lg font-bold text-red-600">
+                                ${memberComparison.member2.total_expense?.toLocaleString()}
+                              </span>
+                            </div>
+                            <div className="flex justify-between items-center pt-2 border-t">
+                              <span className="text-sm font-semibold">Net</span>
+                              <span className={`text-xl font-bold ${memberComparison.member2.profit >= 0 ? 'text-blue-600' : 'text-red-600'}`}>
+                                ${memberComparison.member2.profit?.toLocaleString()}
+                              </span>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      </div>
+
+                      {/* Difference Analysis */}
+                      <Card className="border-2 border-purple-200">
+                        <CardHeader className="bg-purple-50">
+                          <CardTitle>Difference Analysis</CardTitle>
+                        </CardHeader>
+                        <CardContent className="space-y-4 pt-6">
+                          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div>
+                              <p className="text-sm text-gray-600 mb-1">Income Difference</p>
+                              <p className={`text-lg font-bold ${(memberComparison.member2.total_income - memberComparison.member1.total_income) >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                                {member2?.name} {(memberComparison.member2.total_income - memberComparison.member1.total_income) >= 0 ? 'earned' : 'earned less'}
+                                <br />
+                                ${Math.abs(memberComparison.member2.total_income - memberComparison.member1.total_income).toLocaleString()} more
+                              </p>
+                            </div>
+                            <div>
+                              <p className="text-sm text-gray-600 mb-1">Expense Difference</p>
+                              <p className={`text-lg font-bold ${(memberComparison.member2.total_expense - memberComparison.member1.total_expense) >= 0 ? 'text-red-600' : 'text-green-600'}`}>
+                                {member2?.name} spent
+                                <br />
+                                ${Math.abs(memberComparison.member2.total_expense - memberComparison.member1.total_expense).toLocaleString()} {(memberComparison.member2.total_expense - memberComparison.member1.total_expense) >= 0 ? 'more' : 'less'}
+                              </p>
+                            </div>
+                            <div>
+                              <p className="text-sm text-gray-600 mb-1">Net Difference</p>
+                              <p className={`text-lg font-bold ${(memberComparison.member2.profit - memberComparison.member1.profit) >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                                {(memberComparison.member2.profit - memberComparison.member1.profit) >= 0 ? member2?.name : member1?.name}
+                                <br />
+                                saved ${Math.abs(memberComparison.member2.profit - memberComparison.member1.profit).toLocaleString()} more
+                              </p>
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+
+                      {/* Line Graph Comparisons */}
+                      <Card>
+                        <CardContent className="pt-6">
+                          <LineChart 
+                            data1={memberComparison.member1.income_by_category}
+                            data2={memberComparison.member2.income_by_category}
+                            label1={member1?.name}
+                            label2={member2?.name}
+                            title="Income Comparison by Category"
+                            color1="#3B82F6"
+                            color2="#10B981"
+                          />
+                        </CardContent>
+                      </Card>
+
+                      <Card>
+                        <CardContent className="pt-6">
+                          <LineChart 
+                            data1={memberComparison.member1.expense_by_category}
+                            data2={memberComparison.member2.expense_by_category}
+                            label1={member1?.name}
+                            label2={member2?.name}
+                            title="Expense Comparison by Category"
+                            color1="#EF4444"
+                            color2="#F97316"
+                          />
+                        </CardContent>
+                      </Card>
+                    </>
+                  );
+                })()}
+              </div>
+            )}
           </div>
         )}
 
