@@ -12,6 +12,8 @@ import { TrendingUp, TrendingDown, DollarSign, Calendar, Plus, Trash2, Edit, Ale
 import PieChart from './components/PieChart';
 import LineChart from './components/LineChart';
 import { useAuth } from './AuthContext';
+import FamilyManagement from './components/FamilyManagement';
+import JoinFamily from './components/JoinFamily';
 
 // Profile icon mapping
 const PROFILE_ICONS = {
