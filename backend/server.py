@@ -94,29 +94,13 @@ async def get_categories(
 @api_router.delete("/categories/{category_id}")
 async def delete_category(
     category_id: str,
-    current_user: dict = Depends(get_current_user)
+    current_user: dict = Depends(get_admin_user)
 ):
-    """Delete a category. Admin can delete any, members can delete their own personal categories."""
+    """Delete a category. Admin only."""
     # Find the category
     category = await db.categories.find_one({"id": category_id})
     if not category:
         raise HTTPException(status_code=404, detail="Category not found")
-    
-    # Check permissions
-    # If is_shared is not set or True, treat as shared category
-    is_shared = category.get("is_shared", True)  # Default to True for old categories
-    
-    if is_shared and current_user["role"] != "admin":
-        raise HTTPException(
-            status_code=403,
-            detail="Only admin can delete shared categories"
-        )
-    
-    if not is_shared and category.get("created_by_user_id") != current_user["user_id"]:
-        raise HTTPException(
-            status_code=403,
-            detail="You can only delete your own personal categories"
-        )
     
     result = await db.categories.delete_one({"id": category_id})
     if result.deleted_count == 0:
