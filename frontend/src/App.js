@@ -225,15 +225,32 @@ function App() {
         ...categoryForm,
         budget_limit: categoryForm.budget_limit && categoryForm.type === 'expense' 
           ? parseFloat(categoryForm.budget_limit) 
-          : null
+          : null,
+        investment_target: categoryForm.investment_target && categoryForm.type === 'investment'
+          ? parseFloat(categoryForm.investment_target)
+          : null,
+        color: categoryForm.type === 'investment' ? '#F97316' : categoryForm.color
       };
       await categoryAPI.createCategory(data);
       setShowAddCategory(false);
-      setCategoryForm({ name: '', type: 'expense', color: '#3B82F6', budget_limit: '' });
+      setCategoryForm({ name: '', type: 'expense', color: '#3B82F6', budget_limit: '', investment_target: '', is_shared: true });
       fetchData();
     } catch (error) {
       console.error('Error adding category:', error);
       alert('Failed to add category');
+    }
+  };
+
+  const handleAddAccount = async (e) => {
+    e.preventDefault();
+    try {
+      await accountAPI.createAccount(accountForm);
+      setShowAddAccount(false);
+      setAccountForm({ name: '', type: 'bank', opening_balance: 0, owner_type: 'personal' });
+      fetchData();
+    } catch (error) {
+      console.error('Error adding account:', error);
+      alert('Failed to add account');
     }
   };
 
