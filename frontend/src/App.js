@@ -931,7 +931,7 @@ function App() {
         {activeTab === 'compare' && (
           <div className="space-y-6" data-testid="compare-view">
             {/* Comparison Type Selector */}
-            <div className="flex items-center space-x-2 bg-gray-100 rounded-lg p-1 w-fit">
+            <div className="flex items-center space-x-2 bg-gray-700 rounded-lg p-1 w-fit">
               <button
                 onClick={() => {
                   setComparisonType('period');
