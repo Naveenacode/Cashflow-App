@@ -103,12 +103,14 @@ class PeriodStats(BaseModel):
     end_date: str
     total_income: float
     total_expense: float
+    total_investment: float
     profit: float
     opening_balance: float
     closing_balance: float
     loan_amount: float
     income_by_category: dict
     expense_by_category: dict
+    investment_by_category: dict
 
 
 # ============= AUTH & USER MODELS =============
