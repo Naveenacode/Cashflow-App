@@ -46,7 +46,7 @@ const Profile = () => {
       rejected: 'destructive'
     };
     return (
-      <Badge variant={variants[user?.kyc_status]} data-testid=\"profile-kyc-badge\">
+      <Badge variant={variants[user?.kyc_status]} data-testid="profile-kyc-badge">
         {user?.kyc_status?.toUpperCase()}
       </Badge>
     );
