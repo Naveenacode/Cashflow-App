@@ -102,7 +102,7 @@
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
 
-user_problem_statement: "Test all new Investment and Account features for the Spend Tracker app"
+user_problem_statement: "Test Budget Alert Ticker Feature - Show only categories at 90%+ of budget limit"
 
 backend:
   - task: "User Authentication System"
