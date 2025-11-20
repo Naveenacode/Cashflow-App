@@ -9,6 +9,8 @@ class CategoryBase(BaseModel):
     type: Literal["income", "expense"]
     color: Optional[str] = "#3B82F6"
     budget_limit: Optional[float] = None  # Budget limit for expense categories
+    is_shared: bool = True  # True for shared categories, False for personal
+    created_by_user_id: Optional[str] = None  # For personal categories
 
 class CategoryCreate(CategoryBase):
     pass
@@ -16,6 +18,7 @@ class CategoryCreate(CategoryBase):
 class Category(CategoryBase):
     model_config = ConfigDict(extra="ignore")
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    family_id: Optional[str] = None  # Categories belong to a family
     created_at: datetime = Field(default_factory=datetime.utcnow)
 
 
