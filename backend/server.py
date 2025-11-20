@@ -327,17 +327,29 @@ async def get_previous_month_balance(month: int, year: int):
 
 
 @api_router.get("/dashboard/stats")
-async def get_dashboard_stats(month: Optional[int] = None, year: Optional[int] = None):
+async def get_dashboard_stats(
+    month: Optional[int] = None,
+    year: Optional[int] = None,
+    user_id: Optional[str] = None,  # Filter by specific user for "My Transactions" view
+    current_user: dict = Depends(get_current_user)
+):
+    """Get dashboard stats. Can filter by user_id for personal view."""
     if not month:
         month = datetime.now().month
     if not year:
         year = datetime.now().year
     
     # Get opening balance from previous month
-    opening_balance, inherited_loan = await get_previous_month_balance(month, year)
+    opening_balance, inherited_loan = await get_previous_month_balance(
+        month, year, current_user["family_id"], user_id
+    )
     
-    # Get all transactions
-    transactions = await db.transactions.find({}, {"_id": 0}).to_list(10000)
+    # Get all transactions for this family
+    query = {"family_id": current_user["family_id"]}
+    if user_id:
+        query["user_id"] = user_id
+    
+    transactions = await db.transactions.find(query, {"_id": 0}).to_list(10000)
     
     # Convert dates and filter
     filtered = []
