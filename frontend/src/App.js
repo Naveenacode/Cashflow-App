@@ -664,7 +664,7 @@ function App() {
             {/* Carryover Information */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {stats.opening_balance > 0 && (
-                <Card data-testid="opening-balance-card" className="border-green-200 bg-green-50">
+                <Card data-testid="opening-balance-card" className="border-green-200 bg-green-900 bg-opacity-20">
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-sm font-medium">Opening Balance</CardTitle>
                     <ArrowRight className="h-4 w-4 text-green-600" />
@@ -679,7 +679,7 @@ function App() {
               )}
 
               {stats.closing_balance > 0 && (
-                <Card data-testid="closing-balance-card" className="border-blue-200 bg-blue-50">
+                <Card data-testid="closing-balance-card" className="border-blue-200 bg-blue-900 bg-opacity-20">
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-sm font-medium">Closing Balance</CardTitle>
                     <TrendingUp className="h-4 w-4 text-blue-600" />
@@ -739,7 +739,7 @@ function App() {
                             className={`h-2 rounded-full transition-all ${
                               budget.status === 'exceeded' ? 'bg-red-600' :
                               budget.status === 'warning' ? 'bg-yellow-500' :
-                              'bg-green-500'
+                              'bg-green-900 bg-opacity-200'
                             }`}
                             style={{ width: `${Math.min(budget.percentage, 100)}%` }}
                           ></div>
@@ -1042,7 +1042,7 @@ function App() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {/* Period 1 Summary */}
                   <Card className="border-2 border-blue-200">
-                    <CardHeader className="bg-blue-50">
+                    <CardHeader className="bg-blue-900 bg-opacity-20">
                       <CardTitle>{months[compareMonth1 - 1]} {compareYear1}</CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-4 pt-6">
@@ -1069,7 +1069,7 @@ function App() {
 
                   {/* Period 2 Summary */}
                   <Card className="border-2 border-green-200">
-                    <CardHeader className="bg-green-50">
+                    <CardHeader className="bg-green-900 bg-opacity-20">
                       <CardTitle>{months[compareMonth2 - 1]} {compareYear2}</CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-4 pt-6">
@@ -1097,7 +1097,7 @@ function App() {
 
                 {/* Difference Card */}
                 <Card className="border-2 border-purple-200">
-                  <CardHeader className="bg-purple-50">
+                  <CardHeader className="bg-purple-900 bg-opacity-20">
                     <CardTitle>Difference Analysis</CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4 pt-6">
@@ -1186,8 +1186,8 @@ function App() {
                 <CardContent>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {/* Member 1 */}
-                    <div className="space-y-4 p-4 border rounded-lg bg-blue-50">
-                      <h3 className="font-semibold text-blue-900">Member 1</h3>
+                    <div className="space-y-4 p-4 border rounded-lg bg-blue-900 bg-opacity-20">
+                      <h3 className="font-semibold text-blue-300">Member 1</h3>
                       <div>
                         <Label>Select Member</Label>
                         <Select value={compareMember1} onValueChange={setCompareMember1}>
@@ -1206,8 +1206,8 @@ function App() {
                     </div>
 
                     {/* Member 2 */}
-                    <div className="space-y-4 p-4 border rounded-lg bg-green-50">
-                      <h3 className="font-semibold text-green-900">Member 2</h3>
+                    <div className="space-y-4 p-4 border rounded-lg bg-green-900 bg-opacity-20">
+                      <h3 className="font-semibold text-green-300">Member 2</h3>
                       <div>
                         <Label>Select Member</Label>
                         <Select value={compareMember2} onValueChange={setCompareMember2}>
@@ -1248,7 +1248,7 @@ function App() {
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         {/* Member 1 Summary */}
                         <Card className="border-2 border-blue-200">
-                          <CardHeader className="bg-blue-50">
+                          <CardHeader className="bg-blue-900 bg-opacity-20">
                             <CardTitle className="flex items-center space-x-2">
                               <span className="text-2xl">{PROFILE_ICONS[member1?.profile_icon]}</span>
                               <span>{member1?.name}</span>
@@ -1278,7 +1278,7 @@ function App() {
 
                         {/* Member 2 Summary */}
                         <Card className="border-2 border-green-200">
-                          <CardHeader className="bg-green-50">
+                          <CardHeader className="bg-green-900 bg-opacity-20">
                             <CardTitle className="flex items-center space-x-2">
                               <span className="text-2xl">{PROFILE_ICONS[member2?.profile_icon]}</span>
                               <span>{member2?.name}</span>
@@ -1309,7 +1309,7 @@ function App() {
 
                       {/* Difference Analysis */}
                       <Card className="border-2 border-purple-200">
-                        <CardHeader className="bg-purple-50">
+                        <CardHeader className="bg-purple-900 bg-opacity-20">
                           <CardTitle>Difference Analysis</CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-4 pt-6">
