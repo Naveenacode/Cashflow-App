@@ -782,7 +782,7 @@ function App() {
                     <div className="text-2xl font-bold text-green-600">
                       ₹{stats.opening_balance.toLocaleString()}
                     </div>
-                    <p className="text-xs text-green-700 mt-1">Profit from previous month</p>
+                    <p className="text-xs text-green-700 mt-1">Balance from previous month</p>
                   </CardContent>
                 </Card>
               )}
