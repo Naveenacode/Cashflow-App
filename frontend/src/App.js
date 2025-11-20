@@ -1338,10 +1338,10 @@ function App() {
                         </p>
                       </div>
                       <div>
-                        <p className="text-sm text-gray-600 mb-1">Profit Change</p>
-                        <p className={`text-lg font-bold ${(comparisonPeriod2.profit - comparisonPeriod1.profit) >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-                          {(comparisonPeriod2.profit - comparisonPeriod1.profit) >= 0 ? '+' : ''}
-                          ${(comparisonPeriod2.profit - comparisonPeriod1.profit).toLocaleString()}
+                        <p className="text-sm text-gray-600 mb-1">Balance Change</p>
+                        <p className={`text-lg font-bold ${(comparisonPeriod2.closing_balance - comparisonPeriod1.closing_balance) >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                          {(comparisonPeriod2.closing_balance - comparisonPeriod1.closing_balance) >= 0 ? '+' : ''}
+                          ₹{(comparisonPeriod2.closing_balance - comparisonPeriod1.closing_balance).toLocaleString()}
                         </p>
                       </div>
                     </div>
