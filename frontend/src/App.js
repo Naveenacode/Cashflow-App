@@ -159,6 +159,31 @@ function App() {
     return category ? category.name : 'Unknown';
   };
 
+  const handleCategoryClick = (categoryName) => {
+    setSelectedCategoryFilter(categoryName);
+    setShowFilteredTransactions(true);
+    setActiveTab('transactions');
+  };
+
+  const getFilteredTransactions = () => {
+    if (!selectedCategoryFilter) return transactions;
+    return transactions.filter(t => getCategoryName(t.category_id) === selectedCategoryFilter);
+  };
+
+  const loadComparison = async () => {
+    try {
+      const [period1, period2] = await Promise.all([
+        dashboardAPI.getStats({ month: compareMonth1, year: compareYear1 }),
+        dashboardAPI.getStats({ month: compareMonth2, year: compareYear2 })
+      ]);
+      setComparisonPeriod1(period1.data);
+      setComparisonPeriod2(period2.data);
+    } catch (error) {
+      console.error('Error loading comparison:', error);
+      alert('Failed to load comparison data');
+    }
+  };
+
   const months = [
     'January', 'February', 'March', 'April', 'May', 'June',
     'July', 'August', 'September', 'October', 'November', 'December'
