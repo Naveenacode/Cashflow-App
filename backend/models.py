@@ -8,6 +8,7 @@ class CategoryBase(BaseModel):
     name: str
     type: Literal["income", "expense"]
     color: Optional[str] = "#3B82F6"
+    budget_limit: Optional[float] = None  # Budget limit for expense categories
 
 class CategoryCreate(CategoryBase):
     pass
@@ -42,3 +43,13 @@ class MonthlyStats(BaseModel):
     profit: float
     income_by_category: dict
     expense_by_category: dict
+
+
+class BudgetStatus(BaseModel):
+    category_id: str
+    category_name: str
+    budget_limit: float
+    spent: float
+    remaining: float
+    percentage: float
+    status: Literal["safe", "warning", "exceeded"]
