@@ -85,6 +85,16 @@ class BudgetStatus(BaseModel):
     status: Literal["safe", "warning", "exceeded"]
 
 
+class InvestmentTargetStatus(BaseModel):
+    category_id: str
+    category_name: str
+    investment_target: float
+    invested: float
+    remaining: float
+    percentage: float
+    status: Literal["not_started", "in_progress", "achieved", "exceeded"]
+
+
 class MonthlyBalance(BaseModel):
     model_config = ConfigDict(extra="ignore")
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
