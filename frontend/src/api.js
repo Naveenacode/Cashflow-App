@@ -40,3 +40,14 @@ export const dashboardAPI = {
   getBudgetStatus: (params) => api.get('/budget/status', { params }),
   getPeriodStats: (params) => api.get('/dashboard/period-stats', { params }),
 };
+
+// Auth API
+export const authAPI = {
+  register: (data) => api.post('/auth/register', data),
+  login: (data) => api.post('/auth/login', data),
+  getMe: () => api.get('/auth/me'),
+  getFamily: () => api.get('/auth/family'),
+  joinFamily: (familyCode) => api.post('/auth/join-family', { family_code: familyCode }),
+  updateProfile: (data) => api.put('/auth/update-profile', data),
+  removeMember: (userId) => api.post('/auth/remove-member', { user_id: userId }),
+};
