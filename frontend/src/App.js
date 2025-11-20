@@ -50,10 +50,14 @@ function App() {
   const [viewMode, setViewMode] = useState('family'); // 'family' or 'personal'
   
   // Comparison states
+  const [comparisonType, setComparisonType] = useState('period'); // 'period' or 'member'
   const [compareMonth1, setCompareMonth1] = useState(new Date().getMonth() + 1);
   const [compareYear1, setCompareYear1] = useState(new Date().getFullYear());
   const [compareMonth2, setCompareMonth2] = useState(new Date().getMonth());
   const [compareYear2, setCompareYear2] = useState(new Date().getFullYear());
+  const [compareMember1, setCompareMember1] = useState('');
+  const [compareMember2, setCompareMember2] = useState('');
+  const [memberComparison, setMemberComparison] = useState(null);
 
   const [transactionForm, setTransactionForm] = useState({
     amount: '',
