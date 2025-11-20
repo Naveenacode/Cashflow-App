@@ -193,12 +193,18 @@ async def create_transaction(
 async def get_transactions(
     month: Optional[int] = None,
     year: Optional[int] = None,
-    type: Optional[str] = None
+    type: Optional[str] = None,
+    user_id: Optional[str] = None,  # Filter by user (for "My Transactions" view)
+    current_user: dict = Depends(get_current_user)
 ):
-    query = {}
+    """Get transactions for current family. Can filter by user_id for personal view."""
+    query = {"family_id": current_user["family_id"]}
     
     if type:
         query["type"] = type
+    
+    if user_id:
+        query["user_id"] = user_id
     
     transactions = await db.transactions.find(query, {"_id": 0}).to_list(10000)
     
