@@ -32,9 +32,9 @@ export default function PendingApproval() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-50 to-orange-100 flex items-center justify-center p-4">
-      <Card className="w-full max-w-md shadow-xl border-2 border-amber-200">
-        <CardHeader className="text-center bg-amber-50">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 flex items-center justify-center p-4">
+      <Card className="w-full max-w-md shadow-xl border-2 border-amber-600 bg-gray-800">
+        <CardHeader className="text-center bg-gray-700">
           <div className="flex justify-center mb-4">
             <div className="bg-amber-600 p-3 rounded-full animate-pulse">
               <Clock className="h-8 w-8 text-white" />
