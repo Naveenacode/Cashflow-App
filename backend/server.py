@@ -476,7 +476,7 @@ async def get_dashboard_stats(
     
     # Add carryover as income category
     if opening_balance > 0:
-        income_by_category['Previous Month Profit'] = opening_balance
+        income_by_category['Previous Month Balance'] = opening_balance
     
     # Save/update monthly balance
     balance_query = {
