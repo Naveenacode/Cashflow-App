@@ -401,7 +401,7 @@ function App() {
               {periodType === 'monthly' && (
                 <>
                   <div className="flex items-center space-x-2">
-                    <label className="text-sm font-medium text-gray-700">Month:</label>
+                    <label className="text-sm font-medium text-gray-300">Month:</label>
                     <select
                       value={selectedMonth}
                       onChange={(e) => setSelectedMonth(parseInt(e.target.value))}
@@ -414,7 +414,7 @@ function App() {
                     </select>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <label className="text-sm font-medium text-gray-700">Year:</label>
+                    <label className="text-sm font-medium text-gray-300">Year:</label>
                     <select
                       value={selectedYear}
                       onChange={(e) => setSelectedYear(parseInt(e.target.value))}
@@ -432,7 +432,7 @@ function App() {
               {periodType === 'quarterly' && (
                 <>
                   <div className="flex items-center space-x-2">
-                    <label className="text-sm font-medium text-gray-700">Quarter:</label>
+                    <label className="text-sm font-medium text-gray-300">Quarter:</label>
                     <select
                       value={selectedQuarter}
                       onChange={(e) => setSelectedQuarter(parseInt(e.target.value))}
@@ -446,7 +446,7 @@ function App() {
                     </select>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <label className="text-sm font-medium text-gray-700">Year:</label>
+                    <label className="text-sm font-medium text-gray-300">Year:</label>
                     <select
                       value={selectedYear}
                       onChange={(e) => setSelectedYear(parseInt(e.target.value))}
@@ -463,7 +463,7 @@ function App() {
               {periodType === 'half-yearly' && (
                 <>
                   <div className="flex items-center space-x-2">
-                    <label className="text-sm font-medium text-gray-700">Half:</label>
+                    <label className="text-sm font-medium text-gray-300">Half:</label>
                     <select
                       value={selectedHalf}
                       onChange={(e) => setSelectedHalf(parseInt(e.target.value))}
@@ -475,7 +475,7 @@ function App() {
                     </select>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <label className="text-sm font-medium text-gray-700">Year:</label>
+                    <label className="text-sm font-medium text-gray-300">Year:</label>
                     <select
                       value={selectedYear}
                       onChange={(e) => setSelectedYear(parseInt(e.target.value))}
@@ -491,7 +491,7 @@ function App() {
 
               {periodType === 'annual' && (
                 <div className="flex items-center space-x-2">
-                  <label className="text-sm font-medium text-gray-700">Year:</label>
+                  <label className="text-sm font-medium text-gray-300">Year:</label>
                   <select
                     value={selectedYear}
                     onChange={(e) => setSelectedYear(parseInt(e.target.value))}
