@@ -525,6 +525,13 @@ function App() {
             >
               Compare
             </button>
+            <button
+              onClick={() => setActiveTab('family')}
+              className={`px-4 py-2 rounded-md ${activeTab === 'family' ? 'bg-blue-600 text-white' : 'bg-gray-200'}`}
+              data-testid="family-tab"
+            >
+              Family
+            </button>
           </div>
         </div>
       </div>
