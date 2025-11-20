@@ -1423,7 +1423,7 @@ function App() {
         {activeTab === 'categories' && (
           <div className="space-y-6" data-testid="categories-view">
             <div className="flex justify-between items-center">
-              <h2 className="text-2xl font-bold">Categories</h2>
+              <h2 className="text-2xl font-bold text-gray-900">Categories</h2>
               <Button onClick={() => setShowAddCategory(true)} data-testid="add-category-btn">
                 <Plus className="h-4 w-4 mr-2" />
                 Add Category
