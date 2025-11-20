@@ -281,6 +281,34 @@ function App() {
         {/* Dashboard Tab */}
         {activeTab === 'dashboard' && stats && (
           <div className="space-y-6" data-testid="dashboard-view">
+            {/* PIE CHARTS FIRST - HOME VIEW */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <Card data-testid="income-pie-chart" className="border-2 border-green-200">
+                <CardContent className="pt-6">
+                  <PieChart 
+                    data={stats.income_by_category} 
+                    title="Income by Category"
+                    colors={['#10B981', '#3B82F6', '#8B5CF6', '#06B6D4', '#84CC16']}
+                    onSliceClick={handleCategoryClick}
+                  />
+                  <p className="text-center text-xs text-gray-500 mt-4">Click on a category to view transactions</p>
+                </CardContent>
+              </Card>
+
+              <Card data-testid="expense-pie-chart" className="border-2 border-red-200">
+                <CardContent className="pt-6">
+                  <PieChart 
+                    data={stats.expense_by_category} 
+                    title="Expenses by Category"
+                    colors={['#EF4444', '#F59E0B', '#EC4899', '#F97316', '#6B7280']}
+                    onSliceClick={handleCategoryClick}
+                  />
+                  <p className="text-center text-xs text-gray-500 mt-4">Click on a category to view transactions</p>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* SUMMARY STATS */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <Card data-testid="income-card">
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
