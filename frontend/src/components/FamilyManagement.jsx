@@ -96,7 +96,7 @@ export default function FamilyManagement() {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold">Family Management</h2>
+        <h2 className="text-2xl font-bold text-gray-900">Family Management</h2>
       </div>
 
       {/* Family Info Card */}
