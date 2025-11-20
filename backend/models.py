@@ -35,6 +35,10 @@ class TransactionCreate(TransactionBase):
 class Transaction(TransactionBase):
     model_config = ConfigDict(extra="ignore")
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    family_id: Optional[str] = None  # Transactions belong to a family
+    user_id: Optional[str] = None  # Track which user created the transaction
+    user_name: Optional[str] = None  # For display purposes
+    user_icon: Optional[str] = None  # For display purposes
     created_at: datetime = Field(default_factory=datetime.utcnow)
 
 
