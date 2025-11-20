@@ -507,7 +507,7 @@ function App() {
               {periodType === 'custom' && (
                 <>
                   <div className="flex items-center space-x-2">
-                    <label className="text-sm font-medium text-gray-700">From:</label>
+                    <label className="text-sm font-medium text-gray-300">From:</label>
                     <input
                       type="date"
                       value={customStartDate}
@@ -517,7 +517,7 @@ function App() {
                     />
                   </div>
                   <div className="flex items-center space-x-2">
-                    <label className="text-sm font-medium text-gray-700">To:</label>
+                    <label className="text-sm font-medium text-gray-300">To:</label>
                     <input
                       type="date"
                       value={customEndDate}
