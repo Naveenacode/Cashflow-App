@@ -46,21 +46,28 @@ def decode_token(token: str) -> dict:
 
 
 async def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(security)) -> dict:
+    """Get current user from JWT token"""
     token = credentials.credentials
     payload = decode_token(token)
     user_id = payload.get("sub")
+    family_id = payload.get("family_id")
     if user_id is None:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Could not validate credentials",
         )
-    return {"user_id": user_id, "role": payload.get("role")}
+    return {
+        "user_id": user_id, 
+        "family_id": family_id,
+        "role": payload.get("role")
+    }
 
 
 async def get_admin_user(current_user: dict = Depends(get_current_user)) -> dict:
+    """Verify user has admin role"""
     if current_user.get("role") != "admin":
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
-            detail="Not enough permissions"
+            detail="Not enough permissions. Admin access required."
         )
     return current_user
