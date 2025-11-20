@@ -57,15 +57,69 @@ function App() {
 
   useEffect(() => {
     fetchData();
-  }, [selectedMonth, selectedYear]);
+  }, [selectedMonth, selectedYear, periodType, selectedQuarter, selectedHalf, customStartDate, customEndDate]);
 
   const fetchData = async () => {
     try {
+      let params = {};
+      let statsParams = {};
+      
+      if (periodType === 'monthly') {
+        params = { month: selectedMonth, year: selectedYear };
+        statsParams = { month: selectedMonth, year: selectedYear };
+      } else if (periodType === 'quarterly' || periodType === 'half-yearly' || periodType === 'annual' || periodType === 'custom') {
+        // For non-monthly periods, get period stats
+        let periodParams = { period_type: periodType };
+        if (periodType === 'quarterly') {
+          periodParams.quarter = selectedQuarter;
+          periodParams.year = selectedYear;
+        } else if (periodType === 'half-yearly') {
+          periodParams.half = selectedHalf;
+          periodParams.year = selectedYear;
+        } else if (periodType === 'annual') {
+          periodParams.year = selectedYear;
+        } else if (periodType === 'custom') {
+          if (customStartDate && customEndDate) {
+            periodParams.start_date = customStartDate;
+            periodParams.end_date = customEndDate;
+          } else {
+            // Default to current month if custom dates not set
+            params = { month: selectedMonth, year: selectedYear };
+            statsParams = { month: selectedMonth, year: selectedYear };
+          }
+        }
+        
+        if (periodType !== 'custom' || (customStartDate && customEndDate)) {
+          const periodStatsRes = await dashboardAPI.getPeriodStats(periodParams);
+          setStats({
+            ...periodStatsRes.data,
+            total_income_with_carryover: periodStatsRes.data.total_income,
+            opening_balance: 0,
+            closing_balance: periodStatsRes.data.profit > 0 ? periodStatsRes.data.profit : 0,
+            loan_amount: 0,
+            inherited_loan: 0,
+            has_deficit: periodStatsRes.data.profit < 0
+          });
+          
+          // Get transactions for display
+          const transactionsRes = await transactionAPI.getTransactions(params);
+          setTransactions(transactionsRes.data);
+          
+          const categoriesRes = await categoryAPI.getCategories();
+          setCategories(categoriesRes.data);
+          
+          setBudgetStatuses([]);
+          setLoading(false);
+          return;
+        }
+      }
+      
+      // Standard monthly fetch
       const [categoriesRes, transactionsRes, statsRes, budgetRes] = await Promise.all([
         categoryAPI.getCategories(),
-        transactionAPI.getTransactions({ month: selectedMonth, year: selectedYear }),
-        dashboardAPI.getStats({ month: selectedMonth, year: selectedYear }),
-        dashboardAPI.getBudgetStatus({ month: selectedMonth, year: selectedYear })
+        transactionAPI.getTransactions(params),
+        dashboardAPI.getStats(statsParams),
+        dashboardAPI.getBudgetStatus(statsParams)
       ]);
 
       setCategories(categoriesRes.data);
