@@ -158,17 +158,21 @@ function App() {
       }
       
       // Standard monthly fetch
-      const [categoriesRes, transactionsRes, statsRes, budgetRes] = await Promise.all([
+      const [categoriesRes, transactionsRes, statsRes, budgetRes, accountsRes, investmentRes] = await Promise.all([
         categoryAPI.getCategories(),
         transactionAPI.getTransactions(params),
         dashboardAPI.getStats(statsParams),
-        dashboardAPI.getBudgetStatus(statsParams)
+        dashboardAPI.getBudgetStatus(statsParams),
+        accountAPI.getAccounts(),
+        dashboardAPI.getInvestmentTargets(statsParams)
       ]);
 
       setCategories(categoriesRes.data);
       setTransactions(transactionsRes.data);
       setStats(statsRes.data);
       setBudgetStatuses(budgetRes.data);
+      setAccounts(accountsRes.data);
+      setInvestmentTargets(investmentRes.data);
     } catch (error) {
       console.error('Error fetching data:', error);
     } finally {
