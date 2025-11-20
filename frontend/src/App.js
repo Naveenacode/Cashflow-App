@@ -72,16 +72,22 @@ function App() {
 
   useEffect(() => {
     fetchData();
-  }, [selectedMonth, selectedYear, periodType, selectedQuarter, selectedHalf, customStartDate, customEndDate]);
+  }, [selectedMonth, selectedYear, periodType, selectedQuarter, selectedHalf, customStartDate, customEndDate, viewMode]);
 
   const fetchData = async () => {
     try {
       let params = {};
       let statsParams = {};
       
+      // Add user_id filter for personal view
+      if (viewMode === 'personal' && user) {
+        params.user_id = user.id;
+        statsParams.user_id = user.id;
+      }
+      
       if (periodType === 'monthly') {
-        params = { month: selectedMonth, year: selectedYear };
-        statsParams = { month: selectedMonth, year: selectedYear };
+        params = { ...params, month: selectedMonth, year: selectedYear };
+        statsParams = { ...statsParams, month: selectedMonth, year: selectedYear };
       } else if (periodType === 'quarterly' || periodType === 'half-yearly' || periodType === 'annual' || periodType === 'custom') {
         // For non-monthly periods, get period stats
         let periodParams = { period_type: periodType };
