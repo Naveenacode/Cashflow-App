@@ -32,6 +32,9 @@ app = FastAPI(title="Spend Tracker")
 # Create API router
 api_router = APIRouter(prefix="/api")
 
+# Include auth router
+app.include_router(auth_router)
+
 
 # ============= CATEGORY ENDPOINTS =============
 @api_router.post("/categories", response_model=Category)
