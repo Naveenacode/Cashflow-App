@@ -402,14 +402,24 @@ async def get_dashboard_stats(
         income_by_category['Previous Month Profit'] = opening_balance
     
     # Save/update monthly balance
+    balance_query = {
+        "month": month,
+        "year": year,
+        "family_id": current_user["family_id"]
+    }
+    if user_id:
+        balance_query["user_id"] = user_id
+    
     await db.monthly_balances.update_one(
-        {"month": month, "year": year},
+        balance_query,
         {
             "$set": {
                 "opening_balance": opening_balance,
                 "closing_balance": closing_balance,
                 "has_loan": loan_amount > 0,
                 "loan_amount": loan_amount,
+                "family_id": current_user["family_id"],
+                "user_id": user_id,
                 "created_at": datetime.utcnow().isoformat()
             }
         },
