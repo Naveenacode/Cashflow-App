@@ -1277,7 +1277,7 @@ function App() {
             {/* Member Comparison Results */}
             {memberComparison && (
               <div className="space-y-6">
-                <h3 className="text-2xl font-bold">Member Comparison Results</h3>
+                <h3 className="text-2xl font-bold text-gray-900">Member Comparison Results</h3>
                 
                 {/* Get member names */}
                 {(() => {
