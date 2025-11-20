@@ -187,6 +187,23 @@ function App() {
   const handleAddTransaction = async (e) => {
     e.preventDefault();
     try {
+      // Validate required fields
+      if (transactionForm.type === 'transfer') {
+        if (!transactionForm.account_id || !transactionForm.to_account_id) {
+          alert('Please select both From and To accounts for transfer');
+          return;
+        }
+      } else {
+        if (!transactionForm.category_id) {
+          alert('Please select a category');
+          return;
+        }
+        if (!transactionForm.account_id) {
+          alert('Please select an account');
+          return;
+        }
+      }
+
       const data = {
         ...transactionForm,
         amount: parseFloat(transactionForm.amount),
@@ -198,7 +215,7 @@ function App() {
       if (response.data.budget_warning) {
         const warning = response.data.budget_warning;
         const message = warning.exceeded 
-          ? `⚠️ BUDGET EXCEEDED!\n\n${warning.message}\n\nYou are $${(warning.new_total - warning.budget_limit).toFixed(2)} over budget!`
+          ? `⚠️ BUDGET EXCEEDED!\n\n${warning.message}\n\nYou are ₹${(warning.new_total - warning.budget_limit).toFixed(2)} over budget!`
           : `⚠️ BUDGET LIMIT REACHED!\n\n${warning.message}`;
         alert(message);
       }
@@ -209,12 +226,14 @@ function App() {
         category_id: '',
         type: 'expense',
         description: '',
-        date: new Date().toISOString().split('T')[0]
+        date: new Date().toISOString().split('T')[0],
+        account_id: '',
+        to_account_id: ''
       });
       fetchData();
     } catch (error) {
       console.error('Error adding transaction:', error);
-      alert('Failed to add transaction');
+      alert(error.response?.data?.detail || 'Failed to add transaction');
     }
   };
 
