@@ -394,17 +394,21 @@ function App() {
               )}
             </div>
 
-            {/* Budget Status */}
+            {/* Budget Status - CLICKABLE */}
             {budgetStatuses.length > 0 && (
               <Card data-testid="budget-status-card">
                 <CardHeader>
                   <CardTitle>Budget Status</CardTitle>
-                  <CardDescription>Track your spending limits</CardDescription>
+                  <CardDescription>Track your spending limits - Click to view transactions</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
                     {budgetStatuses.map(budget => (
-                      <div key={budget.category_id} className="space-y-2">
+                      <div 
+                        key={budget.category_id} 
+                        className="space-y-2 p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors border"
+                        onClick={() => handleCategoryClick(budget.category_name)}
+                      >
                         <div className="flex items-center justify-between">
                           <span className="text-sm font-medium">{budget.category_name}</span>
                           <span className={`text-sm font-semibold ${
@@ -441,28 +445,6 @@ function App() {
                 </CardContent>
               </Card>
             )}
-
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <Card data-testid="income-pie-chart">
-                <CardContent className="pt-6">
-                  <PieChart 
-                    data={stats.income_by_category} 
-                    title="Income by Category"
-                    colors={['#10B981', '#3B82F6', '#8B5CF6', '#06B6D4', '#84CC16']}
-                  />
-                </CardContent>
-              </Card>
-
-              <Card data-testid="expense-pie-chart">
-                <CardContent className="pt-6">
-                  <PieChart 
-                    data={stats.expense_by_category} 
-                    title="Expenses by Category"
-                    colors={['#EF4444', '#F59E0B', '#EC4899', '#F97316', '#6B7280']}
-                  />
-                </CardContent>
-              </Card>
-            </div>
           </div>
         )}
 
