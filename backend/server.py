@@ -552,9 +552,11 @@ async def get_period_stats(
     month: Optional[int] = None,
     year: Optional[int] = None,
     quarter: Optional[int] = None,
-    half: Optional[int] = None
+    half: Optional[int] = None,
+    user_id: Optional[str] = None,  # Filter by user
+    current_user: dict = Depends(get_current_user)
 ):
-    """Get statistics for different time periods"""
+    """Get statistics for different time periods. Can filter by user."""
     
     if period_type == "custom" and start_date and end_date:
         start = datetime.fromisoformat(start_date)
