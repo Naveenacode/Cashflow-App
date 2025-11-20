@@ -1,4 +1,4 @@
-from fastapi import FastAPI, APIRouter, HTTPException
+from fastapi import FastAPI, APIRouter, HTTPException, Depends
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
@@ -14,6 +14,8 @@ from models import (
     Transaction, TransactionCreate,
     MonthlyStats, BudgetStatus, MonthlyBalance, PeriodStats
 )
+from auth import get_current_user, get_admin_user
+from routes_auth import router as auth_router
 
 
 ROOT_DIR = Path(__file__).parent
