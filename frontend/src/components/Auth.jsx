@@ -81,18 +81,18 @@ export default function Auth() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 flex items-center justify-center p-4">
-      <Card className="w-full max-w-md shadow-xl bg-gray-800 border-gray-700">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 flex items-center justify-center p-4">
+      <Card className="w-full max-w-md shadow-xl bg-white border-gray-200">
         <CardHeader className="space-y-1 text-center">
           <div className="flex justify-center mb-4">
             <div className="bg-blue-600 p-3 rounded-full">
               <Users className="h-8 w-8 text-white" />
             </div>
           </div>
-          <CardTitle className="text-2xl font-bold text-white">
+          <CardTitle className="text-2xl font-bold text-gray-900">
             {isLogin ? 'Welcome Back' : 'Create Your Family Account'}
           </CardTitle>
-          <CardDescription className="text-gray-400">
+          <CardDescription className="text-gray-600">
             {isLogin 
               ? 'Sign in to manage your family finances' 
               : 'Start tracking expenses with your family'}
