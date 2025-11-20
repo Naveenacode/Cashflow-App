@@ -961,13 +961,15 @@ function App() {
                     <div className="grid grid-cols-2 gap-4">
                       <div>
                         <Label>Type</Label>
-                        <Select value={transactionForm.type} onValueChange={(value) => setTransactionForm({...transactionForm, type: value})}>
+                        <Select value={transactionForm.type} onValueChange={(value) => setTransactionForm({...transactionForm, type: value, category_id: ''})}>
                           <SelectTrigger data-testid="transaction-type-select">
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent>
                             <SelectItem value="income">Income</SelectItem>
                             <SelectItem value="expense">Expense</SelectItem>
+                            <SelectItem value="investment">Investment</SelectItem>
+                            <SelectItem value="transfer">Transfer</SelectItem>
                           </SelectContent>
                         </Select>
                       </div>
