@@ -676,6 +676,67 @@ function App() {
               </h2>
             </div>
 
+            {/* Budget Alert Ticker - Show only categories at 90% or above */}
+            {budgetStatuses.filter(b => b.percentage >= 90).length > 0 && (
+              <div className="mb-6">
+                <Card className="border-l-4 border-red-500 bg-red-50">
+                  <CardContent className="py-4">
+                    <div className="flex items-start space-x-3">
+                      <div className="flex-shrink-0">
+                        <svg className="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                        </svg>
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="text-sm font-semibold text-red-900 mb-2">
+                          ⚠️ Budget Alert: {budgetStatuses.filter(b => b.percentage >= 90).length} {budgetStatuses.filter(b => b.percentage >= 90).length === 1 ? 'Category' : 'Categories'} Need Attention
+                        </h3>
+                        <div className="space-y-2">
+                          {budgetStatuses.filter(b => b.percentage >= 90).map(budget => (
+                            <div 
+                              key={budget.category_id}
+                              onClick={() => handleCategoryClick(budget.category_name)}
+                              className="flex items-center justify-between p-2 bg-white rounded border border-red-200 hover:bg-red-50 cursor-pointer transition-colors"
+                            >
+                              <div className="flex items-center space-x-3 flex-1">
+                                <span className="font-medium text-gray-900">{budget.category_name}</span>
+                                <div className="flex-1 max-w-xs">
+                                  <div className="relative w-full bg-gray-200 rounded-full h-2">
+                                    <div 
+                                      className={`h-2 rounded-full ${budget.status === 'exceeded' ? 'bg-red-600' : 'bg-yellow-500'}`}
+                                      style={{ width: `${Math.min(budget.percentage, 100)}%` }}
+                                    ></div>
+                                  </div>
+                                </div>
+                                <span className="text-sm font-semibold text-gray-700">
+                                  {budget.percentage.toFixed(0)}%
+                                </span>
+                              </div>
+                              <div className="ml-4 text-right">
+                                {budget.status === 'exceeded' ? (
+                                  <div className="text-red-700 font-bold text-sm">
+                                    ⚠️ Over by ₹{Math.abs(budget.remaining).toLocaleString()}
+                                  </div>
+                                ) : (
+                                  <div className="text-yellow-700 font-bold text-sm">
+                                    ⚠️ Only ₹{budget.remaining.toLocaleString()} left
+                                  </div>
+                                )}
+                                <div className="text-xs text-gray-600">
+                                  ₹{budget.spent.toLocaleString()} / ₹{budget.budget_limit.toLocaleString()}
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                        <p className="text-xs text-red-700 mt-2">Click on a category to view transactions</p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            )}
+
             {/* PIE CHARTS FIRST - HOME VIEW */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               <Card data-testid="income-pie-chart" className="border-2 border-green-600">
