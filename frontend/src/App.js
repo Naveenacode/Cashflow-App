@@ -844,7 +844,7 @@ function App() {
                             className={`h-2 rounded-full transition-all ${
                               budget.status === 'exceeded' ? 'bg-red-600' :
                               budget.status === 'warning' ? 'bg-yellow-500' :
-                              'bg-green-900 bg-opacity-200'
+                              'bg-green-500'
                             }`}
                             style={{ width: `${Math.min(budget.percentage, 100)}%` }}
                           ></div>
@@ -857,6 +857,60 @@ function App() {
                             <span className="text-yellow-600 font-semibold">⚠️ ₹{budget.remaining.toLocaleString()} remaining</span>
                           ) : (
                             <span className="text-green-600">₹{budget.remaining.toLocaleString()} remaining</span>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
+            {/* Investment Targets */}
+            {investmentTargets.length > 0 && (
+              <Card data-testid="investment-targets-card">
+                <CardHeader>
+                  <CardTitle>Investment Targets</CardTitle>
+                  <CardDescription>Track your investment goals - Click to view transactions</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    {investmentTargets.map(target => (
+                      <div 
+                        key={target.category_id} 
+                        className="space-y-2 p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors border border-orange-200"
+                        onClick={() => handleCategoryClick(target.category_name)}
+                      >
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm font-medium">{target.category_name}</span>
+                          <span className={`text-sm font-semibold ${
+                            target.status === 'achieved' || target.status === 'exceeded' ? 'text-green-600' :
+                            target.status === 'in_progress' ? 'text-orange-600' :
+                            'text-gray-500'
+                          }`}>
+                            ₹{target.invested.toLocaleString()} / ₹{target.investment_target.toLocaleString()}
+                          </span>
+                        </div>
+                        <div className="relative w-full bg-gray-200 rounded-full h-2">
+                          <div 
+                            className={`h-2 rounded-full transition-all ${
+                              target.status === 'achieved' || target.status === 'exceeded' ? 'bg-green-500' :
+                              target.status === 'in_progress' ? 'bg-orange-500' :
+                              'bg-gray-300'
+                            }`}
+                            style={{ width: `${Math.min(target.percentage, 100)}%` }}
+                          ></div>
+                        </div>
+                        <div className="flex items-center justify-between text-xs">
+                          <span className="text-gray-500">{target.percentage.toFixed(1)}% achieved</span>
+                          {target.status === 'exceeded' ? (
+                            <span className="text-green-600 font-semibold">🎉 Exceeded by ₹{Math.abs(target.remaining).toLocaleString()}</span>
+                          ) : target.status === 'achieved' ? (
+                            <span className="text-green-600 font-semibold">✅ Target achieved!</span>
+                          ) : target.status === 'in_progress' ? (
+                            <span className="text-orange-600">₹{target.remaining.toLocaleString()} remaining</span>
+                          ) : (
+                            <span className="text-gray-500">Not started</span>
                           )}
                         </div>
                       </div>
