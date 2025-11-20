@@ -113,7 +113,8 @@ const PieChart = ({ data, title, colors, onSliceClick }) => {
                     <title>{`${slice.label}: ₹${slice.value.toLocaleString()} (${slice.percentage}%)`}</title>
                   </path>
                 </g>
-          ))}
+              );
+            })}
           </svg>
         </div>
 
