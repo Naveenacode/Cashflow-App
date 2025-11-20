@@ -12,7 +12,8 @@ from collections import defaultdict
 from models import (
     Category, CategoryCreate,
     Transaction, TransactionCreate,
-    MonthlyStats, BudgetStatus, MonthlyBalance, PeriodStats
+    Account, AccountCreate,
+    MonthlyStats, BudgetStatus, InvestmentTargetStatus, MonthlyBalance, PeriodStats
 )
 from auth import get_current_user, get_admin_user
 from routes_auth import router as auth_router
