@@ -334,3 +334,102 @@ async def remove_family_member(
         raise HTTPException(status_code=404, detail="Member not found")
     
     return {"message": "Member removed successfully"}
+
+
+@router.get("/pending-requests")
+async def get_pending_requests(current_user: dict = Depends(get_admin_user)):
+    """Get all pending join requests for the family (admin only)"""
+    requests = await db.join_requests.find({
+        "family_id": current_user["family_id"],
+        "status": "pending"
+    }, {"_id": 0}).to_list(100)
+    
+    return {"requests": requests}
+
+
+@router.post("/approve-request")
+async def approve_join_request(
+    request_id: str,
+    current_user: dict = Depends(get_admin_user)
+):
+    """Approve a pending join request (admin only)"""
+    # Find the request
+    request = await db.join_requests.find_one({
+        "id": request_id,
+        "family_id": current_user["family_id"],
+        "status": "pending"
+    })
+    
+    if not request:
+        raise HTTPException(status_code=404, detail="Request not found")
+    
+    # Remove user from their temp family
+    await db.family_members.delete_one({"user_id": request["user_id"]})
+    
+    # Delete the temp family
+    temp_family = await db.families.find_one({"admin_user_id": request["user_id"]})
+    if temp_family:
+        await db.families.delete_one({"id": temp_family["id"]})
+    
+    # Add user to the actual family as member
+    family_member = FamilyMember(
+        family_id=current_user["family_id"],
+        user_id=request["user_id"],
+        role="member"
+    )
+    member_doc = family_member.model_dump()
+    member_doc["joined_at"] = member_doc["joined_at"].isoformat()
+    await db.family_members.insert_one(member_doc)
+    
+    # Update request status
+    await db.join_requests.update_one(
+        {"id": request_id},
+        {"$set": {"status": "approved"}}
+    )
+    
+    return {"message": "Request approved successfully"}
+
+
+@router.post("/reject-request")
+async def reject_join_request(
+    request_id: str,
+    current_user: dict = Depends(get_admin_user)
+):
+    """Reject a pending join request (admin only)"""
+    # Find the request
+    request = await db.join_requests.find_one({
+        "id": request_id,
+        "family_id": current_user["family_id"],
+        "status": "pending"
+    })
+    
+    if not request:
+        raise HTTPException(status_code=404, detail="Request not found")
+    
+    # Update request status
+    await db.join_requests.update_one(
+        {"id": request_id},
+        {"$set": {"status": "rejected"}}
+    )
+    
+    return {"message": "Request rejected"}
+
+
+@router.get("/my-join-status")
+async def get_my_join_status(current_user: dict = Depends(get_current_user)):
+    """Check if user has pending join requests"""
+    request = await db.join_requests.find_one({
+        "user_id": current_user["user_id"],
+        "status": "pending"
+    }, {"_id": 0})
+    
+    if request:
+        # Get the family name
+        family = await db.families.find_one({"id": request["family_id"]}, {"_id": 0})
+        return {
+            "has_pending": True,
+            "family_name": family.get("name") if family else "Unknown Family",
+            "status": "pending"
+        }
+    
+    return {"has_pending": False}
