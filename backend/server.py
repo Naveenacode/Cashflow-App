@@ -386,8 +386,6 @@ async def get_previous_month_balance(month: int, year: int, family_id: str, user
     prev_income = 0
     prev_expense = 0
     
-    prev_investment = 0
-    
     for trans in transactions:
         trans_date = trans.get('date')
         if isinstance(trans_date, str):
@@ -397,11 +395,10 @@ async def get_previous_month_balance(month: int, year: int, family_id: str, user
                 prev_income += trans['amount']
             elif trans['type'] == 'expense':
                 prev_expense += trans['amount']
-            elif trans['type'] == 'investment':
-                prev_investment += trans['amount']
+            # Investment and transfer don't affect profit calculation
     
-    # profit = income - expense - investment
-    prev_profit = prev_income - prev_expense - prev_investment
+    # profit = income - expense (investment is just moving money between accounts)
+    prev_profit = prev_income - prev_expense
     prev_loan = abs(prev_profit) if prev_profit < 0 else 0
     
     return prev_profit if prev_profit > 0 else 0, prev_loan
