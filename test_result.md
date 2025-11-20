@@ -201,6 +201,18 @@ backend:
           agent: "testing"
           comment: "✅ Budget status tracking working correctly. Groceries budget: spent 3000/limit 10000 (30% safe). Percentage calculation and status determination accurate."
 
+  - task: "Budget Alert Ticker Feature (90%+ Categories Only)"
+    implemented: true
+    working: true
+    file: "backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "testing"
+          comment: "✅ Budget Alert Ticker Feature working perfectly. Comprehensive test completed with 4 expense categories at different budget usage levels: Groceries (70% - hidden from ticker), Shopping (92.5% - shows 'Only ₹1500 left'), Entertainment (96% - shows 'Only ₹200 left'), Utilities (116.67% - shows 'Over by ₹500'). Only categories >= 90% appear in ticker as expected. All budget calculations accurate, percentage logic correct, and ticker display logic validated. /budget/status endpoint returns proper data structure for frontend ticker implementation."
+
   - task: "Corrected Investment Logic - Investment as Transfer"
     implemented: true
     working: true
