@@ -28,7 +28,9 @@ export default function Auth() {
     email: '',
     password: '',
     confirmPassword: '',
-    profile_icon: 'user-circle'
+    profile_icon: 'user-circle',
+    registrationType: 'create', // 'create' or 'join'
+    familyCode: ''
   });
 
   const handleSubmit = async (e) => {
