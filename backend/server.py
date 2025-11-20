@@ -788,7 +788,7 @@ async def get_period_stats(
         "total_income": total_income,
         "total_expense": total_expense,
         "total_investment": total_investment,
-        "profit": profit,
+        "closing_balance": net_closing_balance,
         "income_by_category": dict(income_by_category),
         "expense_by_category": dict(expense_by_category),
         "investment_by_category": dict(investment_by_category),
