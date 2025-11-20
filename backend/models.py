@@ -149,3 +149,21 @@ class Token(BaseModel):
 class TokenData(BaseModel):
     user_id: Optional[str] = None
     family_id: Optional[str] = None
+
+
+# ============= JOIN REQUEST MODELS =============
+class JoinRequestBase(BaseModel):
+    family_id: str
+    user_id: str
+    user_name: str
+    user_email: str
+    user_icon: str
+    status: Literal["pending", "approved", "rejected"] = "pending"
+
+class JoinRequestCreate(JoinRequestBase):
+    pass
+
+class JoinRequest(JoinRequestBase):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    created_at: datetime = Field(default_factory=datetime.utcnow)
