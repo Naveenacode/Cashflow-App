@@ -386,6 +386,8 @@ async def get_previous_month_balance(month: int, year: int, family_id: str, user
     prev_income = 0
     prev_expense = 0
     
+    prev_investment = 0
+    
     for trans in transactions:
         trans_date = trans.get('date')
         if isinstance(trans_date, str):
@@ -393,10 +395,13 @@ async def get_previous_month_balance(month: int, year: int, family_id: str, user
         if trans_date.month == prev_month and trans_date.year == prev_year:
             if trans['type'] == 'income':
                 prev_income += trans['amount']
-            else:
+            elif trans['type'] == 'expense':
                 prev_expense += trans['amount']
+            elif trans['type'] == 'investment':
+                prev_investment += trans['amount']
     
-    prev_profit = prev_income - prev_expense
+    # profit = income - expense - investment
+    prev_profit = prev_income - prev_expense - prev_investment
     prev_loan = abs(prev_profit) if prev_profit < 0 else 0
     
     return prev_profit if prev_profit > 0 else 0, prev_loan
