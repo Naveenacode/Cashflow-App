@@ -741,6 +741,17 @@ function App() {
                 </CardContent>
               </Card>
 
+              <Card data-testid="investment-card">
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium">Total Investments</CardTitle>
+                  <TrendingUp className="h-4 w-4 text-orange-600" />
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold text-orange-600">₹{stats.total_investment?.toLocaleString() || '0'}</div>
+                  <p className="text-xs text-gray-500 mt-1">{months[selectedMonth - 1]} {selectedYear}</p>
+                </CardContent>
+              </Card>
+
               <Card data-testid="profit-card">
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                   <CardTitle className="text-sm font-medium">Net Profit</CardTitle>
