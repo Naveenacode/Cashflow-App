@@ -548,12 +548,14 @@ async def get_monthly_trend(
         month_trans = [t for t in transactions if t['date'].month == month]
         income = sum(t['amount'] for t in month_trans if t['type'] == 'income')
         expense = sum(t['amount'] for t in month_trans if t['type'] == 'expense')
+        investment = sum(t['amount'] for t in month_trans if t['type'] == 'investment')
         
         monthly_data[month] = {
             "month": month,
             "income": income,
             "expense": expense,
-            "profit": income - expense
+            "investment": investment,
+            "profit": income - expense - investment
         }
     
     return list(monthly_data.values())
