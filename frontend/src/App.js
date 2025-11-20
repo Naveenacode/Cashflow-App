@@ -367,44 +367,24 @@ function App() {
               </Card>
             )}
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <Card data-testid="income-breakdown">
-                <CardHeader>
-                  <CardTitle>Income by Category</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  {Object.keys(stats.income_by_category).length === 0 ? (
-                    <p className="text-gray-500 text-center py-4">No income data</p>
-                  ) : (
-                    <div className="space-y-3">
-                      {Object.entries(stats.income_by_category).map(([category, amount]) => (
-                        <div key={category} className="flex items-center justify-between">
-                          <span className="text-sm text-gray-700">{category}</span>
-                          <span className="text-sm font-semibold text-green-600">${amount.toLocaleString()}</span>
-                        </div>
-                      ))}
-                    </div>
-                  )}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <Card data-testid="income-pie-chart">
+                <CardContent className="pt-6">
+                  <PieChart 
+                    data={stats.income_by_category} 
+                    title="Income by Category"
+                    colors={['#10B981', '#3B82F6', '#8B5CF6', '#06B6D4', '#84CC16']}
+                  />
                 </CardContent>
               </Card>
 
-              <Card data-testid="expense-breakdown">
-                <CardHeader>
-                  <CardTitle>Expenses by Category</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  {Object.keys(stats.expense_by_category).length === 0 ? (
-                    <p className="text-gray-500 text-center py-4">No expense data</p>
-                  ) : (
-                    <div className="space-y-3">
-                      {Object.entries(stats.expense_by_category).map(([category, amount]) => (
-                        <div key={category} className="flex items-center justify-between">
-                          <span className="text-sm text-gray-700">{category}</span>
-                          <span className="text-sm font-semibold text-red-600">${amount.toLocaleString()}</span>
-                        </div>
-                      ))}
-                    </div>
-                  )}
+              <Card data-testid="expense-pie-chart">
+                <CardContent className="pt-6">
+                  <PieChart 
+                    data={stats.expense_by_category} 
+                    title="Expenses by Category"
+                    colors={['#EF4444', '#F59E0B', '#EC4899', '#F97316', '#6B7280']}
+                  />
                 </CardContent>
               </Card>
             </div>
