@@ -65,7 +65,9 @@ function App() {
     name: '',
     type: 'expense',
     color: '#3B82F6',
-    budget_limit: ''
+    budget_limit: '',
+    is_shared: true,
+    created_by_user_id: null
   });
 
   const [budgetStatuses, setBudgetStatuses] = useState([]);
