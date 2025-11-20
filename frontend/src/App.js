@@ -452,7 +452,25 @@ function App() {
         {activeTab === 'transactions' && (
           <div className="space-y-6" data-testid="transactions-view">
             <div className="flex justify-between items-center">
-              <h2 className="text-2xl font-bold">Transactions</h2>
+              <div>
+                <h2 className="text-2xl font-bold">Transactions</h2>
+                {selectedCategoryFilter && (
+                  <div className="flex items-center space-x-2 mt-2">
+                    <Badge className="bg-blue-100 text-blue-800">
+                      Filtered by: {selectedCategoryFilter}
+                    </Badge>
+                    <button 
+                      onClick={() => {
+                        setSelectedCategoryFilter(null);
+                        setShowFilteredTransactions(false);
+                      }}
+                      className="text-xs text-blue-600 hover:underline"
+                    >
+                      Clear filter
+                    </button>
+                  </div>
+                )}
+              </div>
               <Button onClick={() => setShowAddTransaction(true)} data-testid="add-transaction-btn">
                 <Plus className="h-4 w-4 mr-2" />
                 Add Transaction
