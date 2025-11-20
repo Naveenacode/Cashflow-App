@@ -76,8 +76,17 @@ function App() {
     type: 'expense',
     color: '#3B82F6',
     budget_limit: '',
+    investment_target: '',
     is_shared: true,
     created_by_user_id: null
+  });
+
+  const [accountForm, setAccountForm] = useState({
+    name: '',
+    type: 'bank',
+    opening_balance: 0,
+    owner_type: 'personal',
+    owner_user_id: null
   });
 
   const [budgetStatuses, setBudgetStatuses] = useState([]);
