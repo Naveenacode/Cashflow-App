@@ -247,7 +247,8 @@ async def update_transaction(
         raise HTTPException(status_code=404, detail="Transaction not found")
     
     # Check permissions: members can only edit their own transactions
-    if current_user["role"] != "admin" and existing.get("user_id") != current_user["user_id"]:
+    # If user_id is not set (old transactions), allow admin to edit
+    if current_user["role"] != "admin" and existing.get("user_id") and existing.get("user_id") != current_user["user_id"]:
         raise HTTPException(
             status_code=403,
             detail="You can only edit your own transactions"
