@@ -1670,6 +1670,21 @@ function App() {
                       </div>
                     )}
 
+                    {categoryForm.type === 'investment' && (
+                      <div>
+                        <Label>Monthly Investment Target (Optional)</Label>
+                        <Input
+                          type="number"
+                          step="0.01"
+                          value={categoryForm.investment_target}
+                          onChange={(e) => setCategoryForm({...categoryForm, investment_target: e.target.value})}
+                          placeholder="e.g., 5000"
+                          data-testid="category-target-input"
+                        />
+                        <p className="text-xs text-gray-500 mt-1">Set a monthly investment target for this category. Track your progress towards your financial goals.</p>
+                      </div>
+                    )}
+
                     <div className="flex space-x-2">
                       <Button type="submit" data-testid="save-category-btn">Save</Button>
                       <Button type="button" variant="outline" onClick={() => setShowAddCategory(false)}>Cancel</Button>
