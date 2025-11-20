@@ -698,21 +698,26 @@ async def get_period_stats(
     # Calculate stats
     total_income = sum(t['amount'] for t in filtered if t['type'] == 'income')
     total_expense = sum(t['amount'] for t in filtered if t['type'] == 'expense')
-    profit = total_income - total_expense
+    total_investment = sum(t['amount'] for t in filtered if t['type'] == 'investment')
+    profit = total_income - total_expense - total_investment
     
     # Group by category
     income_by_category = defaultdict(float)
     expense_by_category = defaultdict(float)
+    investment_by_category = defaultdict(float)
     
     categories = await db.categories.find({}, {"_id": 0}).to_list(1000)
     category_map = {cat['id']: cat['name'] for cat in categories}
     
     for trans in filtered:
-        category_name = category_map.get(trans['category_id'], 'Unknown')
-        if trans['type'] == 'income':
-            income_by_category[category_name] += trans['amount']
-        else:
-            expense_by_category[category_name] += trans['amount']
+        if trans.get('category_id'):  # Skip transfers
+            category_name = category_map.get(trans['category_id'], 'Unknown')
+            if trans['type'] == 'income':
+                income_by_category[category_name] += trans['amount']
+            elif trans['type'] == 'expense':
+                expense_by_category[category_name] += trans['amount']
+            elif trans['type'] == 'investment':
+                investment_by_category[category_name] += trans['amount']
     
     return {
         "period_type": period_type,
@@ -720,9 +725,11 @@ async def get_period_stats(
         "end_date": end.isoformat(),
         "total_income": total_income,
         "total_expense": total_expense,
+        "total_investment": total_investment,
         "profit": profit,
         "income_by_category": dict(income_by_category),
         "expense_by_category": dict(expense_by_category),
+        "investment_by_category": dict(investment_by_category),
         "transaction_count": len(filtered)
     }
 
