@@ -12,7 +12,7 @@ from collections import defaultdict
 from models import (
     Category, CategoryCreate,
     Transaction, TransactionCreate,
-    MonthlyStats
+    MonthlyStats, BudgetStatus
 )
 
 
