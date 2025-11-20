@@ -53,3 +53,29 @@ class BudgetStatus(BaseModel):
     remaining: float
     percentage: float
     status: Literal["safe", "warning", "exceeded"]
+
+
+class MonthlyBalance(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    month: int
+    year: int
+    opening_balance: float  # Profit/deficit from previous month
+    closing_balance: float  # Profit/deficit for this month
+    has_loan: bool = False
+    loan_amount: float = 0.0
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+
+
+class PeriodStats(BaseModel):
+    period_type: str
+    start_date: str
+    end_date: str
+    total_income: float
+    total_expense: float
+    profit: float
+    opening_balance: float
+    closing_balance: float
+    loan_amount: float
+    income_by_category: dict
+    expense_by_category: dict
