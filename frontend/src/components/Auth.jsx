@@ -189,13 +189,22 @@ export default function Auth() {
                   </div>
                 </div>
 
-                {/* Info about family creation */}
-                <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
-                  <p className="text-xs text-blue-900">
-                    <strong>Note:</strong> Creating an account will automatically create a new family 
-                    with you as the admin. You'll receive a family code to invite other members.
-                  </p>
-                </div>
+                {/* Info about family creation/joining */}
+                {formData.registrationType === 'create' ? (
+                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+                    <p className="text-xs text-blue-900">
+                      <strong>Creating a new family:</strong> You'll be the admin and receive a unique 
+                      family code to share with family members.
+                    </p>
+                  </div>
+                ) : (
+                  <div className="bg-green-50 border border-green-200 rounded-lg p-3">
+                    <p className="text-xs text-green-900">
+                      <strong>Joining a family:</strong> You'll become a member and can start tracking 
+                      expenses with your family right away.
+                    </p>
+                  </div>
+                )}
               </>
             )}
 
