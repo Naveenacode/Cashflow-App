@@ -25,10 +25,12 @@ class Category(CategoryBase):
 
 class TransactionBase(BaseModel):
     amount: float
-    category_id: str
-    type: Literal["income", "expense"]
+    category_id: Optional[str] = None  # Not required for transfers
+    type: Literal["income", "expense", "investment", "transfer"]
     description: Optional[str] = None
     date: datetime
+    account_id: Optional[str] = None  # Account used for this transaction
+    to_account_id: Optional[str] = None  # For transfer transactions
 
 class TransactionCreate(TransactionBase):
     pass
