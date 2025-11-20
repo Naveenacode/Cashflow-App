@@ -582,15 +582,26 @@ function App() {
                 <CardContent>
                   <div className="space-y-2">
                     {categories.filter(c => c.type === 'expense').map(category => (
-                      <div key={category.id} className="flex items-center justify-between border rounded p-3" data-testid={`category-${category.id}`}>
-                        <span className="font-medium">{category.name}</span>
-                        <button
-                          onClick={() => handleDeleteCategory(category.id)}
-                          className="text-red-600 hover:text-red-800"
-                          data-testid={`delete-category-${category.id}`}
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </button>
+                      <div key={category.id} className="border rounded p-3" data-testid={`category-${category.id}`}>
+                        <div className="flex items-center justify-between">
+                          <div className="flex-1">
+                            <span className="font-medium">{category.name}</span>
+                            {category.budget_limit && (
+                              <div className="mt-1">
+                                <span className="text-xs text-gray-500">
+                                  Budget: ${category.budget_limit.toLocaleString()}/month
+                                </span>
+                              </div>
+                            )}
+                          </div>
+                          <button
+                            onClick={() => handleDeleteCategory(category.id)}
+                            className="text-red-600 hover:text-red-800"
+                            data-testid={`delete-category-${category.id}`}
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </button>
+                        </div>
                       </div>
                     ))}
                     {categories.filter(c => c.type === 'expense').length === 0 && (
