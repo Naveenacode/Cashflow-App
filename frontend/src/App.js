@@ -251,19 +251,29 @@ function App() {
   };
 
   const handleDeleteCategory = async (id) => {
+    console.log('Delete category called:', { id, isAdmin });
+    
     if (!isAdmin) {
       alert('Only admin can delete categories');
       return;
     }
+    
     if (window.confirm('Are you sure you want to delete this category?')) {
       try {
-        await categoryAPI.deleteCategory(id);
-        fetchData();
+        console.log('Calling API to delete category:', id);
+        const response = await categoryAPI.deleteCategory(id);
+        console.log('Delete response:', response);
+        
+        await fetchData();
         alert('Category deleted successfully!');
       } catch (error) {
         console.error('Error deleting category:', error);
-        const errorMessage = error.response?.data?.detail || 'Failed to delete category. You may not have permission or it may have associated transactions.';
-        alert(errorMessage);
+        console.error('Error response:', error.response);
+        
+        const errorMessage = error.response?.data?.detail || 
+          error.message || 
+          'Failed to delete category. You may not have permission or it may have associated transactions.';
+        alert(`Delete failed: ${errorMessage}`);
       }
     }
   };
