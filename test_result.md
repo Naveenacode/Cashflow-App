@@ -201,6 +201,18 @@ backend:
           agent: "testing"
           comment: "✅ Budget status tracking working correctly. Groceries budget: spent 3000/limit 10000 (30% safe). Percentage calculation and status determination accurate."
 
+  - task: "Corrected Investment Logic - Investment as Transfer"
+    implemented: true
+    working: true
+    file: "backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "testing"
+          comment: "✅ CRITICAL TEST PASSED: Investment logic is CORRECT. Investment transactions properly implemented as transfers between accounts (NOT expenses that reduce profit). Verified: Investment moves money from bank (₹130000) to investment account (₹50000), profit calculation correct (₹80000 = ₹100000 income - ₹20000 expense), investment tracked separately (₹50000), transfers also don't affect profit. All account balances update correctly. Backend implements the corrected business logic perfectly."
+
 frontend:
   - task: "Dashboard Pie Charts and Summary Cards"
     implemented: true
