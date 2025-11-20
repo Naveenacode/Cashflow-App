@@ -151,7 +151,11 @@ function App() {
           const categoriesRes = await categoryAPI.getCategories();
           setCategories(categoriesRes.data);
           
+          const accountsRes = await accountAPI.getAccounts();
+          setAccounts(accountsRes.data);
+          
           setBudgetStatuses([]);
+          setInvestmentTargets([]);
           setLoading(false);
           return;
         }
