@@ -1172,7 +1172,6 @@ function App() {
                 </Card>
               </div>
             )}
-            )}
 
             {/* Member Comparison */}
             {comparisonType === 'member' && (
