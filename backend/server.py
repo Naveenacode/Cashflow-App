@@ -158,7 +158,7 @@ async def create_transaction(
         
         if new_total >= budget_limit:
             budget_warning = {
-                "message": f"Budget limit reached! Spending ${new_total:.2f} of ${budget_limit:.2f} budget for {category['name']}",
+                "message": f"Budget limit reached! Spending ₹{new_total:.2f} of ₹{budget_limit:.2f} budget for {category['name']}",
                 "current_spent": current_spent,
                 "new_total": new_total,
                 "budget_limit": budget_limit,
