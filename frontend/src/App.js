@@ -921,15 +921,14 @@ function App() {
                           <span className={`text-lg font-bold ${transaction.type === 'income' ? 'text-green-600' : 'text-red-600'}`}>
                             {transaction.type === 'income' ? '+' : '-'}₹{transaction.amount.toLocaleString()}
                           </span>
-                          {isAdmin && (
-                            <button
-                              onClick={() => handleDeleteTransaction(transaction.id)}
-                              className="text-red-600 hover:text-red-800"
-                              data-testid={`delete-transaction-${transaction.id}`}
-                            >
-                              <Trash2 className="h-4 w-4" />
-                            </button>
-                          )}
+                          <button
+                            onClick={() => handleDeleteTransaction(transaction.id)}
+                            className={`${isAdmin ? 'text-red-600 hover:text-red-800' : 'text-gray-500 cursor-not-allowed'}`}
+                            data-testid={`delete-transaction-${transaction.id}`}
+                            title={isAdmin ? 'Delete transaction' : 'Only admin can delete'}
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </button>
                         </div>
                       </div>
                     ))}
