@@ -450,10 +450,10 @@ async def get_dashboard_stats(
     # Add opening balance to income
     total_income_with_carryover = total_income + opening_balance
     
-    # Calculate profit/loss: profit = income - expense (investment is just moving money, not spending)
-    profit = total_income_with_carryover - total_expense
-    closing_balance = profit if profit > 0 else 0
-    loan_amount = inherited_loan + abs(profit) if profit < 0 else inherited_loan
+    # Calculate closing balance: closing_balance = income - expense (investment is just moving money, not spending)
+    net_closing_balance = total_income_with_carryover - total_expense
+    closing_balance = net_closing_balance if net_closing_balance > 0 else 0
+    loan_amount = inherited_loan + abs(net_closing_balance) if net_closing_balance < 0 else inherited_loan
     
     # Group by category
     income_by_category = defaultdict(float)
