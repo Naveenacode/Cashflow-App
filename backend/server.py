@@ -624,6 +624,68 @@ async def get_budget_status(
     return budget_statuses
 
 
+@api_router.get("/dashboard/investment-targets")
+async def get_investment_targets(
+    month: Optional[int] = None,
+    year: Optional[int] = None,
+    current_user: dict = Depends(get_current_user)
+):
+    """Get investment target status for all investment categories."""
+    if not month:
+        month = datetime.now().month
+    if not year:
+        year = datetime.now().year
+    
+    # Get all investment categories with targets for this family
+    categories = await db.categories.find({
+        "family_id": current_user["family_id"],
+        "type": "investment",
+        "investment_target": {"$exists": True, "$ne": None}
+    }, {"_id": 0}).to_list(1000)
+    
+    target_statuses = []
+    
+    for category in categories:
+        # Get transactions for this category in the specified month
+        transactions = await db.transactions.find({
+            "category_id": category["id"],
+            "type": "investment"
+        }, {"_id": 0}).to_list(10000)
+        
+        # Filter by month/year and calculate invested amount
+        invested = 0
+        for trans in transactions:
+            trans_date = trans.get('date')
+            if isinstance(trans_date, str):
+                trans_date = datetime.fromisoformat(trans_date)
+            if trans_date.month == month and trans_date.year == year:
+                invested += trans['amount']
+        
+        investment_target = category.get("investment_target", 0)
+        remaining = investment_target - invested
+        percentage = (invested / investment_target * 100) if investment_target > 0 else 0
+        
+        # Determine status
+        if invested == 0:
+            status = "not_started"
+        elif percentage >= 100:
+            status = "exceeded" if invested > investment_target else "achieved"
+        else:
+            status = "in_progress"
+        
+        target_statuses.append({
+            "category_id": category["id"],
+            "category_name": category["name"],
+            "investment_target": investment_target,
+            "invested": invested,
+            "remaining": remaining,
+            "percentage": round(percentage, 2),
+            "status": status
+        })
+    
+    return target_statuses
+
+
 # ============= PERIOD COMPARISON ENDPOINTS =============
 @api_router.get("/dashboard/period-stats")
 async def get_period_stats(
