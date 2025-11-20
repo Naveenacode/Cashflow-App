@@ -361,8 +361,8 @@ function App() {
                 {/* User Info */}
                 <div className="flex items-center space-x-3">
                   <div className="text-right">
-                    <div className="text-sm font-medium text-gray-900">{user?.name}</div>
-                    <div className="text-xs text-gray-500">{family?.family_name}</div>
+                    <div className="text-sm font-medium text-white">{user?.name}</div>
+                    <div className="text-xs text-gray-400">{family?.family_name}</div>
                     {isAdmin && (
                       <Badge className="text-xs bg-blue-100 text-blue-800 mt-1">Admin</Badge>
                     )}
