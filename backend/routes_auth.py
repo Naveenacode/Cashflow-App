@@ -174,21 +174,39 @@ async def get_family_info(current_user: dict = Depends(get_current_user)):
 
 @router.post("/join-family", response_model=Token)
 async def join_family(family_code: str, current_user: dict = Depends(get_current_user)):
-    """Join an existing family using family code"""
+    """Join an existing family using family code. Will leave current family if applicable."""
     # Find family by code
     family = await db.families.find_one({"family_code": family_code.upper()}, {"_id": 0})
     if not family:
         raise HTTPException(status_code=404, detail="Invalid family code")
     
-    # Check if user is already in a family
-    existing_member = await db.family_members.find_one({"user_id": current_user["user_id"]})
-    if existing_member:
+    # Check if user is trying to join their current family
+    if current_user["family_id"] == family["id"]:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="You are already part of a family"
+            detail="You are already in this family"
         )
     
-    # Add user to family as member
+    # Remove user from current family
+    existing_member = await db.family_members.find_one({"user_id": current_user["user_id"]})
+    if existing_member:
+        # Check if user is the only admin of their current family
+        current_family_members = await db.family_members.find({
+            "family_id": existing_member["family_id"]
+        }).to_list(100)
+        
+        admin_count = sum(1 for m in current_family_members if m.get("role") == "admin")
+        
+        if existing_member.get("role") == "admin" and admin_count == 1 and len(current_family_members) > 1:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="You are the only admin in your current family. Please promote another member to admin before leaving."
+            )
+        
+        # Remove from current family
+        await db.family_members.delete_one({"user_id": current_user["user_id"]})
+    
+    # Add user to new family as member
     family_member = FamilyMember(
         family_id=family["id"],
         user_id=current_user["user_id"],
