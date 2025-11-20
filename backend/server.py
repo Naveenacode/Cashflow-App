@@ -123,7 +123,10 @@ async def delete_category(
 
 # ============= TRANSACTION ENDPOINTS =============
 @api_router.post("/transactions", response_model=Transaction)
-async def create_transaction(transaction_data: TransactionCreate):
+async def create_transaction(
+    transaction_data: TransactionCreate,
+    current_user: dict = Depends(get_current_user)
+):
     # Verify category exists
     category = await db.categories.find_one({"id": transaction_data.category_id})
     if not category:
