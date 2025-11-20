@@ -44,15 +44,17 @@ function App() {
 
   const fetchData = async () => {
     try {
-      const [categoriesRes, transactionsRes, statsRes] = await Promise.all([
+      const [categoriesRes, transactionsRes, statsRes, budgetRes] = await Promise.all([
         categoryAPI.getCategories(),
         transactionAPI.getTransactions({ month: selectedMonth, year: selectedYear }),
-        dashboardAPI.getStats({ month: selectedMonth, year: selectedYear })
+        dashboardAPI.getStats({ month: selectedMonth, year: selectedYear }),
+        dashboardAPI.getBudgetStatus({ month: selectedMonth, year: selectedYear })
       ]);
 
       setCategories(categoriesRes.data);
       setTransactions(transactionsRes.data);
       setStats(statsRes.data);
+      setBudgetStatuses(budgetRes.data);
     } catch (error) {
       console.error('Error fetching data:', error);
     } finally {
