@@ -45,13 +45,13 @@ export default function PendingApproval() {
 
         <CardContent className="pt-6 space-y-6">
           <div className="text-center space-y-3">
-            <p className="text-lg font-semibold text-gray-900">
+            <p className="text-lg font-semibold text-gray-200">
               Your request to join
             </p>
-            <p className="text-2xl font-bold text-amber-600">
+            <p className="text-2xl font-bold text-amber-400">
               {joinStatus?.family_name || 'the family'}
             </p>
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-gray-400">
               is pending admin approval.
             </p>
           </div>
