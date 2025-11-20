@@ -118,6 +118,14 @@ export default function Auth() {
                     ))}
                   </div>
                 </div>
+
+                {/* Info about family creation */}
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+                  <p className="text-xs text-blue-900">
+                    <strong>Note:</strong> Creating an account will automatically create a new family 
+                    with you as the admin. You'll receive a family code to invite other members.
+                  </p>
+                </div>
               </>
             )}
 
