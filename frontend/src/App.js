@@ -1631,6 +1631,7 @@ function App() {
                           <SelectContent>
                             <SelectItem value="income">Income</SelectItem>
                             <SelectItem value="expense">Expense</SelectItem>
+                            <SelectItem value="investment">Investment</SelectItem>
                           </SelectContent>
                         </Select>
                       </div>
