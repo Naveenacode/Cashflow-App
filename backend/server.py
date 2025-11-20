@@ -42,13 +42,13 @@ async def create_category(
     category_data: CategoryCreate,
     current_user: dict = Depends(get_current_user)
 ):
-    """Create a new category. Admin can create shared, members can create personal."""
-    # Only admin can create shared categories or set budget limits
-    if category_data.is_shared or category_data.budget_limit:
+    """Create a new category. All members can create shared categories. Only admin can set budget limits."""
+    # Only admin can set budget limits
+    if category_data.budget_limit:
         if current_user["role"] != "admin":
             raise HTTPException(
                 status_code=403,
-                detail="Only admin can create shared categories or set budget limits"
+                detail="Only admin can set budget limits"
             )
     
     category = Category(**category_data.model_dump())
