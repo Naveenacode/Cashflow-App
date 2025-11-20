@@ -630,6 +630,13 @@ function App() {
               Categories
             </button>
             <button
+              onClick={() => setActiveTab('accounts')}
+              className={`px-4 py-2 rounded-md ${activeTab === 'accounts' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+              data-testid="accounts-tab"
+            >
+              Accounts
+            </button>
+            <button
               onClick={() => setActiveTab('compare')}
               className={`px-4 py-2 rounded-md ${activeTab === 'compare' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
               data-testid="compare-tab"
