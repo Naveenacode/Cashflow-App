@@ -38,8 +38,26 @@ app.include_router(auth_router)
 
 # ============= CATEGORY ENDPOINTS =============
 @api_router.post("/categories", response_model=Category)
-async def create_category(category_data: CategoryCreate):
+async def create_category(
+    category_data: CategoryCreate,
+    current_user: dict = Depends(get_current_user)
+):
+    """Create a new category. Admin can create shared, members can create personal."""
+    # Only admin can create shared categories or set budget limits
+    if category_data.is_shared or category_data.budget_limit:
+        if current_user["role"] != "admin":
+            raise HTTPException(
+                status_code=403,
+                detail="Only admin can create shared categories or set budget limits"
+            )
+    
     category = Category(**category_data.model_dump())
+    category.family_id = current_user["family_id"]
+    
+    # For personal categories, set the creator
+    if not category_data.is_shared:
+        category.created_by_user_id = current_user["user_id"]
+    
     category_doc = category.model_dump()
     category_doc["created_at"] = category_doc["created_at"].isoformat()
     
@@ -48,12 +66,25 @@ async def create_category(category_data: CategoryCreate):
 
 
 @api_router.get("/categories", response_model=List[Category])
-async def get_categories(type: Optional[str] = None):
-    query = {}
+async def get_categories(
+    type: Optional[str] = None,
+    current_user: dict = Depends(get_current_user)
+):
+    """Get categories for current family. Returns shared + user's personal categories."""
+    query = {"family_id": current_user["family_id"]}
+    
     if type:
         query["type"] = type
     
-    categories = await db.categories.find(query, {"_id": 0}).to_list(1000)
+    # Get shared categories + user's personal categories
+    categories = await db.categories.find({
+        **query,
+        "$or": [
+            {"is_shared": True},
+            {"created_by_user_id": current_user["user_id"]}
+        ]
+    }, {"_id": 0}).to_list(1000)
+    
     for cat in categories:
         if isinstance(cat.get('created_at'), str):
             cat['created_at'] = datetime.fromisoformat(cat['created_at'])
@@ -61,7 +92,29 @@ async def get_categories(type: Optional[str] = None):
 
 
 @api_router.delete("/categories/{category_id}")
-async def delete_category(category_id: str):
+async def delete_category(
+    category_id: str,
+    current_user: dict = Depends(get_current_user)
+):
+    """Delete a category. Admin can delete any, members can delete their own personal categories."""
+    # Find the category
+    category = await db.categories.find_one({"id": category_id})
+    if not category:
+        raise HTTPException(status_code=404, detail="Category not found")
+    
+    # Check permissions
+    if category.get("is_shared") and current_user["role"] != "admin":
+        raise HTTPException(
+            status_code=403,
+            detail="Only admin can delete shared categories"
+        )
+    
+    if not category.get("is_shared") and category.get("created_by_user_id") != current_user["user_id"]:
+        raise HTTPException(
+            status_code=403,
+            detail="You can only delete your own personal categories"
+        )
+    
     result = await db.categories.delete_one({"id": category_id})
     if result.deleted_count == 0:
         raise HTTPException(status_code=404, detail="Category not found")
