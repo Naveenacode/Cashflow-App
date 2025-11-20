@@ -6,9 +6,10 @@ import uuid
 
 class CategoryBase(BaseModel):
     name: str
-    type: Literal["income", "expense"]
+    type: Literal["income", "expense", "investment"]
     color: Optional[str] = "#3B82F6"
     budget_limit: Optional[float] = None  # Budget limit for expense categories
+    investment_target: Optional[float] = None  # Target for investment categories
     is_shared: bool = True  # True for shared categories, False for personal
     created_by_user_id: Optional[str] = None  # For personal categories
 
