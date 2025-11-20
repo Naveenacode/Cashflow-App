@@ -507,6 +507,7 @@ async def get_dashboard_stats(
         "total_income": total_income,
         "total_income_with_carryover": total_income_with_carryover,
         "total_expense": total_expense,
+        "total_investment": total_investment,
         "profit": profit,
         "opening_balance": opening_balance,
         "closing_balance": closing_balance,
@@ -515,6 +516,7 @@ async def get_dashboard_stats(
         "has_deficit": profit < 0,
         "income_by_category": dict(income_by_category),
         "expense_by_category": dict(expense_by_category),
+        "investment_by_category": dict(investment_by_category),
         "transaction_count": len(transactions)
     }
 
