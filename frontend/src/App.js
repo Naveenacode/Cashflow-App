@@ -66,7 +66,9 @@ function App() {
     category_id: '',
     type: 'expense',
     description: '',
-    date: new Date().toISOString().split('T')[0]
+    date: new Date().toISOString().split('T')[0],
+    account_id: '',
+    to_account_id: ''  // For transfers
   });
 
   const [categoryForm, setCategoryForm] = useState({
