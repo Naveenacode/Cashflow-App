@@ -397,6 +397,103 @@ async def get_budget_status(month: Optional[int] = None, year: Optional[int] = N
     return budget_statuses
 
 
+# ============= PERIOD COMPARISON ENDPOINTS =============
+@api_router.get("/dashboard/period-stats")
+async def get_period_stats(
+    period_type: str = "monthly",  # monthly, quarterly, half-yearly, annual, custom
+    start_date: Optional[str] = None,
+    end_date: Optional[str] = None,
+    month: Optional[int] = None,
+    year: Optional[int] = None,
+    quarter: Optional[int] = None,
+    half: Optional[int] = None
+):
+    """Get statistics for different time periods"""
+    
+    if period_type == "custom" and start_date and end_date:
+        start = datetime.fromisoformat(start_date)
+        end = datetime.fromisoformat(end_date)
+    elif period_type == "monthly":
+        if not month or not year:
+            month = datetime.now().month
+            year = datetime.now().year
+        start = datetime(year, month, 1)
+        # Last day of month
+        if month == 12:
+            end = datetime(year + 1, 1, 1)
+        else:
+            end = datetime(year, month + 1, 1)
+    elif period_type == "quarterly":
+        if not quarter or not year:
+            raise HTTPException(status_code=400, detail="Quarter and year required")
+        start_month = (quarter - 1) * 3 + 1
+        start = datetime(year, start_month, 1)
+        end_month = start_month + 3
+        if end_month > 12:
+            end = datetime(year + 1, end_month - 12, 1)
+        else:
+            end = datetime(year, end_month, 1)
+    elif period_type == "half-yearly":
+        if not half or not year:
+            raise HTTPException(status_code=400, detail="Half and year required")
+        start_month = 1 if half == 1 else 7
+        start = datetime(year, start_month, 1)
+        end_month = 7 if half == 1 else 13
+        if end_month == 13:
+            end = datetime(year + 1, 1, 1)
+        else:
+            end = datetime(year, end_month, 1)
+    elif period_type == "annual":
+        if not year:
+            year = datetime.now().year
+        start = datetime(year, 1, 1)
+        end = datetime(year + 1, 1, 1)
+    else:
+        raise HTTPException(status_code=400, detail="Invalid period type")
+    
+    # Get transactions in range
+    transactions = await db.transactions.find({}, {"_id": 0}).to_list(10000)
+    
+    filtered = []
+    for trans in transactions:
+        trans_date = trans.get('date')
+        if isinstance(trans_date, str):
+            trans_date = datetime.fromisoformat(trans_date)
+        if start <= trans_date < end:
+            filtered.append(trans)
+    
+    # Calculate stats
+    total_income = sum(t['amount'] for t in filtered if t['type'] == 'income')
+    total_expense = sum(t['amount'] for t in filtered if t['type'] == 'expense')
+    profit = total_income - total_expense
+    
+    # Group by category
+    income_by_category = defaultdict(float)
+    expense_by_category = defaultdict(float)
+    
+    categories = await db.categories.find({}, {"_id": 0}).to_list(1000)
+    category_map = {cat['id']: cat['name'] for cat in categories}
+    
+    for trans in filtered:
+        category_name = category_map.get(trans['category_id'], 'Unknown')
+        if trans['type'] == 'income':
+            income_by_category[category_name] += trans['amount']
+        else:
+            expense_by_category[category_name] += trans['amount']
+    
+    return {
+        "period_type": period_type,
+        "start_date": start.isoformat(),
+        "end_date": end.isoformat(),
+        "total_income": total_income,
+        "total_expense": total_expense,
+        "profit": profit,
+        "income_by_category": dict(income_by_category),
+        "expense_by_category": dict(expense_by_category),
+        "transaction_count": len(filtered)
+    }
+
+
 # Include router
 app.include_router(api_router)
 
