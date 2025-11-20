@@ -223,6 +223,7 @@ function App() {
   };
 
   const handleDeleteTransaction = async (id) => {
+    alert(`Delete handler called! ID: ${id}, isAdmin: ${isAdmin}`);
     console.log('Delete transaction called:', { id, isAdmin });
     
     if (!isAdmin) {
