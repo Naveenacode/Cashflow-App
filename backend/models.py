@@ -114,7 +114,7 @@ class PeriodStats(BaseModel):
     total_income: float
     total_expense: float
     total_investment: float
-    profit: float
+    net_closing_balance: float
     opening_balance: float
     closing_balance: float
     loan_amount: float
