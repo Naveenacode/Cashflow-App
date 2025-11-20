@@ -18,6 +18,13 @@ function App() {
   const [stats, setStats] = useState(null);
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1);
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+  const [periodType, setPeriodType] = useState('monthly');
+  const [selectedQuarter, setSelectedQuarter] = useState(1);
+  const [selectedHalf, setSelectedHalf] = useState(1);
+  const [customStartDate, setCustomStartDate] = useState('');
+  const [customEndDate, setCustomEndDate] = useState('');
+  const [comparisonPeriod1, setComparisonPeriod1] = useState(null);
+  const [comparisonPeriod2, setComparisonPeriod2] = useState(null);
   const [showAddTransaction, setShowAddTransaction] = useState(false);
   const [showAddCategory, setShowAddCategory] = useState(false);
   const [loading, setLoading] = useState(true);
