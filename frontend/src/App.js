@@ -625,7 +625,7 @@ function App() {
                   <TrendingUp className="h-4 w-4 text-green-600" />
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold text-green-600">${stats.total_income.toLocaleString()}</div>
+                  <div className="text-2xl font-bold text-green-600">₹{stats.total_income.toLocaleString()}</div>
                   <p className="text-xs text-gray-500 mt-1">
                     {periodType === 'monthly' && `${months[selectedMonth - 1]} ${selectedYear}`}
                     {periodType === 'quarterly' && `Q${selectedQuarter} ${selectedYear}`}
@@ -642,7 +642,7 @@ function App() {
                   <TrendingDown className="h-4 w-4 text-red-600" />
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold text-red-600">${stats.total_expense.toLocaleString()}</div>
+                  <div className="text-2xl font-bold text-red-600">₹{stats.total_expense.toLocaleString()}</div>
                   <p className="text-xs text-gray-500 mt-1">{months[selectedMonth - 1]} {selectedYear}</p>
                 </CardContent>
               </Card>
@@ -654,7 +654,7 @@ function App() {
                 </CardHeader>
                 <CardContent>
                   <div className={`text-2xl font-bold ${stats.profit >= 0 ? 'text-blue-600' : 'text-red-600'}`}>
-                    ${stats.profit.toLocaleString()}
+                    ₹{stats.profit.toLocaleString()}
                   </div>
                   <p className="text-xs text-gray-500 mt-1">{months[selectedMonth - 1]} {selectedYear}</p>
                 </CardContent>
@@ -671,7 +671,7 @@ function App() {
                   </CardHeader>
                   <CardContent>
                     <div className="text-2xl font-bold text-green-600">
-                      ${stats.opening_balance.toLocaleString()}
+                      ₹{stats.opening_balance.toLocaleString()}
                     </div>
                     <p className="text-xs text-green-700 mt-1">Profit from previous month</p>
                   </CardContent>
@@ -686,7 +686,7 @@ function App() {
                   </CardHeader>
                   <CardContent>
                     <div className="text-2xl font-bold text-blue-600">
-                      ${stats.closing_balance.toLocaleString()}
+                      ₹{stats.closing_balance.toLocaleString()}
                     </div>
                     <p className="text-xs text-blue-700 mt-1">Will carry to next month</p>
                   </CardContent>
@@ -701,7 +701,7 @@ function App() {
                   </CardHeader>
                   <CardContent>
                     <div className="text-2xl font-bold text-red-600">
-                      ${stats.loan_amount.toLocaleString()}
+                      ₹{stats.loan_amount.toLocaleString()}
                     </div>
                     <p className="text-xs text-red-700 mt-1">Deficit to be covered</p>
                   </CardContent>
