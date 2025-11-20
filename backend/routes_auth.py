@@ -1,6 +1,8 @@
 from fastapi import APIRouter, HTTPException, Depends, status
 from motor.motor_asyncio import AsyncIOMotorClient
 from datetime import timedelta
+from dotenv import load_dotenv
+from pathlib import Path
 import os
 
 from models import (
@@ -12,6 +14,10 @@ from auth import (
     get_current_user, get_admin_user,
     ACCESS_TOKEN_EXPIRE_MINUTES
 )
+
+# Load environment variables
+ROOT_DIR = Path(__file__).parent
+load_dotenv(ROOT_DIR / '.env')
 
 # Get database connection
 mongo_url = os.environ['MONGO_URL']
