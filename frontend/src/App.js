@@ -1761,6 +1761,147 @@ function App() {
           </div>
         )}
 
+        {/* Accounts Tab */}
+        {activeTab === 'accounts' && (
+          <div className="space-y-6" data-testid="accounts-view">
+            <div className="flex justify-between items-center">
+              <h2 className="text-2xl font-bold text-gray-900">Accounts</h2>
+              <Button onClick={() => setShowAddAccount(true)} data-testid="add-account-btn">
+                <Plus className="h-4 w-4 mr-2" />
+                Add Account
+              </Button>
+            </div>
+
+            {showAddAccount && (
+              <Card data-testid="add-account-form">
+                <CardHeader>
+                  <CardTitle>Add New Account</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <form onSubmit={handleAddAccount} className="space-y-4">
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <Label>Account Name</Label>
+                        <Input
+                          value={accountForm.name}
+                          onChange={(e) => setAccountForm({...accountForm, name: e.target.value})}
+                          required
+                          placeholder="e.g., HDFC Savings"
+                          data-testid="account-name-input"
+                        />
+                      </div>
+                      <div>
+                        <Label>Account Type</Label>
+                        <Select value={accountForm.type} onValueChange={(value) => setAccountForm({...accountForm, type: value})}>
+                          <SelectTrigger data-testid="account-type-select">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="bank">Bank Account</SelectItem>
+                            <SelectItem value="credit_card">Credit Card</SelectItem>
+                            <SelectItem value="cash">Cash</SelectItem>
+                            <SelectItem value="other">Other</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <Label>Opening Balance</Label>
+                        <Input
+                          type="number"
+                          step="0.01"
+                          value={accountForm.opening_balance}
+                          onChange={(e) => setAccountForm({...accountForm, opening_balance: parseFloat(e.target.value) || 0})}
+                          placeholder="e.g., 10000"
+                          data-testid="account-balance-input"
+                        />
+                      </div>
+                      <div>
+                        <Label>Owner</Label>
+                        <Select value={accountForm.owner_type} onValueChange={(value) => setAccountForm({...accountForm, owner_type: value})}>
+                          <SelectTrigger>
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="personal">Personal (My Account)</SelectItem>
+                            <SelectItem value="family">Family (Shared)</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+
+                    <div className="flex space-x-2">
+                      <Button type="submit" data-testid="save-account-btn">Save</Button>
+                      <Button type="button" variant="outline" onClick={() => setShowAddAccount(false)}>Cancel</Button>
+                    </div>
+                  </form>
+                </CardContent>
+              </Card>
+            )}
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {accounts.map(account => (
+                <Card key={account.id} data-testid={`account-${account.id}`} className="hover:shadow-lg transition-shadow">
+                  <CardHeader>
+                    <div className="flex items-center justify-between">
+                      <CardTitle className="text-lg">{account.name}</CardTitle>
+                      {isAdmin && (
+                        <button
+                          onClick={async () => {
+                            if (window.confirm('Are you sure you want to delete this account?')) {
+                              try {
+                                await accountAPI.deleteAccount(account.id);
+                                fetchData();
+                              } catch (error) {
+                                alert('Failed to delete account');
+                              }
+                            }
+                          }}
+                          className="text-red-600 hover:text-red-800"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </button>
+                      )}
+                    </div>
+                    <CardDescription>
+                      {account.type === 'bank' && '🏦 Bank Account'}
+                      {account.type === 'credit_card' && '💳 Credit Card'}
+                      {account.type === 'cash' && '💵 Cash'}
+                      {account.type === 'other' && '📌 Other'}
+                      {' • '}
+                      {account.owner_type === 'personal' ? '👤 Personal' : '👨‍👩‍👧‍👦 Family'}
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-2">
+                      <div className="flex justify-between items-center">
+                        <span className="text-sm text-gray-600">Current Balance:</span>
+                        <span className={`text-2xl font-bold ${account.current_balance >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                          ₹{account.current_balance?.toLocaleString()}
+                        </span>
+                      </div>
+                      <div className="flex justify-between items-center text-sm">
+                        <span className="text-gray-600">Opening Balance:</span>
+                        <span className="text-gray-900">₹{account.opening_balance?.toLocaleString()}</span>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+
+            {accounts.length === 0 && !showAddAccount && (
+              <Card>
+                <CardContent className="pt-6 text-center py-12">
+                  <p className="text-gray-500">No accounts yet. Add your first account to start tracking!</p>
+                </CardContent>
+              </Card>
+            )}
+          </div>
+        )}
+
         {/* Family Tab */}
         {activeTab === 'family' && (
           <div data-testid="family-view">
