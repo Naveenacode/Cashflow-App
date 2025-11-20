@@ -62,23 +62,46 @@ async def register(user_data: UserCreate):
                 detail="Invalid family code. Please check and try again."
             )
         
-        # Add user to existing family as member
-        family_member = FamilyMember(
+        # Create a join request instead of directly adding to family
+        join_request = JoinRequest(
             family_id=family["id"],
             user_id=user.id,
-            role="member"
+            user_name=user.name,
+            user_email=user.email,
+            user_icon=user.profile_icon,
+            status="pending"
+        )
+        request_doc = join_request.model_dump()
+        request_doc["created_at"] = request_doc["created_at"].isoformat()
+        await db.join_requests.insert_one(request_doc)
+        
+        # Create a temporary family for the user until approved
+        temp_family = Family(
+            name=f"{user.name}'s Temporary Family",
+            admin_user_id=user.id
+        )
+        temp_family_doc = temp_family.model_dump()
+        temp_family_doc["created_at"] = temp_family_doc["created_at"].isoformat()
+        await db.families.insert_one(temp_family_doc)
+        
+        # Add user to temp family
+        family_member = FamilyMember(
+            family_id=temp_family.id,
+            user_id=user.id,
+            role="admin"
         )
         member_doc = family_member.model_dump()
         member_doc["joined_at"] = member_doc["joined_at"].isoformat()
         await db.family_members.insert_one(member_doc)
         
-        # Create access token with existing family
+        # Create access token with temp family (will be updated upon approval)
         access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
         access_token = create_access_token(
             data={
                 "sub": user.id,
-                "family_id": family["id"],
-                "role": "member"
+                "family_id": temp_family.id,
+                "role": "admin",
+                "pending_approval": True  # Flag to show pending status
             },
             expires_delta=access_token_expires
         )
