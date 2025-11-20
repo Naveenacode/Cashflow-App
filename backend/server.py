@@ -168,10 +168,13 @@ async def create_transaction(
     transaction_data: TransactionCreate,
     current_user: dict = Depends(get_current_user)
 ):
-    # Handle transfer transactions
-    if transaction_data.type == "transfer":
+    # Handle transfer and investment transactions (both move money between accounts)
+    if transaction_data.type == "transfer" or transaction_data.type == "investment":
         if not transaction_data.account_id or not transaction_data.to_account_id:
-            raise HTTPException(status_code=400, detail="Transfer requires both account_id and to_account_id")
+            raise HTTPException(
+                status_code=400, 
+                detail=f"{transaction_data.type.capitalize()} requires both account_id (from) and to_account_id"
+            )
         
         # Update account balances
         from_account = await db.accounts.find_one({"id": transaction_data.account_id})
