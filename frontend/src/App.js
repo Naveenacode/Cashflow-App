@@ -928,12 +928,45 @@ function App() {
         {/* Compare Tab */}
         {activeTab === 'compare' && (
           <div className="space-y-6" data-testid="compare-view">
-            <Card>
-              <CardHeader>
-                <CardTitle>Compare Two Periods</CardTitle>
-                <CardDescription>Select two months to compare side-by-side</CardDescription>
-              </CardHeader>
-              <CardContent>
+            {/* Comparison Type Selector */}
+            <div className="flex items-center space-x-2 bg-gray-100 rounded-lg p-1 w-fit">
+              <button
+                onClick={() => {
+                  setComparisonType('period');
+                  setMemberComparison(null);
+                }}
+                className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                  comparisonType === 'period' 
+                    ? 'bg-white text-blue-600 shadow-sm' 
+                    : 'text-gray-600 hover:text-gray-900'
+                }`}
+              >
+                Compare Periods
+              </button>
+              <button
+                onClick={() => {
+                  setComparisonType('member');
+                  setComparisonPeriod1(null);
+                  setComparisonPeriod2(null);
+                }}
+                className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                  comparisonType === 'member' 
+                    ? 'bg-white text-blue-600 shadow-sm' 
+                    : 'text-gray-600 hover:text-gray-900'
+                }`}
+              >
+                Compare Members
+              </button>
+            </div>
+
+            {/* Period Comparison */}
+            {comparisonType === 'period' && (
+              <Card>
+                <CardHeader>
+                  <CardTitle>Compare Two Periods</CardTitle>
+                  <CardDescription>Select two months to compare side-by-side</CardDescription>
+                </CardHeader>
+                <CardContent>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {/* Period 1 */}
                   <div className="space-y-4 p-4 border rounded-lg bg-blue-50">
