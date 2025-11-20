@@ -421,13 +421,13 @@ function App() {
             </div>
             
             {/* Integrated Period Selector */}
-            <div className="flex flex-wrap items-center gap-3 p-4 bg-gray-50 rounded-lg border">
+            <div className="flex flex-wrap items-center gap-3 p-4 bg-white rounded-lg border border-gray-200 shadow-sm">
               <div className="flex items-center space-x-2">
                 <label className="text-sm font-medium text-gray-700">Period:</label>
                 <select
                   value={periodType}
                   onChange={(e) => setPeriodType(e.target.value)}
-                  className="border border-gray-600 rounded-md px-3 py-2 bg-gray-800 text-white text-sm"
+                  className="border border-gray-300 rounded-md px-3 py-2 bg-white text-gray-900 text-sm"
                   data-testid="period-type-selector"
                 >
                   <option value="monthly">Monthly</option>
@@ -441,11 +441,11 @@ function App() {
               {periodType === 'monthly' && (
                 <>
                   <div className="flex items-center space-x-2">
-                    <label className="text-sm font-medium text-gray-300">Month:</label>
+                    <label className="text-sm font-medium text-gray-700">Month:</label>
                     <select
                       value={selectedMonth}
                       onChange={(e) => setSelectedMonth(parseInt(e.target.value))}
-                      className="border border-gray-600 rounded-md px-3 py-2 bg-gray-800 text-white text-sm"
+                      className="border border-gray-300 rounded-md px-3 py-2 bg-white text-gray-900 text-sm"
                       data-testid="month-selector"
                     >
                       {months.map((month, index) => (
@@ -454,11 +454,11 @@ function App() {
                     </select>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <label className="text-sm font-medium text-gray-300">Year:</label>
+                    <label className="text-sm font-medium text-gray-700">Year:</label>
                     <select
                       value={selectedYear}
                       onChange={(e) => setSelectedYear(parseInt(e.target.value))}
-                      className="border border-gray-600 rounded-md px-3 py-2 bg-gray-800 text-white text-sm"
+                      className="border border-gray-300 rounded-md px-3 py-2 bg-white text-gray-900 text-sm"
                       data-testid="year-selector"
                     >
                       {[2023, 2024, 2025, 2026].map(year => (
@@ -472,11 +472,11 @@ function App() {
               {periodType === 'quarterly' && (
                 <>
                   <div className="flex items-center space-x-2">
-                    <label className="text-sm font-medium text-gray-300">Quarter:</label>
+                    <label className="text-sm font-medium text-gray-700">Quarter:</label>
                     <select
                       value={selectedQuarter}
                       onChange={(e) => setSelectedQuarter(parseInt(e.target.value))}
-                      className="border border-gray-600 rounded-md px-3 py-2 bg-gray-800 text-white text-sm"
+                      className="border border-gray-300 rounded-md px-3 py-2 bg-white text-gray-900 text-sm"
                       data-testid="quarter-selector"
                     >
                       <option value="1">Q1 (Jan-Mar)</option>
@@ -486,11 +486,11 @@ function App() {
                     </select>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <label className="text-sm font-medium text-gray-300">Year:</label>
+                    <label className="text-sm font-medium text-gray-700">Year:</label>
                     <select
                       value={selectedYear}
                       onChange={(e) => setSelectedYear(parseInt(e.target.value))}
-                      className="border border-gray-600 rounded-md px-3 py-2 bg-gray-800 text-white text-sm"
+                      className="border border-gray-300 rounded-md px-3 py-2 bg-white text-gray-900 text-sm"
                     >
                       {[2023, 2024, 2025, 2026].map(year => (
                         <option key={year} value={year}>{year}</option>
@@ -503,11 +503,11 @@ function App() {
               {periodType === 'half-yearly' && (
                 <>
                   <div className="flex items-center space-x-2">
-                    <label className="text-sm font-medium text-gray-300">Half:</label>
+                    <label className="text-sm font-medium text-gray-700">Half:</label>
                     <select
                       value={selectedHalf}
                       onChange={(e) => setSelectedHalf(parseInt(e.target.value))}
-                      className="border border-gray-600 rounded-md px-3 py-2 bg-gray-800 text-white text-sm"
+                      className="border border-gray-300 rounded-md px-3 py-2 bg-white text-gray-900 text-sm"
                       data-testid="half-selector"
                     >
                       <option value="1">H1 (Jan-Jun)</option>
@@ -515,11 +515,11 @@ function App() {
                     </select>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <label className="text-sm font-medium text-gray-300">Year:</label>
+                    <label className="text-sm font-medium text-gray-700">Year:</label>
                     <select
                       value={selectedYear}
                       onChange={(e) => setSelectedYear(parseInt(e.target.value))}
-                      className="border border-gray-600 rounded-md px-3 py-2 bg-gray-800 text-white text-sm"
+                      className="border border-gray-300 rounded-md px-3 py-2 bg-white text-gray-900 text-sm"
                     >
                       {[2023, 2024, 2025, 2026].map(year => (
                         <option key={year} value={year}>{year}</option>
@@ -531,11 +531,11 @@ function App() {
 
               {periodType === 'annual' && (
                 <div className="flex items-center space-x-2">
-                  <label className="text-sm font-medium text-gray-300">Year:</label>
+                  <label className="text-sm font-medium text-gray-700">Year:</label>
                   <select
                     value={selectedYear}
                     onChange={(e) => setSelectedYear(parseInt(e.target.value))}
-                    className="border border-gray-600 rounded-md px-3 py-2 bg-gray-800 text-white text-sm"
+                    className="border border-gray-300 rounded-md px-3 py-2 bg-white text-gray-900 text-sm"
                   >
                     {[2023, 2024, 2025, 2026].map(year => (
                       <option key={year} value={year}>{year}</option>
@@ -547,22 +547,22 @@ function App() {
               {periodType === 'custom' && (
                 <>
                   <div className="flex items-center space-x-2">
-                    <label className="text-sm font-medium text-gray-300">From:</label>
+                    <label className="text-sm font-medium text-gray-700">From:</label>
                     <input
                       type="date"
                       value={customStartDate}
                       onChange={(e) => setCustomStartDate(e.target.value)}
-                      className="border border-gray-600 rounded-md px-3 py-2 bg-gray-800 text-white text-sm"
+                      className="border border-gray-300 rounded-md px-3 py-2 bg-white text-gray-900 text-sm"
                       data-testid="custom-start-date"
                     />
                   </div>
                   <div className="flex items-center space-x-2">
-                    <label className="text-sm font-medium text-gray-300">To:</label>
+                    <label className="text-sm font-medium text-gray-700">To:</label>
                     <input
                       type="date"
                       value={customEndDate}
                       onChange={(e) => setCustomEndDate(e.target.value)}
-                      className="border border-gray-600 rounded-md px-3 py-2 bg-gray-800 text-white text-sm"
+                      className="border border-gray-300 rounded-md px-3 py-2 bg-white text-gray-900 text-sm"
                       data-testid="custom-end-date"
                     />
                   </div>
