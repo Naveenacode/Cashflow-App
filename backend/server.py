@@ -269,6 +269,63 @@ async def get_monthly_trend(year: Optional[int] = None):
     return list(monthly_data.values())
 
 
+# ============= BUDGET ENDPOINTS =============
+@api_router.get("/budget/status")
+async def get_budget_status(month: Optional[int] = None, year: Optional[int] = None):
+    if not month:
+        month = datetime.now().month
+    if not year:
+        year = datetime.now().year
+    
+    # Get all expense categories with budget limits
+    categories = await db.categories.find({
+        "type": "expense",
+        "budget_limit": {"$exists": True, "$ne": None}
+    }, {"_id": 0}).to_list(1000)
+    
+    budget_statuses = []
+    
+    for category in categories:
+        # Get transactions for this category in the specified month
+        transactions = await db.transactions.find({
+            "category_id": category["id"],
+            "type": "expense"
+        }, {"_id": 0}).to_list(10000)
+        
+        # Filter by month/year and calculate spent
+        spent = 0
+        for trans in transactions:
+            trans_date = trans.get('date')
+            if isinstance(trans_date, str):
+                trans_date = datetime.fromisoformat(trans_date)
+            if trans_date.month == month and trans_date.year == year:
+                spent += trans['amount']
+        
+        budget_limit = category.get("budget_limit", 0)
+        remaining = budget_limit - spent
+        percentage = (spent / budget_limit * 100) if budget_limit > 0 else 0
+        
+        # Determine status
+        if percentage >= 100:
+            status = "exceeded"
+        elif percentage >= 80:
+            status = "warning"
+        else:
+            status = "safe"
+        
+        budget_statuses.append({
+            "category_id": category["id"],
+            "category_name": category["name"],
+            "budget_limit": budget_limit,
+            "spent": spent,
+            "remaining": remaining,
+            "percentage": round(percentage, 2),
+            "status": status
+        })
+    
+    return budget_statuses
+
+
 # Include router
 app.include_router(api_router)
 
