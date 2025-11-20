@@ -216,12 +216,19 @@ function App() {
   };
 
   const handleDeleteTransaction = async (id) => {
+    if (!isAdmin) {
+      alert('Only admin can delete transactions');
+      return;
+    }
     if (window.confirm('Are you sure you want to delete this transaction?')) {
       try {
         await transactionAPI.deleteTransaction(id);
         fetchData();
+        alert('Transaction deleted successfully!');
       } catch (error) {
         console.error('Error deleting transaction:', error);
+        const errorMessage = error.response?.data?.detail || 'Failed to delete transaction. You may not have permission.';
+        alert(errorMessage);
       }
     }
   };
