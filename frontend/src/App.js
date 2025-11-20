@@ -156,6 +156,11 @@ function App() {
     'July', 'August', 'September', 'October', 'November', 'December'
   ];
 
+  const pieColors = [
+    '#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6',
+    '#EC4899', '#14B8A6', '#F97316', '#06B6D4', '#84CC16'
+  ];
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
