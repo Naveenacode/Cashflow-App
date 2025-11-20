@@ -10,6 +10,7 @@ import { Textarea } from './components/ui/textarea';
 import { Badge } from './components/ui/badge';
 import { TrendingUp, TrendingDown, DollarSign, Calendar, Plus, Trash2, Edit, AlertTriangle, ArrowRight } from 'lucide-react';
 import PieChart from './components/PieChart';
+import LineChart from './components/LineChart';
 
 function App() {
   const [activeTab, setActiveTab] = useState('dashboard');
