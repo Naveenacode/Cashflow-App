@@ -63,21 +63,56 @@ const PieChart = ({ data, title, colors, onSliceClick }) => {
       <h3 className="text-lg font-semibold text-center">{title}</h3>
       
       <div className="flex flex-col md:flex-row items-center justify-center gap-6">
-        {/* Pie Chart SVG */}
-        <svg viewBox="0 0 200 200" className="w-64 h-64">
-          {slices.map((slice, index) => (
-            <g key={index}>
-              <path
-                d={slice.pathData}
-                fill={slice.color}
-                stroke="white"
-                strokeWidth="2"
-                className="hover:opacity-80 transition-opacity cursor-pointer"
-                onClick={() => onSliceClick && onSliceClick(slice.label)}
-              >
-                <title>{`${slice.label}: $${slice.value.toLocaleString()} (${slice.percentage}%)`}</title>
-              </path>
-            </g>
+        {/* Pie Chart SVG with 3D Effect */}
+        <div className="relative" style={{ perspective: '1000px' }}>
+          <svg 
+            viewBox="0 0 200 220" 
+            className="w-64 h-64"
+            style={{
+              filter: 'drop-shadow(0 10px 25px rgba(0,0,0,0.15))',
+              transform: 'rotateX(15deg)',
+              transformStyle: 'preserve-3d'
+            }}
+          >
+            {/* 3D Shadow/Depth slices */}
+            {slices.map((slice, index) => (
+              <g key={`shadow-${index}`}>
+                <path
+                  d={slice.pathData.replace(/M 100 100/g, 'M 100 110')}
+                  fill={slice.color}
+                  opacity="0.3"
+                  filter="blur(2px)"
+                />
+              </g>
+            ))}
+            
+            {/* Main slices with gradient */}
+            {slices.map((slice, index) => {
+              const gradientId = `gradient-${index}`;
+              return (
+                <g key={index}>
+                  <defs>
+                    <linearGradient id={gradientId} x1="0%" y1="0%" x2="0%" y2="100%">
+                      <stop offset="0%" style={{ stopColor: slice.color, stopOpacity: 1 }} />
+                      <stop offset="100%" style={{ stopColor: slice.color, stopOpacity: 0.7 }} />
+                    </linearGradient>
+                  </defs>
+                  <path
+                    d={slice.pathData}
+                    fill={`url(#${gradientId})`}
+                    stroke="white"
+                    strokeWidth="3"
+                    className="hover:opacity-90 transition-all cursor-pointer hover:scale-105"
+                    onClick={() => onSliceClick && onSliceClick(slice.label)}
+                    style={{
+                      filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.2))',
+                      transformOrigin: 'center',
+                      transition: 'all 0.3s ease'
+                    }}
+                  >
+                    <title>{`${slice.label}: ₹${slice.value.toLocaleString()} (${slice.percentage}%)`}</title>
+                  </path>
+                </g>
           ))}
         </svg>
 
