@@ -939,34 +939,52 @@ function App() {
                   </CardContent>
                 </Card>
 
-                {/* Pie Charts Comparison */}
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                  <Card>
-                    <CardHeader>
-                      <CardTitle>{months[compareMonth1 - 1]} {compareYear1} - Expenses</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <PieChart 
-                        data={comparisonPeriod1.expense_by_category} 
-                        title=""
-                        colors={['#EF4444', '#F59E0B', '#EC4899', '#F97316', '#6B7280']}
-                      />
-                    </CardContent>
-                  </Card>
+                {/* Line Graph Comparisons */}
+                <Card>
+                  <CardContent className="pt-6">
+                    <LineChart 
+                      data1={comparisonPeriod1.income_by_category}
+                      data2={comparisonPeriod2.income_by_category}
+                      label1={`${months[compareMonth1 - 1]} ${compareYear1}`}
+                      label2={`${months[compareMonth2 - 1]} ${compareYear2}`}
+                      title="Income Comparison by Category"
+                      color1="#3B82F6"
+                      color2="#10B981"
+                    />
+                  </CardContent>
+                </Card>
 
-                  <Card>
-                    <CardHeader>
-                      <CardTitle>{months[compareMonth2 - 1]} {compareYear2} - Expenses</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <PieChart 
-                        data={comparisonPeriod2.expense_by_category} 
-                        title=""
-                        colors={['#EF4444', '#F59E0B', '#EC4899', '#F97316', '#6B7280']}
-                      />
-                    </CardContent>
-                  </Card>
-                </div>
+                <Card>
+                  <CardContent className="pt-6">
+                    <LineChart 
+                      data1={comparisonPeriod1.expense_by_category}
+                      data2={comparisonPeriod2.expense_by_category}
+                      label1={`${months[compareMonth1 - 1]} ${compareYear1}`}
+                      label2={`${months[compareMonth2 - 1]} ${compareYear2}`}
+                      title="Expense Comparison by Category"
+                      color1="#EF4444"
+                      color2="#F97316"
+                    />
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardContent className="pt-6">
+                    <LineChart 
+                      data1={{
+                        'Profit': comparisonPeriod1.profit
+                      }}
+                      data2={{
+                        'Profit': comparisonPeriod2.profit
+                      }}
+                      label1={`${months[compareMonth1 - 1]} ${compareYear1}`}
+                      label2={`${months[compareMonth2 - 1]} ${compareYear2}`}
+                      title="Net Profit Comparison"
+                      color1="#8B5CF6"
+                      color2="#EC4899"
+                    />
+                  </CardContent>
+                </Card>
               </div>
             )}
           </div>
