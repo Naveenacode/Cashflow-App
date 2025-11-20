@@ -7,7 +7,8 @@ import os
 
 from models import (
     User, UserCreate, UserLogin, UserInDB, Token,
-    Family, FamilyCreate, FamilyMember, FamilyMemberCreate
+    Family, FamilyCreate, FamilyMember, FamilyMemberCreate,
+    JoinRequest, JoinRequestCreate
 )
 from auth import (
     hash_password, verify_password, create_access_token,
