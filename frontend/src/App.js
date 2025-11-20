@@ -972,7 +972,7 @@ function App() {
         {activeTab === 'compare' && (
           <div className="space-y-6" data-testid="compare-view">
             {/* Comparison Type Selector */}
-            <div className="flex items-center space-x-2 bg-gray-700 rounded-lg p-1 w-fit">
+            <div className="flex items-center space-x-2 bg-gray-100 rounded-lg p-1 w-fit">
               <button
                 onClick={() => {
                   setComparisonType('period');
@@ -980,8 +980,8 @@ function App() {
                 }}
                 className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
                   comparisonType === 'period' 
-                    ? 'bg-white text-blue-600 shadow-sm' 
-                    : 'text-gray-600 hover:text-gray-900'
+                    ? 'bg-blue-600 text-white shadow-sm' 
+                    : 'text-gray-700 hover:text-gray-900'
                 }`}
               >
                 Compare Periods
@@ -994,8 +994,8 @@ function App() {
                 }}
                 className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
                   comparisonType === 'member' 
-                    ? 'bg-white text-blue-600 shadow-sm' 
-                    : 'text-gray-600 hover:text-gray-900'
+                    ? 'bg-blue-600 text-white shadow-sm' 
+                    : 'text-gray-700 hover:text-gray-900'
                 }`}
               >
                 Compare Members
