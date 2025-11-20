@@ -50,4 +50,8 @@ export const authAPI = {
   joinFamily: (familyCode) => api.post('/auth/join-family', { family_code: familyCode }),
   updateProfile: (data) => api.put('/auth/update-profile', data),
   removeMember: (userId) => api.post('/auth/remove-member', { user_id: userId }),
+  getPendingRequests: () => api.get('/auth/pending-requests'),
+  approveRequest: (requestId) => api.post('/auth/approve-request', { request_id: requestId }),
+  rejectRequest: (requestId) => api.post('/auth/reject-request', { request_id: requestId }),
+  getMyJoinStatus: () => api.get('/auth/my-join-status'),
 };
