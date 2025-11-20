@@ -628,6 +628,13 @@ function App() {
                   `${months[selectedMonth - 1]} ${selectedYear}`
                 }
               </h2>
+              {/* TEST BUTTON - Remove after testing */}
+              <button 
+                onClick={() => alert('TEST: Button click is working!')}
+                className="mt-2 px-4 py-2 bg-red-600 text-white rounded"
+              >
+                TEST DELETE (Click Me)
+              </button>
             </div>
 
             {/* PIE CHARTS FIRST - HOME VIEW */}
