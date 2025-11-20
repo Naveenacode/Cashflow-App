@@ -398,13 +398,13 @@ async def get_previous_month_balance(month: int, year: int, family_id: str, user
                 prev_income += trans['amount']
             elif trans['type'] == 'expense':
                 prev_expense += trans['amount']
-            # Investment and transfer don't affect profit calculation
+            # Investment and transfer don't affect closing balance calculation
     
-    # profit = income - expense (investment is just moving money between accounts)
-    prev_profit = prev_income - prev_expense
-    prev_loan = abs(prev_profit) if prev_profit < 0 else 0
+    # closing_balance = income - expense (investment is just moving money between accounts)
+    prev_closing_balance = prev_income - prev_expense
+    prev_loan = abs(prev_closing_balance) if prev_closing_balance < 0 else 0
     
-    return prev_profit if prev_profit > 0 else 0, prev_loan
+    return prev_closing_balance if prev_closing_balance > 0 else 0, prev_loan
 
 
 @api_router.get("/dashboard/stats")
