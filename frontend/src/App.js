@@ -1227,8 +1227,8 @@ function App() {
                 <CardContent>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {/* Member 1 */}
-                    <div className="space-y-4 p-4 border rounded-lg bg-blue-900 bg-opacity-20">
-                      <h3 className="font-semibold text-blue-300">Member 1</h3>
+                    <div className="space-y-4 p-4 border rounded-lg bg-blue-50">
+                      <h3 className="font-semibold text-blue-700">Member 1</h3>
                       <div>
                         <Label>Select Member</Label>
                         <Select value={compareMember1} onValueChange={setCompareMember1}>
