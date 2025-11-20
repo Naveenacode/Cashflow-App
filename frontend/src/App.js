@@ -618,7 +618,7 @@ function App() {
           <div className="space-y-6" data-testid="dashboard-view">
             {/* Dashboard Title */}
             <div className="text-center mb-6">
-              <h2 className="text-3xl font-bold text-white">
+              <h2 className="text-3xl font-bold text-gray-900">
                 Dashboard for {
                   periodType === 'monthly' ? `${months[selectedMonth - 1]} ${selectedYear}` :
                   periodType === 'quarterly' ? `Q${selectedQuarter} ${selectedYear}` :
