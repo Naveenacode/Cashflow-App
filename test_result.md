@@ -306,7 +306,7 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Frontend Investment and Account features testing completed successfully"
+    - "Budget Alert Ticker Feature (90%+ Categories Only)"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
