@@ -56,8 +56,8 @@ export default function PendingApproval() {
             </p>
           </div>
 
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-            <p className="text-sm text-blue-900">
+          <div className="bg-blue-900 border border-blue-700 rounded-lg p-4">
+            <p className="text-sm text-blue-100">
               <strong>What happens next?</strong>
               <br />
               The family admin will review your request and approve or reject it. 
