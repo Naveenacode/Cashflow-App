@@ -265,7 +265,22 @@ async def update_transaction(
 
 
 @api_router.delete("/transactions/{transaction_id}")
-async def delete_transaction(transaction_id: str):
+async def delete_transaction(
+    transaction_id: str,
+    current_user: dict = Depends(get_current_user)
+):
+    """Delete transaction. Members can only delete their own."""
+    existing = await db.transactions.find_one({"id": transaction_id})
+    if not existing:
+        raise HTTPException(status_code=404, detail="Transaction not found")
+    
+    # Check permissions
+    if current_user["role"] != "admin" and existing.get("user_id") != current_user["user_id"]:
+        raise HTTPException(
+            status_code=403,
+            detail="You can only delete your own transactions"
+        )
+    
     result = await db.transactions.delete_one({"id": transaction_id})
     if result.deleted_count == 0:
         raise HTTPException(status_code=404, detail="Transaction not found")
