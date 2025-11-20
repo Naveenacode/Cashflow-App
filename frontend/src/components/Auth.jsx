@@ -103,6 +103,56 @@ export default function Auth() {
           <form onSubmit={handleSubmit} className="space-y-4">
             {!isLogin && (
               <>
+                {/* Registration Type Selector */}
+                <div className="space-y-3">
+                  <Label>I want to...</Label>
+                  <div className="grid grid-cols-2 gap-3">
+                    <button
+                      type="button"
+                      onClick={() => setFormData({ ...formData, registrationType: 'create', familyCode: '' })}
+                      className={`p-4 rounded-lg border-2 text-left transition-all ${
+                        formData.registrationType === 'create'
+                          ? 'border-blue-600 bg-blue-50'
+                          : 'border-gray-200 hover:border-gray-300'
+                      }`}
+                    >
+                      <Users className="h-5 w-5 text-blue-600 mb-2" />
+                      <div className="font-semibold text-sm">Create New Family</div>
+                      <div className="text-xs text-gray-500 mt-1">I'll be the admin</div>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setFormData({ ...formData, registrationType: 'join' })}
+                      className={`p-4 rounded-lg border-2 text-left transition-all ${
+                        formData.registrationType === 'join'
+                          ? 'border-blue-600 bg-blue-50'
+                          : 'border-gray-200 hover:border-gray-300'
+                      }`}
+                    >
+                      <User className="h-5 w-5 text-blue-600 mb-2" />
+                      <div className="font-semibold text-sm">Join Existing Family</div>
+                      <div className="text-xs text-gray-500 mt-1">I have a code</div>
+                    </button>
+                  </div>
+                </div>
+
+                {/* Family Code Input (only for join) */}
+                {formData.registrationType === 'join' && (
+                  <div className="space-y-2">
+                    <Label htmlFor="familyCode">Family Code</Label>
+                    <Input
+                      id="familyCode"
+                      placeholder="Enter 8-character code"
+                      value={formData.familyCode}
+                      onChange={(e) => setFormData({ ...formData, familyCode: e.target.value.toUpperCase() })}
+                      maxLength={8}
+                      className="text-center text-lg tracking-wider font-mono"
+                      required
+                    />
+                    <p className="text-xs text-gray-500">Ask your family admin for the code</p>
+                  </div>
+                )}
+
                 <div className="space-y-2">
                   <Label htmlFor="name">Full Name</Label>
                   <div className="relative">
