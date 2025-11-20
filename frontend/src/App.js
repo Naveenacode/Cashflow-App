@@ -557,11 +557,13 @@ function App() {
 
             <Card>
               <CardContent className="pt-6">
-                {transactions.length === 0 ? (
-                  <p className="text-center text-gray-500 py-8">No transactions for this month</p>
+                {getFilteredTransactions().length === 0 ? (
+                  <p className="text-center text-gray-500 py-8">
+                    {selectedCategoryFilter ? `No transactions found for ${selectedCategoryFilter}` : 'No transactions for this month'}
+                  </p>
                 ) : (
                   <div className="space-y-3">
-                    {transactions.map(transaction => (
+                    {getFilteredTransactions().map(transaction => (
                       <div key={transaction.id} className="border rounded-lg p-4 flex items-start justify-between" data-testid={`transaction-${transaction.id}`}>
                         <div className="flex-1">
                           <div className="flex items-center space-x-2">
