@@ -1,6 +1,6 @@
 import React from 'react';
 
-const PieChart = ({ data, title, colors }) => {
+const PieChart = ({ data, title, colors, onSliceClick }) => {
   if (!data || Object.keys(data).length === 0) {
     return (
       <div className="flex items-center justify-center h-64 text-gray-400">
