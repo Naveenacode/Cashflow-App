@@ -141,7 +141,7 @@ function App() {
             closing_balance: periodStatsRes.data.closing_balance > 0 ? periodStatsRes.data.closing_balance : 0,
             loan_amount: 0,
             inherited_loan: 0,
-            has_deficit: periodStatsRes.data.profit < 0
+            has_deficit: periodStatsRes.data.closing_balance < 0
           });
           
           // Get transactions for display
