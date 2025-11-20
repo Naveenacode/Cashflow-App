@@ -188,9 +188,13 @@ function App() {
     e.preventDefault();
     try {
       // Validate required fields
-      if (transactionForm.type === 'transfer') {
+      if (transactionForm.type === 'transfer' || transactionForm.type === 'investment') {
         if (!transactionForm.account_id || !transactionForm.to_account_id) {
-          alert('Please select both From and To accounts for transfer');
+          alert(`Please select both From and To accounts for ${transactionForm.type}`);
+          return;
+        }
+        if (transactionForm.type === 'investment' && !transactionForm.category_id) {
+          alert('Please select an investment category');
           return;
         }
       } else {
