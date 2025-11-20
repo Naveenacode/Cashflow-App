@@ -731,7 +731,7 @@ function App() {
                             budget.status === 'warning' ? 'text-yellow-600' :
                             'text-green-600'
                           }`}>
-                            ${budget.spent.toLocaleString()} / ${budget.budget_limit.toLocaleString()}
+                            ₹{budget.spent.toLocaleString()} / ₹{budget.budget_limit.toLocaleString()}
                           </span>
                         </div>
                         <div className="relative w-full bg-gray-200 rounded-full h-2">
@@ -747,11 +747,11 @@ function App() {
                         <div className="flex items-center justify-between text-xs">
                           <span className="text-gray-500">{budget.percentage.toFixed(1)}% used</span>
                           {budget.status === 'exceeded' ? (
-                            <span className="text-red-600 font-semibold">⚠️ Over by ${Math.abs(budget.remaining).toLocaleString()}</span>
+                            <span className="text-red-600 font-semibold">⚠️ Over by ₹{Math.abs(budget.remaining).toLocaleString()}</span>
                           ) : budget.status === 'warning' ? (
-                            <span className="text-yellow-600 font-semibold">⚠️ ${budget.remaining.toLocaleString()} remaining</span>
+                            <span className="text-yellow-600 font-semibold">⚠️ ₹{budget.remaining.toLocaleString()} remaining</span>
                           ) : (
-                            <span className="text-green-600">${budget.remaining.toLocaleString()} remaining</span>
+                            <span className="text-green-600">₹{budget.remaining.toLocaleString()} remaining</span>
                           )}
                         </div>
                       </div>
