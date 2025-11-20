@@ -53,7 +53,25 @@ export default function Auth() {
           setLoading(false);
           return;
         }
-        await register(formData.name, formData.email, formData.password, formData.profile_icon);
+        if (formData.registrationType === 'join' && !formData.familyCode) {
+          setError('Please enter a family code to join');
+          setLoading(false);
+          return;
+        }
+        if (formData.registrationType === 'join' && formData.familyCode.length !== 8) {
+          setError('Family code must be 8 characters');
+          setLoading(false);
+          return;
+        }
+        
+        // Register with family code if joining
+        await register(
+          formData.name, 
+          formData.email, 
+          formData.password, 
+          formData.profile_icon,
+          formData.registrationType === 'join' ? formData.familyCode : null
+        );
       }
     } catch (err) {
       setError(err.response?.data?.detail || 'An error occurred. Please try again.');
