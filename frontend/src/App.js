@@ -1259,6 +1259,20 @@ function App() {
             </div>
           </div>
         )}
+
+        {/* Family Tab */}
+        {activeTab === 'family' && (
+          <div data-testid="family-view">
+            <FamilyManagement />
+            
+            {/* Join Family Section (for members who want to switch families) */}
+            {!isAdmin && (
+              <div className="mt-6">
+                <JoinFamily />
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
