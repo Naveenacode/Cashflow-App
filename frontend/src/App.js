@@ -808,7 +808,7 @@ function App() {
           <div className="space-y-6" data-testid="transactions-view">
             <div className="flex justify-between items-center">
               <div>
-                <h2 className="text-2xl font-bold">Transactions</h2>
+                <h2 className="text-2xl font-bold text-gray-900">Transactions</h2>
                 {selectedCategoryFilter && (
                   <div className="flex items-center space-x-2 mt-2">
                     <Badge className="bg-blue-100 text-blue-800">
