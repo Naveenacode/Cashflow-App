@@ -387,7 +387,7 @@ function App() {
                 <select
                   value={periodType}
                   onChange={(e) => setPeriodType(e.target.value)}
-                  className="border rounded-md px-3 py-2 bg-white text-sm"
+                  className="border border-gray-600 rounded-md px-3 py-2 bg-gray-800 text-white text-sm"
                   data-testid="period-type-selector"
                 >
                   <option value="monthly">Monthly</option>
@@ -405,7 +405,7 @@ function App() {
                     <select
                       value={selectedMonth}
                       onChange={(e) => setSelectedMonth(parseInt(e.target.value))}
-                      className="border rounded-md px-3 py-2 bg-white text-sm"
+                      className="border border-gray-600 rounded-md px-3 py-2 bg-gray-800 text-white text-sm"
                       data-testid="month-selector"
                     >
                       {months.map((month, index) => (
@@ -418,7 +418,7 @@ function App() {
                     <select
                       value={selectedYear}
                       onChange={(e) => setSelectedYear(parseInt(e.target.value))}
-                      className="border rounded-md px-3 py-2 bg-white text-sm"
+                      className="border border-gray-600 rounded-md px-3 py-2 bg-gray-800 text-white text-sm"
                       data-testid="year-selector"
                     >
                       {[2023, 2024, 2025, 2026].map(year => (
@@ -436,7 +436,7 @@ function App() {
                     <select
                       value={selectedQuarter}
                       onChange={(e) => setSelectedQuarter(parseInt(e.target.value))}
-                      className="border rounded-md px-3 py-2 bg-white text-sm"
+                      className="border border-gray-600 rounded-md px-3 py-2 bg-gray-800 text-white text-sm"
                       data-testid="quarter-selector"
                     >
                       <option value="1">Q1 (Jan-Mar)</option>
@@ -450,7 +450,7 @@ function App() {
                     <select
                       value={selectedYear}
                       onChange={(e) => setSelectedYear(parseInt(e.target.value))}
-                      className="border rounded-md px-3 py-2 bg-white text-sm"
+                      className="border border-gray-600 rounded-md px-3 py-2 bg-gray-800 text-white text-sm"
                     >
                       {[2023, 2024, 2025, 2026].map(year => (
                         <option key={year} value={year}>{year}</option>
@@ -467,7 +467,7 @@ function App() {
                     <select
                       value={selectedHalf}
                       onChange={(e) => setSelectedHalf(parseInt(e.target.value))}
-                      className="border rounded-md px-3 py-2 bg-white text-sm"
+                      className="border border-gray-600 rounded-md px-3 py-2 bg-gray-800 text-white text-sm"
                       data-testid="half-selector"
                     >
                       <option value="1">H1 (Jan-Jun)</option>
@@ -479,7 +479,7 @@ function App() {
                     <select
                       value={selectedYear}
                       onChange={(e) => setSelectedYear(parseInt(e.target.value))}
-                      className="border rounded-md px-3 py-2 bg-white text-sm"
+                      className="border border-gray-600 rounded-md px-3 py-2 bg-gray-800 text-white text-sm"
                     >
                       {[2023, 2024, 2025, 2026].map(year => (
                         <option key={year} value={year}>{year}</option>
@@ -495,7 +495,7 @@ function App() {
                   <select
                     value={selectedYear}
                     onChange={(e) => setSelectedYear(parseInt(e.target.value))}
-                    className="border rounded-md px-3 py-2 bg-white text-sm"
+                    className="border border-gray-600 rounded-md px-3 py-2 bg-gray-800 text-white text-sm"
                   >
                     {[2023, 2024, 2025, 2026].map(year => (
                       <option key={year} value={year}>{year}</option>
@@ -512,7 +512,7 @@ function App() {
                       type="date"
                       value={customStartDate}
                       onChange={(e) => setCustomStartDate(e.target.value)}
-                      className="border rounded-md px-3 py-2 bg-white text-sm"
+                      className="border border-gray-600 rounded-md px-3 py-2 bg-gray-800 text-white text-sm"
                       data-testid="custom-start-date"
                     />
                   </div>
@@ -522,7 +522,7 @@ function App() {
                       type="date"
                       value={customEndDate}
                       onChange={(e) => setCustomEndDate(e.target.value)}
-                      className="border rounded-md px-3 py-2 bg-white text-sm"
+                      className="border border-gray-600 rounded-md px-3 py-2 bg-gray-800 text-white text-sm"
                       data-testid="custom-end-date"
                     />
                   </div>
