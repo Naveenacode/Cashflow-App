@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import { useAuth } from '../AuthContext';
-import { Users, Copy, CheckCircle, Trash2, UserPlus } from 'lucide-react';
+import { authAPI } from '../api';
+import { Users, Copy, CheckCircle, Trash2, UserPlus, Clock, X } from 'lucide-react';
 
 const PROFILE_ICONS = {
   'user-circle': '👤',
