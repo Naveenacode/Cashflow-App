@@ -109,6 +109,59 @@ async def delete_category(
     return {"message": "Category deleted successfully"}
 
 
+# ============= ACCOUNT ENDPOINTS =============
+@api_router.post("/accounts", response_model=Account)
+async def create_account(
+    account_data: AccountCreate,
+    current_user: dict = Depends(get_current_user)
+):
+    """Create a new account (bank, credit card, cash, other)"""
+    account = Account(**account_data.model_dump())
+    account.family_id = current_user["family_id"]
+    account.current_balance = account_data.opening_balance
+    
+    # Set owner
+    if account_data.owner_type == "personal":
+        account.owner_user_id = current_user["user_id"]
+    
+    account_doc = account.model_dump()
+    account_doc["created_at"] = account_doc["created_at"].isoformat()
+    
+    await db.accounts.insert_one(account_doc)
+    return account
+
+
+@api_router.get("/accounts", response_model=List[Account])
+async def get_accounts(
+    current_user: dict = Depends(get_current_user)
+):
+    """Get all accounts for current family (family accounts + user's personal accounts)"""
+    accounts = await db.accounts.find({
+        "family_id": current_user["family_id"],
+        "$or": [
+            {"owner_type": "family"},
+            {"owner_user_id": current_user["user_id"]}
+        ]
+    }, {"_id": 0}).to_list(1000)
+    
+    for acc in accounts:
+        if isinstance(acc.get('created_at'), str):
+            acc['created_at'] = datetime.fromisoformat(acc['created_at'])
+    return accounts
+
+
+@api_router.delete("/accounts/{account_id}")
+async def delete_account(
+    account_id: str,
+    current_user: dict = Depends(get_admin_user)
+):
+    """Delete an account. Admin only."""
+    result = await db.accounts.delete_one({"id": account_id})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Account not found")
+    return {"message": "Account deleted successfully"}
+
+
 # ============= TRANSACTION ENDPOINTS =============
 @api_router.post("/transactions", response_model=Transaction)
 async def create_transaction(
