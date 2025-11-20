@@ -19,6 +19,8 @@ const PROFILE_ICONS = {
 export default function FamilyManagement() {
   const { family, isAdmin } = useAuth();
   const [copied, setCopied] = useState(false);
+  const [pendingRequests, setPendingRequests] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const copyFamilyCode = () => {
     navigator.clipboard.writeText(family.family_code);
