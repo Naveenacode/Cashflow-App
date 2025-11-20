@@ -271,6 +271,54 @@ function App() {
               </Card>
             </div>
 
+            {/* Carryover Information */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {stats.opening_balance > 0 && (
+                <Card data-testid="opening-balance-card" className="border-green-200 bg-green-50">
+                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-sm font-medium">Opening Balance</CardTitle>
+                    <ArrowRight className="h-4 w-4 text-green-600" />
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-2xl font-bold text-green-600">
+                      ${stats.opening_balance.toLocaleString()}
+                    </div>
+                    <p className="text-xs text-green-700 mt-1">Profit from previous month</p>
+                  </CardContent>
+                </Card>
+              )}
+
+              {stats.closing_balance > 0 && (
+                <Card data-testid="closing-balance-card" className="border-blue-200 bg-blue-50">
+                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-sm font-medium">Closing Balance</CardTitle>
+                    <TrendingUp className="h-4 w-4 text-blue-600" />
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-2xl font-bold text-blue-600">
+                      ${stats.closing_balance.toLocaleString()}
+                    </div>
+                    <p className="text-xs text-blue-700 mt-1">Will carry to next month</p>
+                  </CardContent>
+                </Card>
+              )}
+
+              {stats.loan_amount > 0 && (
+                <Card data-testid="loan-card" className="border-red-200 bg-red-50">
+                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-sm font-medium">Outstanding Loan</CardTitle>
+                    <AlertTriangle className="h-4 w-4 text-red-600" />
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-2xl font-bold text-red-600">
+                      ${stats.loan_amount.toLocaleString()}
+                    </div>
+                    <p className="text-xs text-red-700 mt-1">Deficit to be covered</p>
+                  </CardContent>
+                </Card>
+              )}
+            </div>
+
             {/* Budget Status */}
             {budgetStatuses.length > 0 && (
               <Card data-testid="budget-status-card">
