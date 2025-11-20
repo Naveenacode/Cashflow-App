@@ -592,7 +592,7 @@ function App() {
 
             {/* PIE CHARTS FIRST - HOME VIEW */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <Card data-testid="income-pie-chart" className="border-2 border-green-200">
+              <Card data-testid="income-pie-chart" className="border-2 border-green-600">
                 <CardContent className="pt-6">
                   <PieChart 
                     data={stats.income_by_category} 
@@ -664,7 +664,7 @@ function App() {
             {/* Carryover Information */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {stats.opening_balance > 0 && (
-                <Card data-testid="opening-balance-card" className="border-green-200 bg-green-900 bg-opacity-20">
+                <Card data-testid="opening-balance-card" className="border-green-600 bg-green-900 bg-opacity-20">
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-sm font-medium">Opening Balance</CardTitle>
                     <ArrowRight className="h-4 w-4 text-green-600" />
@@ -679,7 +679,7 @@ function App() {
               )}
 
               {stats.closing_balance > 0 && (
-                <Card data-testid="closing-balance-card" className="border-blue-200 bg-blue-900 bg-opacity-20">
+                <Card data-testid="closing-balance-card" className="border-blue-600 bg-blue-900 bg-opacity-20">
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-sm font-medium">Closing Balance</CardTitle>
                     <TrendingUp className="h-4 w-4 text-blue-600" />
@@ -1041,7 +1041,7 @@ function App() {
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {/* Period 1 Summary */}
-                  <Card className="border-2 border-blue-200">
+                  <Card className="border-2 border-blue-600">
                     <CardHeader className="bg-blue-900 bg-opacity-20">
                       <CardTitle>{months[compareMonth1 - 1]} {compareYear1}</CardTitle>
                     </CardHeader>
@@ -1068,7 +1068,7 @@ function App() {
                   </Card>
 
                   {/* Period 2 Summary */}
-                  <Card className="border-2 border-green-200">
+                  <Card className="border-2 border-green-600">
                     <CardHeader className="bg-green-900 bg-opacity-20">
                       <CardTitle>{months[compareMonth2 - 1]} {compareYear2}</CardTitle>
                     </CardHeader>
@@ -1096,7 +1096,7 @@ function App() {
                 </div>
 
                 {/* Difference Card */}
-                <Card className="border-2 border-purple-200">
+                <Card className="border-2 border-purple-600">
                   <CardHeader className="bg-purple-900 bg-opacity-20">
                     <CardTitle>Difference Analysis</CardTitle>
                   </CardHeader>
@@ -1247,7 +1247,7 @@ function App() {
                     <>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         {/* Member 1 Summary */}
-                        <Card className="border-2 border-blue-200">
+                        <Card className="border-2 border-blue-600">
                           <CardHeader className="bg-blue-900 bg-opacity-20">
                             <CardTitle className="flex items-center space-x-2">
                               <span className="text-2xl">{PROFILE_ICONS[member1?.profile_icon]}</span>
@@ -1277,7 +1277,7 @@ function App() {
                         </Card>
 
                         {/* Member 2 Summary */}
-                        <Card className="border-2 border-green-200">
+                        <Card className="border-2 border-green-600">
                           <CardHeader className="bg-green-900 bg-opacity-20">
                             <CardTitle className="flex items-center space-x-2">
                               <span className="text-2xl">{PROFILE_ICONS[member2?.profile_icon]}</span>
@@ -1308,7 +1308,7 @@ function App() {
                       </div>
 
                       {/* Difference Analysis */}
-                      <Card className="border-2 border-purple-200">
+                      <Card className="border-2 border-purple-600">
                         <CardHeader className="bg-purple-900 bg-opacity-20">
                           <CardTitle>Difference Analysis</CardTitle>
                         </CardHeader>
