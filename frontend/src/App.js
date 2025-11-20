@@ -835,19 +835,31 @@ function App() {
                   <div className="space-y-3">
                     {getFilteredTransactions().map(transaction => (
                       <div key={transaction.id} className="border rounded-lg p-4 flex items-start justify-between" data-testid={`transaction-${transaction.id}`}>
-                        <div className="flex-1">
-                          <div className="flex items-center space-x-2">
-                            <Badge variant={transaction.type === 'income' ? 'default' : 'destructive'}>
-                              {transaction.type}
-                            </Badge>
-                            <span className="font-semibold">{getCategoryName(transaction.category_id)}</span>
-                          </div>
-                          {transaction.description && (
-                            <p className="text-sm text-gray-600 mt-1">{transaction.description}</p>
+                        <div className="flex items-center space-x-3 flex-1">
+                          {/* User Icon (for family view) */}
+                          {viewMode === 'family' && transaction.user_icon && (
+                            <div className="text-2xl flex-shrink-0" title={transaction.user_name}>
+                              {PROFILE_ICONS[transaction.user_icon]}
+                            </div>
                           )}
-                          <p className="text-xs text-gray-500 mt-1">
-                            {new Date(transaction.date).toLocaleDateString()}
-                          </p>
+                          
+                          <div className="flex-1">
+                            <div className="flex items-center space-x-2">
+                              <Badge variant={transaction.type === 'income' ? 'default' : 'destructive'}>
+                                {transaction.type}
+                              </Badge>
+                              <span className="font-semibold">{getCategoryName(transaction.category_id)}</span>
+                              {viewMode === 'family' && transaction.user_name && (
+                                <span className="text-xs text-gray-500">by {transaction.user_name}</span>
+                              )}
+                            </div>
+                            {transaction.description && (
+                              <p className="text-sm text-gray-600 mt-1">{transaction.description}</p>
+                            )}
+                            <p className="text-xs text-gray-500 mt-1">
+                              {new Date(transaction.date).toLocaleDateString()}
+                            </p>
+                          </div>
                         </div>
                         <div className="flex items-center space-x-3">
                           <span className={`text-lg font-bold ${transaction.type === 'income' ? 'text-green-600' : 'text-red-600'}`}>
