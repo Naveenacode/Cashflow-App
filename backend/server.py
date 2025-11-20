@@ -71,13 +71,53 @@ async def create_transaction(transaction_data: TransactionCreate):
     if not category:
         raise HTTPException(status_code=404, detail="Category not found")
     
+    # Check budget limit for expense categories
+    budget_warning = None
+    if transaction_data.type == "expense" and category.get("budget_limit"):
+        # Get current month's spending for this category
+        now = datetime.now()
+        month_transactions = await db.transactions.find({
+            "category_id": transaction_data.category_id,
+            "type": "expense"
+        }, {"_id": 0}).to_list(10000)
+        
+        current_spent = 0
+        for trans in month_transactions:
+            trans_date = trans.get('date')
+            if isinstance(trans_date, str):
+                trans_date = datetime.fromisoformat(trans_date)
+            if trans_date.month == now.month and trans_date.year == now.year:
+                current_spent += trans['amount']
+        
+        new_total = current_spent + transaction_data.amount
+        budget_limit = category["budget_limit"]
+        
+        if new_total >= budget_limit:
+            budget_warning = {
+                "message": f"Budget limit reached! Spending ${new_total:.2f} of ${budget_limit:.2f} budget for {category['name']}",
+                "current_spent": current_spent,
+                "new_total": new_total,
+                "budget_limit": budget_limit,
+                "exceeded": new_total > budget_limit
+            }
+    
     transaction = Transaction(**transaction_data.model_dump())
     transaction_doc = transaction.model_dump()
     transaction_doc["date"] = transaction_doc["date"].isoformat()
     transaction_doc["created_at"] = transaction_doc["created_at"].isoformat()
     
+    # Add budget warning to response if exists
+    if budget_warning:
+        transaction_doc["budget_warning"] = budget_warning
+    
     await db.transactions.insert_one(transaction_doc)
-    return transaction
+    
+    # Return transaction with budget warning in response
+    result = Transaction(**transaction.model_dump())
+    if budget_warning:
+        return {"transaction": result, "budget_warning": budget_warning}
+    
+    return result
 
 
 @api_router.get("/transactions", response_model=List[Transaction])
