@@ -185,31 +185,78 @@ async def delete_transaction(transaction_id: str):
 
 
 # ============= DASHBOARD STATS =============
+async def get_previous_month_balance(month: int, year: int):
+    """Get the closing balance from previous month"""
+    prev_month = month - 1
+    prev_year = year
+    if prev_month == 0:
+        prev_month = 12
+        prev_year = year - 1
+    
+    # Check if balance exists
+    balance = await db.monthly_balances.find_one({
+        "month": prev_month,
+        "year": prev_year
+    })
+    
+    if balance:
+        return balance.get("closing_balance", 0), balance.get("loan_amount", 0)
+    
+    # Calculate if not exists
+    transactions = await db.transactions.find({}, {"_id": 0}).to_list(10000)
+    prev_income = 0
+    prev_expense = 0
+    
+    for trans in transactions:
+        trans_date = trans.get('date')
+        if isinstance(trans_date, str):
+            trans_date = datetime.fromisoformat(trans_date)
+        if trans_date.month == prev_month and trans_date.year == prev_year:
+            if trans['type'] == 'income':
+                prev_income += trans['amount']
+            else:
+                prev_expense += trans['amount']
+    
+    prev_profit = prev_income - prev_expense
+    prev_loan = abs(prev_profit) if prev_profit < 0 else 0
+    
+    return prev_profit if prev_profit > 0 else 0, prev_loan
+
+
 @api_router.get("/dashboard/stats")
 async def get_dashboard_stats(month: Optional[int] = None, year: Optional[int] = None):
+    if not month:
+        month = datetime.now().month
+    if not year:
+        year = datetime.now().year
+    
+    # Get opening balance from previous month
+    opening_balance, inherited_loan = await get_previous_month_balance(month, year)
+    
     # Get all transactions
     transactions = await db.transactions.find({}, {"_id": 0}).to_list(10000)
     
-    # Convert dates
+    # Convert dates and filter
+    filtered = []
     for trans in transactions:
         if isinstance(trans.get('date'), str):
             trans['date'] = datetime.fromisoformat(trans['date'])
-    
-    # Filter by month/year
-    if month or year:
-        filtered = []
-        for trans in transactions:
-            if month and trans['date'].month != month:
-                continue
-            if year and trans['date'].year != year:
-                continue
+        if trans['date'].month == month and trans['date'].year == year:
             filtered.append(trans)
-        transactions = filtered
+    
+    transactions = filtered
     
     # Calculate stats
     total_income = sum(t['amount'] for t in transactions if t['type'] == 'income')
     total_expense = sum(t['amount'] for t in transactions if t['type'] == 'expense')
-    profit = total_income - total_expense
+    
+    # Add opening balance to income
+    total_income_with_carryover = total_income + opening_balance
+    
+    # Calculate profit/loss
+    profit = total_income_with_carryover - total_expense
+    closing_balance = profit if profit > 0 else 0
+    loan_amount = inherited_loan + abs(profit) if profit < 0 else inherited_loan
     
     # Group by category
     income_by_category = defaultdict(float)
@@ -226,10 +273,35 @@ async def get_dashboard_stats(month: Optional[int] = None, year: Optional[int] =
         else:
             expense_by_category[category_name] += trans['amount']
     
+    # Add carryover as income category
+    if opening_balance > 0:
+        income_by_category['Previous Month Profit'] = opening_balance
+    
+    # Save/update monthly balance
+    await db.monthly_balances.update_one(
+        {"month": month, "year": year},
+        {
+            "$set": {
+                "opening_balance": opening_balance,
+                "closing_balance": closing_balance,
+                "has_loan": loan_amount > 0,
+                "loan_amount": loan_amount,
+                "created_at": datetime.utcnow().isoformat()
+            }
+        },
+        upsert=True
+    )
+    
     return {
         "total_income": total_income,
+        "total_income_with_carryover": total_income_with_carryover,
         "total_expense": total_expense,
         "profit": profit,
+        "opening_balance": opening_balance,
+        "closing_balance": closing_balance,
+        "inherited_loan": inherited_loan,
+        "loan_amount": loan_amount,
+        "has_deficit": profit < 0,
         "income_by_category": dict(income_by_category),
         "expense_by_category": dict(expense_by_category),
         "transaction_count": len(transactions)
