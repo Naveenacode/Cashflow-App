@@ -552,7 +552,7 @@ async def get_monthly_trend(
             "income": income,
             "expense": expense,
             "investment": investment,
-            "profit": income - expense - investment
+            "profit": income - expense  # Investment doesn't reduce profit
         }
     
     return list(monthly_data.values())
