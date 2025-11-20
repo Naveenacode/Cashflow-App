@@ -772,6 +772,205 @@ function App() {
           </div>
         )}
 
+        {/* Compare Tab */}
+        {activeTab === 'compare' && (
+          <div className="space-y-6" data-testid="compare-view">
+            <Card>
+              <CardHeader>
+                <CardTitle>Compare Two Periods</CardTitle>
+                <CardDescription>Select two months to compare side-by-side</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {/* Period 1 */}
+                  <div className="space-y-4 p-4 border rounded-lg bg-blue-50">
+                    <h3 className="font-semibold text-blue-900">Period 1</h3>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <Label>Month</Label>
+                        <Select value={compareMonth1.toString()} onValueChange={(v) => setCompareMonth1(parseInt(v))}>
+                          <SelectTrigger>
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {months.map((month, index) => (
+                              <SelectItem key={index} value={(index + 1).toString()}>{month}</SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div>
+                        <Label>Year</Label>
+                        <Input 
+                          type="number" 
+                          value={compareYear1} 
+                          onChange={(e) => setCompareYear1(parseInt(e.target.value))} 
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Period 2 */}
+                  <div className="space-y-4 p-4 border rounded-lg bg-green-50">
+                    <h3 className="font-semibold text-green-900">Period 2</h3>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <Label>Month</Label>
+                        <Select value={compareMonth2.toString()} onValueChange={(v) => setCompareMonth2(parseInt(v))}>
+                          <SelectTrigger>
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {months.map((month, index) => (
+                              <SelectItem key={index} value={(index + 1).toString()}>{month}</SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div>
+                        <Label>Year</Label>
+                        <Input 
+                          type="number" 
+                          value={compareYear2} 
+                          onChange={(e) => setCompareYear2(parseInt(e.target.value))} 
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <Button onClick={loadComparison} className="w-full mt-6" data-testid="load-comparison-btn">
+                  Compare Periods
+                </Button>
+              </CardContent>
+            </Card>
+
+            {/* Comparison Results */}
+            {comparisonPeriod1 && comparisonPeriod2 && (
+              <div className="space-y-6">
+                <h3 className="text-2xl font-bold">Comparison Results</h3>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {/* Period 1 Summary */}
+                  <Card className="border-2 border-blue-200">
+                    <CardHeader className="bg-blue-50">
+                      <CardTitle>{months[compareMonth1 - 1]} {compareYear1}</CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-4 pt-6">
+                      <div className="flex justify-between items-center">
+                        <span className="text-sm text-gray-600">Income</span>
+                        <span className="text-lg font-bold text-green-600">
+                          ${comparisonPeriod1.total_income?.toLocaleString()}
+                        </span>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span className="text-sm text-gray-600">Expenses</span>
+                        <span className="text-lg font-bold text-red-600">
+                          ${comparisonPeriod1.total_expense?.toLocaleString()}
+                        </span>
+                      </div>
+                      <div className="flex justify-between items-center pt-2 border-t">
+                        <span className="text-sm font-semibold">Net Profit</span>
+                        <span className={`text-xl font-bold ${comparisonPeriod1.profit >= 0 ? 'text-blue-600' : 'text-red-600'}`}>
+                          ${comparisonPeriod1.profit?.toLocaleString()}
+                        </span>
+                      </div>
+                    </CardContent>
+                  </Card>
+
+                  {/* Period 2 Summary */}
+                  <Card className="border-2 border-green-200">
+                    <CardHeader className="bg-green-50">
+                      <CardTitle>{months[compareMonth2 - 1]} {compareYear2}</CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-4 pt-6">
+                      <div className="flex justify-between items-center">
+                        <span className="text-sm text-gray-600">Income</span>
+                        <span className="text-lg font-bold text-green-600">
+                          ${comparisonPeriod2.total_income?.toLocaleString()}
+                        </span>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span className="text-sm text-gray-600">Expenses</span>
+                        <span className="text-lg font-bold text-red-600">
+                          ${comparisonPeriod2.total_expense?.toLocaleString()}
+                        </span>
+                      </div>
+                      <div className="flex justify-between items-center pt-2 border-t">
+                        <span className="text-sm font-semibold">Net Profit</span>
+                        <span className={`text-xl font-bold ${comparisonPeriod2.profit >= 0 ? 'text-blue-600' : 'text-red-600'}`}>
+                          ${comparisonPeriod2.profit?.toLocaleString()}
+                        </span>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+
+                {/* Difference Card */}
+                <Card className="border-2 border-purple-200">
+                  <CardHeader className="bg-purple-50">
+                    <CardTitle>Difference Analysis</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4 pt-6">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <div>
+                        <p className="text-sm text-gray-600 mb-1">Income Change</p>
+                        <p className={`text-lg font-bold ${(comparisonPeriod2.total_income - comparisonPeriod1.total_income) >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                          {(comparisonPeriod2.total_income - comparisonPeriod1.total_income) >= 0 ? '+' : ''}
+                          ${(comparisonPeriod2.total_income - comparisonPeriod1.total_income).toLocaleString()}
+                        </p>
+                      </div>
+                      <div>
+                        <p className="text-sm text-gray-600 mb-1">Expense Change</p>
+                        <p className={`text-lg font-bold ${(comparisonPeriod2.total_expense - comparisonPeriod1.total_expense) >= 0 ? 'text-red-600' : 'text-green-600'}`}>
+                          {(comparisonPeriod2.total_expense - comparisonPeriod1.total_expense) >= 0 ? '+' : ''}
+                          ${(comparisonPeriod2.total_expense - comparisonPeriod1.total_expense).toLocaleString()}
+                        </p>
+                      </div>
+                      <div>
+                        <p className="text-sm text-gray-600 mb-1">Profit Change</p>
+                        <p className={`text-lg font-bold ${(comparisonPeriod2.profit - comparisonPeriod1.profit) >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                          {(comparisonPeriod2.profit - comparisonPeriod1.profit) >= 0 ? '+' : ''}
+                          ${(comparisonPeriod2.profit - comparisonPeriod1.profit).toLocaleString()}
+                        </p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Pie Charts Comparison */}
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>{months[compareMonth1 - 1]} {compareYear1} - Expenses</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <PieChart 
+                        data={comparisonPeriod1.expense_by_category} 
+                        title=""
+                        colors={['#EF4444', '#F59E0B', '#EC4899', '#F97316', '#6B7280']}
+                      />
+                    </CardContent>
+                  </Card>
+
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>{months[compareMonth2 - 1]} {compareYear2} - Expenses</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <PieChart 
+                        data={comparisonPeriod2.expense_by_category} 
+                        title=""
+                        colors={['#EF4444', '#F59E0B', '#EC4899', '#F97316', '#6B7280']}
+                      />
+                    </CardContent>
+                  </Card>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
         {/* Categories Tab */}
         {activeTab === 'categories' && (
           <div className="space-y-6" data-testid="categories-view">
