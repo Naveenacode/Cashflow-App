@@ -756,14 +756,14 @@ function App() {
                 </CardContent>
               </Card>
 
-              <Card data-testid="profit-card">
+              <Card data-testid="closing-balance-card">
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">Net Profit</CardTitle>
+                  <CardTitle className="text-sm font-medium">Closing Balance</CardTitle>
                   <DollarSign className="h-4 w-4 text-blue-600" />
                 </CardHeader>
                 <CardContent>
-                  <div className={`text-2xl font-bold ${stats.profit >= 0 ? 'text-blue-600' : 'text-red-600'}`}>
-                    ₹{stats.profit.toLocaleString()}
+                  <div className={`text-2xl font-bold ${stats.closing_balance >= 0 ? 'text-blue-600' : 'text-red-600'}`}>
+                    ₹{stats.closing_balance.toLocaleString()}
                   </div>
                   <p className="text-xs text-gray-500 mt-1">{months[selectedMonth - 1]} {selectedYear}</p>
                 </CardContent>
