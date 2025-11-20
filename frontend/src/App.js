@@ -79,6 +79,7 @@ function App() {
   });
 
   const [budgetStatuses, setBudgetStatuses] = useState([]);
+  const [investmentTargets, setInvestmentTargets] = useState([]);
 
   useEffect(() => {
     fetchData();
