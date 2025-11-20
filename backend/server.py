@@ -106,18 +106,17 @@ async def create_transaction(transaction_data: TransactionCreate):
     transaction_doc["date"] = transaction_doc["date"].isoformat()
     transaction_doc["created_at"] = transaction_doc["created_at"].isoformat()
     
-    # Add budget warning to response if exists
-    if budget_warning:
-        transaction_doc["budget_warning"] = budget_warning
-    
     await db.transactions.insert_one(transaction_doc)
     
-    # Return transaction with budget warning in response
-    result = Transaction(**transaction.model_dump())
+    # Return transaction with budget warning if exists
     if budget_warning:
-        return {"transaction": result, "budget_warning": budget_warning}
+        # Create a response that includes both transaction and warning
+        return {
+            **transaction.model_dump(),
+            "budget_warning": budget_warning
+        }
     
-    return result
+    return transaction
 
 
 @api_router.get("/transactions", response_model=List[Transaction])
