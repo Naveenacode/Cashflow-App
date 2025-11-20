@@ -32,8 +32,11 @@ function App() {
   const [categoryForm, setCategoryForm] = useState({
     name: '',
     type: 'expense',
-    color: '#3B82F6'
+    color: '#3B82F6',
+    budget_limit: ''
   });
+
+  const [budgetStatuses, setBudgetStatuses] = useState([]);
 
   useEffect(() => {
     fetchData();
