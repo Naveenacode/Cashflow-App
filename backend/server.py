@@ -445,29 +445,34 @@ async def get_dashboard_stats(
     # Calculate stats
     total_income = sum(t['amount'] for t in transactions if t['type'] == 'income')
     total_expense = sum(t['amount'] for t in transactions if t['type'] == 'expense')
+    total_investment = sum(t['amount'] for t in transactions if t['type'] == 'investment')
     
     # Add opening balance to income
     total_income_with_carryover = total_income + opening_balance
     
-    # Calculate profit/loss
-    profit = total_income_with_carryover - total_expense
+    # Calculate profit/loss: profit = income - expense - investment
+    profit = total_income_with_carryover - total_expense - total_investment
     closing_balance = profit if profit > 0 else 0
     loan_amount = inherited_loan + abs(profit) if profit < 0 else inherited_loan
     
     # Group by category
     income_by_category = defaultdict(float)
     expense_by_category = defaultdict(float)
+    investment_by_category = defaultdict(float)
     
     # Get all categories for names
     categories = await db.categories.find({}, {"_id": 0}).to_list(1000)
     category_map = {cat['id']: cat['name'] for cat in categories}
     
     for trans in transactions:
-        category_name = category_map.get(trans['category_id'], 'Unknown')
-        if trans['type'] == 'income':
-            income_by_category[category_name] += trans['amount']
-        else:
-            expense_by_category[category_name] += trans['amount']
+        if trans.get('category_id'):  # Skip transfers
+            category_name = category_map.get(trans['category_id'], 'Unknown')
+            if trans['type'] == 'income':
+                income_by_category[category_name] += trans['amount']
+            elif trans['type'] == 'expense':
+                expense_by_category[category_name] += trans['amount']
+            elif trans['type'] == 'investment':
+                investment_by_category[category_name] += trans['amount']
     
     # Add carryover as income category
     if opening_balance > 0:
