@@ -28,6 +28,14 @@ function App() {
   const [showAddTransaction, setShowAddTransaction] = useState(false);
   const [showAddCategory, setShowAddCategory] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [selectedCategoryFilter, setSelectedCategoryFilter] = useState(null);
+  const [showFilteredTransactions, setShowFilteredTransactions] = useState(false);
+  
+  // Comparison states
+  const [compareMonth1, setCompareMonth1] = useState(new Date().getMonth() + 1);
+  const [compareYear1, setCompareYear1] = useState(new Date().getFullYear());
+  const [compareMonth2, setCompareMonth2] = useState(new Date().getMonth());
+  const [compareYear2, setCompareYear2] = useState(new Date().getFullYear());
 
   const [transactionForm, setTransactionForm] = useState({
     amount: '',
