@@ -1247,8 +1247,8 @@ function App() {
                     </div>
 
                     {/* Member 2 */}
-                    <div className="space-y-4 p-4 border rounded-lg bg-green-900 bg-opacity-20">
-                      <h3 className="font-semibold text-green-300">Member 2</h3>
+                    <div className="space-y-4 p-4 border rounded-lg bg-green-50">
+                      <h3 className="font-semibold text-green-700">Member 2</h3>
                       <div>
                         <Label>Select Member</Label>
                         <Select value={compareMember2} onValueChange={setCompareMember2}>
