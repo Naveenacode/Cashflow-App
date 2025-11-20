@@ -555,7 +555,7 @@ async def get_monthly_trend(
             "income": income,
             "expense": expense,
             "investment": investment,
-            "profit": income - expense  # Investment doesn't reduce profit
+            "closing_balance": income - expense  # Investment doesn't reduce closing balance
         }
     
     return list(monthly_data.values())
