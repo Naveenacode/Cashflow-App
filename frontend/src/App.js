@@ -8,11 +8,25 @@ import { Label } from './components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './components/ui/select';
 import { Textarea } from './components/ui/textarea';
 import { Badge } from './components/ui/badge';
-import { TrendingUp, TrendingDown, DollarSign, Calendar, Plus, Trash2, Edit, AlertTriangle, ArrowRight } from 'lucide-react';
+import { TrendingUp, TrendingDown, DollarSign, Calendar, Plus, Trash2, Edit, AlertTriangle, ArrowRight, LogOut, Users, User as UserIcon } from 'lucide-react';
 import PieChart from './components/PieChart';
 import LineChart from './components/LineChart';
+import { useAuth } from './AuthContext';
+
+// Profile icon mapping
+const PROFILE_ICONS = {
+  'user-circle': '👤',
+  'user-male': '👨',
+  'user-female': '👩',
+  'user-child': '🧒',
+  'user-elderly': '👴',
+  'user-teen': '🧑',
+  'user-baby': '👶',
+  'user-couple': '👫'
+};
 
 function App() {
+  const { user, family, logout, isAdmin } = useAuth();
   const [activeTab, setActiveTab] = useState('dashboard');
   const [transactions, setTransactions] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -31,6 +45,7 @@ function App() {
   const [loading, setLoading] = useState(true);
   const [selectedCategoryFilter, setSelectedCategoryFilter] = useState(null);
   const [showFilteredTransactions, setShowFilteredTransactions] = useState(false);
+  const [viewMode, setViewMode] = useState('family'); // 'family' or 'personal'
   
   // Comparison states
   const [compareMonth1, setCompareMonth1] = useState(new Date().getMonth() + 1);
