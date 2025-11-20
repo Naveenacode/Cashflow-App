@@ -211,29 +211,159 @@ function App() {
       {/* Header */}
       <div className="bg-white border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex items-center justify-between">
-            <h1 className="text-3xl font-bold text-gray-900">Spend Tracker</h1>
-            <div className="flex items-center space-x-4">
-              <select
-                value={selectedMonth}
-                onChange={(e) => setSelectedMonth(parseInt(e.target.value))}
-                className="border rounded-md px-3 py-2"
-                data-testid="month-selector"
-              >
-                {months.map((month, index) => (
-                  <option key={index} value={index + 1}>{month}</option>
-                ))}
-              </select>
-              <select
-                value={selectedYear}
-                onChange={(e) => setSelectedYear(parseInt(e.target.value))}
-                className="border rounded-md px-3 py-2"
-                data-testid="year-selector"
-              >
-                {[2023, 2024, 2025, 2026].map(year => (
-                  <option key={year} value={year}>{year}</option>
-                ))}
-              </select>
+          <div className="flex flex-col space-y-4">
+            <div className="flex items-center justify-between">
+              <h1 className="text-3xl font-bold text-gray-900">Spend Tracker</h1>
+            </div>
+            
+            {/* Integrated Period Selector */}
+            <div className="flex flex-wrap items-center gap-3 p-4 bg-gray-50 rounded-lg border">
+              <div className="flex items-center space-x-2">
+                <label className="text-sm font-medium text-gray-700">Period:</label>
+                <select
+                  value={periodType}
+                  onChange={(e) => setPeriodType(e.target.value)}
+                  className="border rounded-md px-3 py-2 bg-white text-sm"
+                  data-testid="period-type-selector"
+                >
+                  <option value="monthly">Monthly</option>
+                  <option value="quarterly">Quarterly</option>
+                  <option value="half-yearly">Half-Yearly</option>
+                  <option value="annual">Annual</option>
+                  <option value="custom">Custom Range</option>
+                </select>
+              </div>
+
+              {periodType === 'monthly' && (
+                <>
+                  <div className="flex items-center space-x-2">
+                    <label className="text-sm font-medium text-gray-700">Month:</label>
+                    <select
+                      value={selectedMonth}
+                      onChange={(e) => setSelectedMonth(parseInt(e.target.value))}
+                      className="border rounded-md px-3 py-2 bg-white text-sm"
+                      data-testid="month-selector"
+                    >
+                      {months.map((month, index) => (
+                        <option key={index} value={index + 1}>{month}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <label className="text-sm font-medium text-gray-700">Year:</label>
+                    <select
+                      value={selectedYear}
+                      onChange={(e) => setSelectedYear(parseInt(e.target.value))}
+                      className="border rounded-md px-3 py-2 bg-white text-sm"
+                      data-testid="year-selector"
+                    >
+                      {[2023, 2024, 2025, 2026].map(year => (
+                        <option key={year} value={year}>{year}</option>
+                      ))}
+                    </select>
+                  </div>
+                </>
+              )}
+
+              {periodType === 'quarterly' && (
+                <>
+                  <div className="flex items-center space-x-2">
+                    <label className="text-sm font-medium text-gray-700">Quarter:</label>
+                    <select
+                      value={selectedQuarter}
+                      onChange={(e) => setSelectedQuarter(parseInt(e.target.value))}
+                      className="border rounded-md px-3 py-2 bg-white text-sm"
+                      data-testid="quarter-selector"
+                    >
+                      <option value="1">Q1 (Jan-Mar)</option>
+                      <option value="2">Q2 (Apr-Jun)</option>
+                      <option value="3">Q3 (Jul-Sep)</option>
+                      <option value="4">Q4 (Oct-Dec)</option>
+                    </select>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <label className="text-sm font-medium text-gray-700">Year:</label>
+                    <select
+                      value={selectedYear}
+                      onChange={(e) => setSelectedYear(parseInt(e.target.value))}
+                      className="border rounded-md px-3 py-2 bg-white text-sm"
+                    >
+                      {[2023, 2024, 2025, 2026].map(year => (
+                        <option key={year} value={year}>{year}</option>
+                      ))}
+                    </select>
+                  </div>
+                </>
+              )}
+
+              {periodType === 'half-yearly' && (
+                <>
+                  <div className="flex items-center space-x-2">
+                    <label className="text-sm font-medium text-gray-700">Half:</label>
+                    <select
+                      value={selectedHalf}
+                      onChange={(e) => setSelectedHalf(parseInt(e.target.value))}
+                      className="border rounded-md px-3 py-2 bg-white text-sm"
+                      data-testid="half-selector"
+                    >
+                      <option value="1">H1 (Jan-Jun)</option>
+                      <option value="2">H2 (Jul-Dec)</option>
+                    </select>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <label className="text-sm font-medium text-gray-700">Year:</label>
+                    <select
+                      value={selectedYear}
+                      onChange={(e) => setSelectedYear(parseInt(e.target.value))}
+                      className="border rounded-md px-3 py-2 bg-white text-sm"
+                    >
+                      {[2023, 2024, 2025, 2026].map(year => (
+                        <option key={year} value={year}>{year}</option>
+                      ))}
+                    </select>
+                  </div>
+                </>
+              )}
+
+              {periodType === 'annual' && (
+                <div className="flex items-center space-x-2">
+                  <label className="text-sm font-medium text-gray-700">Year:</label>
+                  <select
+                    value={selectedYear}
+                    onChange={(e) => setSelectedYear(parseInt(e.target.value))}
+                    className="border rounded-md px-3 py-2 bg-white text-sm"
+                  >
+                    {[2023, 2024, 2025, 2026].map(year => (
+                      <option key={year} value={year}>{year}</option>
+                    ))}
+                  </select>
+                </div>
+              )}
+
+              {periodType === 'custom' && (
+                <>
+                  <div className="flex items-center space-x-2">
+                    <label className="text-sm font-medium text-gray-700">From:</label>
+                    <input
+                      type="date"
+                      value={customStartDate}
+                      onChange={(e) => setCustomStartDate(e.target.value)}
+                      className="border rounded-md px-3 py-2 bg-white text-sm"
+                      data-testid="custom-start-date"
+                    />
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <label className="text-sm font-medium text-gray-700">To:</label>
+                    <input
+                      type="date"
+                      value={customEndDate}
+                      onChange={(e) => setCustomEndDate(e.target.value)}
+                      className="border rounded-md px-3 py-2 bg-white text-sm"
+                      data-testid="custom-end-date"
+                    />
+                  </div>
+                </>
+              )}
             </div>
           </div>
 
