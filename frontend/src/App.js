@@ -673,7 +673,7 @@ function App() {
             </div>
 
             {/* PIE CHARTS FIRST - HOME VIEW */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               <Card data-testid="income-pie-chart" className="border-2 border-green-600">
                 <CardContent className="pt-6">
                   <PieChart 
@@ -692,6 +692,18 @@ function App() {
                     data={stats.expense_by_category} 
                     title="Expenses by Category"
                     colors={['#EF4444', '#F59E0B', '#EC4899', '#F97316', '#6B7280']}
+                    onSliceClick={handleCategoryClick}
+                  />
+                  <p className="text-center text-xs text-gray-500 mt-4">Click on a category to view transactions</p>
+                </CardContent>
+              </Card>
+
+              <Card data-testid="investment-pie-chart" className="border-2 border-orange-500">
+                <CardContent className="pt-6">
+                  <PieChart 
+                    data={stats.investment_by_category} 
+                    title="Investments by Category"
+                    colors={['#F97316', '#FB923C', '#FDBA74', '#FED7AA', '#FFEDD5']}
                     onSliceClick={handleCategoryClick}
                   />
                   <p className="text-center text-xs text-gray-500 mt-4">Click on a category to view transactions</p>
