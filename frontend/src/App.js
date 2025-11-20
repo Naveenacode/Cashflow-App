@@ -1280,9 +1280,9 @@ function App() {
                         </span>
                       </div>
                       <div className="flex justify-between items-center pt-2 border-t">
-                        <span className="text-sm font-semibold">Net Profit</span>
-                        <span className={`text-xl font-bold ${comparisonPeriod1.profit >= 0 ? 'text-blue-600' : 'text-red-600'}`}>
-                          ${comparisonPeriod1.profit?.toLocaleString()}
+                        <span className="text-sm font-semibold">Closing Balance</span>
+                        <span className={`text-xl font-bold ${comparisonPeriod1.closing_balance >= 0 ? 'text-blue-600' : 'text-red-600'}`}>
+                          ₹{comparisonPeriod1.closing_balance?.toLocaleString()}
                         </span>
                       </div>
                     </CardContent>
