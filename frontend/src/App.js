@@ -1552,11 +1552,11 @@ function App() {
                               </p>
                             </div>
                             <div>
-                              <p className="text-sm text-gray-600 mb-1">Net Difference</p>
-                              <p className={`text-lg font-bold ${(memberComparison.member2.profit - memberComparison.member1.profit) >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-                                {(memberComparison.member2.profit - memberComparison.member1.profit) >= 0 ? member2?.name : member1?.name}
+                              <p className="text-sm text-gray-600 mb-1">Balance Difference</p>
+                              <p className={`text-lg font-bold ${(memberComparison.member2.closing_balance - memberComparison.member1.closing_balance) >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                                {(memberComparison.member2.closing_balance - memberComparison.member1.closing_balance) >= 0 ? member2?.name : member1?.name}
                                 <br />
-                                saved ${Math.abs(memberComparison.member2.profit - memberComparison.member1.profit).toLocaleString()} more
+                                saved ₹{Math.abs(memberComparison.member2.closing_balance - memberComparison.member1.closing_balance).toLocaleString()} more
                               </p>
                             </div>
                           </div>
