@@ -114,7 +114,8 @@ const PieChart = ({ data, title, colors, onSliceClick }) => {
                   </path>
                 </g>
           ))}
-        </svg>
+          </svg>
+        </div>
 
         {/* Legend */}
         <div className="space-y-2">
