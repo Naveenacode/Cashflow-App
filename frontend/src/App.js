@@ -252,6 +252,7 @@ function App() {
   };
 
   const handleDeleteCategory = async (id) => {
+    alert(`Delete handler called! ID: ${id}, isAdmin: ${isAdmin}`);
     console.log('Delete category called:', { id, isAdmin });
     
     if (!isAdmin) {
