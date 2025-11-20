@@ -333,13 +333,13 @@ function App() {
               
               <div className="flex items-center space-x-4">
                 {/* View Toggle */}
-                <div className="flex items-center space-x-2 bg-gray-100 rounded-lg p-1">
+                <div className="flex items-center space-x-2 bg-gray-700 rounded-lg p-1">
                   <button
                     onClick={() => setViewMode('family')}
                     className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
                       viewMode === 'family' 
-                        ? 'bg-white text-blue-600 shadow-sm' 
-                        : 'text-gray-600 hover:text-gray-900'
+                        ? 'bg-blue-600 text-white shadow-sm' 
+                        : 'text-gray-300 hover:text-white'
                     }`}
                   >
                     <Users className="h-4 w-4 inline mr-2" />
@@ -349,8 +349,8 @@ function App() {
                     onClick={() => setViewMode('personal')}
                     className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
                       viewMode === 'personal' 
-                        ? 'bg-white text-blue-600 shadow-sm' 
-                        : 'text-gray-600 hover:text-gray-900'
+                        ? 'bg-blue-600 text-white shadow-sm' 
+                        : 'text-gray-300 hover:text-white'
                     }`}
                   >
                     <UserIcon className="h-4 w-4 inline mr-2" />
