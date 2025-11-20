@@ -45,14 +45,34 @@ class Transaction(TransactionBase):
     created_at: datetime = Field(default_factory=datetime.utcnow)
 
 
+class AccountBase(BaseModel):
+    name: str
+    type: Literal["bank", "credit_card", "cash", "other"]
+    opening_balance: float = 0.0
+    owner_type: Literal["personal", "family"] = "personal"
+    owner_user_id: Optional[str] = None  # User ID if personal account
+
+class AccountCreate(AccountBase):
+    pass
+
+class Account(AccountBase):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    family_id: Optional[str] = None
+    current_balance: float = 0.0
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+
+
 class MonthlyStats(BaseModel):
     month: str
     year: int
     total_income: float
     total_expense: float
+    total_investment: float
     profit: float
     income_by_category: dict
     expense_by_category: dict
+    investment_by_category: dict
 
 
 class BudgetStatus(BaseModel):
