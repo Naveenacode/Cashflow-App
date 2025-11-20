@@ -908,15 +908,17 @@ function App() {
                         </div>
                         <div className="flex items-center space-x-3">
                           <span className={`text-lg font-bold ${transaction.type === 'income' ? 'text-green-600' : 'text-red-600'}`}>
-                            {transaction.type === 'income' ? '+' : '-'}${transaction.amount.toLocaleString()}
+                            {transaction.type === 'income' ? '+' : '-'}₹{transaction.amount.toLocaleString()}
                           </span>
-                          <button
-                            onClick={() => handleDeleteTransaction(transaction.id)}
-                            className="text-red-600 hover:text-red-800"
-                            data-testid={`delete-transaction-${transaction.id}`}
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </button>
+                          {isAdmin && (
+                            <button
+                              onClick={() => handleDeleteTransaction(transaction.id)}
+                              className="text-red-600 hover:text-red-800"
+                              data-testid={`delete-transaction-${transaction.id}`}
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </button>
+                          )}
                         </div>
                       </div>
                     ))}
