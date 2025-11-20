@@ -73,6 +73,7 @@ const PieChart = ({ data, title, colors, onSliceClick }) => {
                 stroke="white"
                 strokeWidth="2"
                 className="hover:opacity-80 transition-opacity cursor-pointer"
+                onClick={() => onSliceClick && onSliceClick(slice.label)}
               >
                 <title>{`${slice.label}: $${slice.value.toLocaleString()} (${slice.percentage}%)`}</title>
               </path>
