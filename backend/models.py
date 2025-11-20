@@ -69,7 +69,7 @@ class MonthlyStats(BaseModel):
     total_income: float
     total_expense: float
     total_investment: float
-    profit: float
+    closing_balance: float
     income_by_category: dict
     expense_by_category: dict
     investment_by_category: dict
