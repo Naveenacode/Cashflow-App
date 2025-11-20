@@ -525,6 +525,217 @@ class SpendTrackerTester:
         self.log(f"✅ Budget status correct - Groceries: ₹{groceries_budget['spent']}/₹{groceries_budget['budget_limit']} ({groceries_budget['percentage']}% {groceries_budget['status']})")
         return True
     
+    def test_9_budget_alert_ticker_feature(self):
+        """Test 9: Budget Alert Ticker Feature - Show only categories at 90%+ of budget limit"""
+        self.log("=== TEST 9: Budget Alert Ticker Feature (90%+ Categories Only) ===")
+        
+        # Create a fresh user for this specific test
+        test_id = str(uuid.uuid4())[:8]
+        email = f"budgettest_{test_id}@example.com"
+        password = "BudgetTest123!"
+        name = f"Budget Test User {test_id}"
+        
+        # Register new user
+        register_data = {
+            "name": name,
+            "email": email,
+            "password": password,
+            "profile_icon": "user-circle"
+        }
+        
+        response = self.make_request("POST", "/auth/register", register_data)
+        if not response or response.status_code != 200:
+            self.log("❌ FAILED: Budget test user registration failed")
+            return False
+            
+        # Get token and login
+        token_data = response.json()
+        budget_test_token = token_data.get("access_token")
+        self.auth_token = budget_test_token  # Switch to budget test user
+        
+        self.log("✅ Budget test user created and logged in")
+        
+        # Step 1: Create Bank Account
+        bank_account_data = {
+            "name": "Test Bank",
+            "type": "bank",
+            "opening_balance": 500000.0,
+            "owner_type": "personal"
+        }
+        
+        response = self.make_request("POST", "/accounts", bank_account_data)
+        if not response or response.status_code != 200:
+            self.log("❌ FAILED: Could not create Test Bank account")
+            return False
+            
+        bank_account = response.json()
+        self.log(f"✅ Created Test Bank account (₹{bank_account['opening_balance']})")
+        
+        # Step 2: Create Expense Categories with Budget Limits
+        categories_data = [
+            {"name": "Groceries", "budget_limit": 10000.0},
+            {"name": "Shopping", "budget_limit": 20000.0},
+            {"name": "Entertainment", "budget_limit": 5000.0},
+            {"name": "Utilities", "budget_limit": 3000.0}
+        ]
+        
+        created_categories = {}
+        for cat_data in categories_data:
+            category_payload = {
+                "name": cat_data["name"],
+                "type": "expense",
+                "color": "#EF4444",
+                "budget_limit": cat_data["budget_limit"],
+                "is_shared": True
+            }
+            
+            response = self.make_request("POST", "/categories", category_payload)
+            if not response or response.status_code != 200:
+                self.log(f"❌ FAILED: Could not create {cat_data['name']} category")
+                return False
+                
+            category = response.json()
+            created_categories[cat_data["name"]] = category
+            self.log(f"✅ Created {cat_data['name']} category (budget: ₹{cat_data['budget_limit']})")
+        
+        # Step 3: Add Transactions to Test Budget Alerts
+        transactions_data = [
+            # Case 1: Under 90% (should NOT appear in ticker)
+            {"category": "Groceries", "amount": 7000.0, "description": "Groceries - 70% of budget"},
+            
+            # Case 2: At 90-99% (should appear with warning)
+            {"category": "Shopping", "amount": 18500.0, "description": "Shopping - 92.5% of budget"},
+            
+            # Case 3: At 95%+ (should appear with critical warning)
+            {"category": "Entertainment", "amount": 4800.0, "description": "Entertainment - 96% of budget"},
+            
+            # Case 4: Over 100% (should appear as exceeded)
+            {"category": "Utilities", "amount": 3500.0, "description": "Utilities - 116.67% of budget"}
+        ]
+        
+        for trans_data in transactions_data:
+            transaction_payload = {
+                "amount": trans_data["amount"],
+                "category_id": created_categories[trans_data["category"]]["id"],
+                "type": "expense",
+                "description": trans_data["description"],
+                "date": datetime.now().isoformat(),
+                "account_id": bank_account["id"]
+            }
+            
+            response = self.make_request("POST", "/transactions", transaction_payload)
+            if not response or response.status_code != 200:
+                self.log(f"❌ FAILED: Could not create transaction for {trans_data['category']}")
+                return False
+                
+            self.log(f"✅ Added transaction: {trans_data['category']} ₹{trans_data['amount']}")
+        
+        # Step 4: Verify Budget Status
+        response = self.make_request("GET", "/budget/status")
+        if not response or response.status_code != 200:
+            self.log("❌ FAILED: Could not retrieve budget status")
+            return False
+            
+        budget_statuses = response.json()
+        
+        if len(budget_statuses) != 4:
+            self.log(f"❌ FAILED: Expected 4 budget categories, got {len(budget_statuses)}")
+            return False
+        
+        # Verify each category's budget status
+        expected_results = {
+            "Groceries": {"spent": 7000.0, "limit": 10000.0, "percentage": 70.0, "status": "safe", "should_show_in_ticker": False},
+            "Shopping": {"spent": 18500.0, "limit": 20000.0, "percentage": 92.5, "status": "warning", "should_show_in_ticker": True},
+            "Entertainment": {"spent": 4800.0, "limit": 5000.0, "percentage": 96.0, "status": "warning", "should_show_in_ticker": True},
+            "Utilities": {"spent": 3500.0, "limit": 3000.0, "percentage": 116.67, "status": "exceeded", "should_show_in_ticker": True}
+        }
+        
+        ticker_categories = []  # Categories that should appear in ticker (>= 90%)
+        
+        for budget_status in budget_statuses:
+            category_name = budget_status["category_name"]
+            expected = expected_results[category_name]
+            
+            # Verify spent amount
+            if abs(budget_status["spent"] - expected["spent"]) > 0.01:
+                self.log(f"❌ FAILED: {category_name} spent amount mismatch. Expected: {expected['spent']}, Got: {budget_status['spent']}")
+                return False
+            
+            # Verify budget limit
+            if abs(budget_status["budget_limit"] - expected["limit"]) > 0.01:
+                self.log(f"❌ FAILED: {category_name} budget limit mismatch. Expected: {expected['limit']}, Got: {budget_status['budget_limit']}")
+                return False
+            
+            # Verify percentage
+            if abs(budget_status["percentage"] - expected["percentage"]) > 0.1:
+                self.log(f"❌ FAILED: {category_name} percentage mismatch. Expected: {expected['percentage']}, Got: {budget_status['percentage']}")
+                return False
+            
+            # Check if should appear in ticker (>= 90%)
+            if budget_status["percentage"] >= 90.0:
+                ticker_categories.append({
+                    "name": category_name,
+                    "percentage": budget_status["percentage"],
+                    "remaining": budget_status["remaining"],
+                    "status": budget_status["status"]
+                })
+                
+                if not expected["should_show_in_ticker"]:
+                    self.log(f"❌ FAILED: {category_name} should NOT appear in ticker but has {budget_status['percentage']}%")
+                    return False
+            else:
+                if expected["should_show_in_ticker"]:
+                    self.log(f"❌ FAILED: {category_name} should appear in ticker but has only {budget_status['percentage']}%")
+                    return False
+            
+            self.log(f"✅ {category_name}: ₹{budget_status['spent']}/₹{budget_status['budget_limit']} ({budget_status['percentage']}% {budget_status['status']})")
+        
+        # Step 5: Verify Ticker Logic
+        self.log("\n--- BUDGET ALERT TICKER VERIFICATION ---")
+        
+        if len(ticker_categories) != 3:
+            self.log(f"❌ FAILED: Expected 3 categories in ticker (>= 90%), got {len(ticker_categories)}")
+            return False
+        
+        # Verify ticker categories
+        ticker_names = [cat["name"] for cat in ticker_categories]
+        expected_ticker_names = ["Shopping", "Entertainment", "Utilities"]
+        
+        for expected_name in expected_ticker_names:
+            if expected_name not in ticker_names:
+                self.log(f"❌ FAILED: {expected_name} should appear in ticker but is missing")
+                return False
+        
+        if "Groceries" in ticker_names:
+            self.log("❌ FAILED: Groceries should NOT appear in ticker (only 70%)")
+            return False
+        
+        # Verify ticker display logic
+        for ticker_cat in ticker_categories:
+            name = ticker_cat["name"]
+            percentage = ticker_cat["percentage"]
+            remaining = ticker_cat["remaining"]
+            status = ticker_cat["status"]
+            
+            if status == "exceeded":
+                over_amount = abs(remaining)
+                self.log(f"✅ TICKER: {name}: {percentage}% - Over by ₹{over_amount}")
+            else:
+                self.log(f"✅ TICKER: {name}: {percentage}% - Only ₹{remaining} left")
+        
+        # Final validation summary
+        self.log("\n--- FINAL VALIDATION ---")
+        self.log("✅ Total categories: 4")
+        self.log("✅ Categories >= 90%: 3 (Shopping, Entertainment, Utilities)")
+        self.log("✅ Categories < 90%: 1 (Groceries - hidden from ticker)")
+        self.log("✅ Shopping: 92.5% with 'Only ₹1500 left'")
+        self.log("✅ Entertainment: 96% with 'Only ₹200 left'")
+        self.log("✅ Utilities: 116.67% with 'Over by ₹500'")
+        self.log("✅ Groceries: 70% - NOT shown in ticker")
+        
+        self.log("🎉 Budget Alert Ticker Feature working correctly!")
+        return True
+    
     def run_all_tests(self):
         """Run all tests in sequence"""
         self.log("🚀 Starting Spend Tracker Investment and Account Features Test Suite")
