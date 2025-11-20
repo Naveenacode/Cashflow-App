@@ -96,6 +96,7 @@ class UserBase(BaseModel):
 
 class UserCreate(UserBase):
     password: str
+    family_code: Optional[str] = None  # Optional family code to join during registration
 
 class UserLogin(BaseModel):
     email: EmailStr
