@@ -278,7 +278,8 @@ async def delete_transaction(
         raise HTTPException(status_code=404, detail="Transaction not found")
     
     # Check permissions
-    if current_user["role"] != "admin" and existing.get("user_id") != current_user["user_id"]:
+    # If user_id is not set (old transactions), allow admin to delete
+    if current_user["role"] != "admin" and existing.get("user_id") and existing.get("user_id") != current_user["user_id"]:
         raise HTTPException(
             status_code=403,
             detail="You can only delete your own transactions"
