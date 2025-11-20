@@ -29,7 +29,7 @@ router = APIRouter(prefix="/api/auth", tags=["Authentication"])
 
 @router.post("/register", response_model=Token)
 async def register(user_data: UserCreate):
-    """Register a new user and create their family"""
+    """Register a new user. Can either create a new family or join an existing one."""
     # Check if user already exists
     existing_user = await db.users.find_one({"email": user_data.email})
     if existing_user:
@@ -39,7 +39,7 @@ async def register(user_data: UserCreate):
         )
     
     # Create user
-    user = User(**user_data.model_dump(exclude={"password"}))
+    user = User(**user_data.model_dump(exclude={"password", "family_code"}))
     user_in_db = UserInDB(
         **user.model_dump(),
         password_hash=hash_password(user_data.password)
@@ -49,35 +49,68 @@ async def register(user_data: UserCreate):
     user_doc["created_at"] = user_doc["created_at"].isoformat()
     await db.users.insert_one(user_doc)
     
-    # Create family for the user (admin)
-    family = Family(
-        name=f"{user.name}'s Family",
-        admin_user_id=user.id
-    )
-    family_doc = family.model_dump()
-    family_doc["created_at"] = family_doc["created_at"].isoformat()
-    await db.families.insert_one(family_doc)
-    
-    # Add user as family member with admin role
-    family_member = FamilyMember(
-        family_id=family.id,
-        user_id=user.id,
-        role="admin"
-    )
-    member_doc = family_member.model_dump()
-    member_doc["joined_at"] = member_doc["joined_at"].isoformat()
-    await db.family_members.insert_one(member_doc)
-    
-    # Create access token
-    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
-    access_token = create_access_token(
-        data={
-            "sub": user.id,
-            "family_id": family.id,
-            "role": "admin"
-        },
-        expires_delta=access_token_expires
-    )
+    # Check if user wants to join existing family
+    if user_data.family_code:
+        # Find family by code
+        family = await db.families.find_one({"family_code": user_data.family_code.upper()}, {"_id": 0})
+        if not family:
+            # Cleanup: delete the created user
+            await db.users.delete_one({"id": user.id})
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Invalid family code. Please check and try again."
+            )
+        
+        # Add user to existing family as member
+        family_member = FamilyMember(
+            family_id=family["id"],
+            user_id=user.id,
+            role="member"
+        )
+        member_doc = family_member.model_dump()
+        member_doc["joined_at"] = member_doc["joined_at"].isoformat()
+        await db.family_members.insert_one(member_doc)
+        
+        # Create access token with existing family
+        access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+        access_token = create_access_token(
+            data={
+                "sub": user.id,
+                "family_id": family["id"],
+                "role": "member"
+            },
+            expires_delta=access_token_expires
+        )
+    else:
+        # Create new family for the user (admin)
+        family = Family(
+            name=f"{user.name}'s Family",
+            admin_user_id=user.id
+        )
+        family_doc = family.model_dump()
+        family_doc["created_at"] = family_doc["created_at"].isoformat()
+        await db.families.insert_one(family_doc)
+        
+        # Add user as family member with admin role
+        family_member = FamilyMember(
+            family_id=family.id,
+            user_id=user.id,
+            role="admin"
+        )
+        member_doc = family_member.model_dump()
+        member_doc["joined_at"] = member_doc["joined_at"].isoformat()
+        await db.family_members.insert_one(member_doc)
+        
+        # Create access token
+        access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+        access_token = create_access_token(
+            data={
+                "sub": user.id,
+                "family_id": family.id,
+                "role": "admin"
+            },
+            expires_delta=access_token_expires
+        )
     
     return Token(access_token=access_token, token_type="bearer")
 
