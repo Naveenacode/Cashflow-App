@@ -28,4 +28,5 @@ export const transactionAPI = {
 export const dashboardAPI = {
   getStats: (params) => api.get('/dashboard/stats', { params }),
   getMonthlyTrend: (params) => api.get('/dashboard/monthly-trend', { params }),
+  getBudgetStatus: (params) => api.get('/budget/status', { params }),
 };
