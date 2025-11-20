@@ -70,7 +70,17 @@ function App() {
         amount: parseFloat(transactionForm.amount),
         date: new Date(transactionForm.date).toISOString()
       };
-      await transactionAPI.createTransaction(data);
+      const response = await transactionAPI.createTransaction(data);
+      
+      // Check for budget warning
+      if (response.data.budget_warning) {
+        const warning = response.data.budget_warning;
+        const message = warning.exceeded 
+          ? `⚠️ BUDGET EXCEEDED!\n\n${warning.message}\n\nYou are $${(warning.new_total - warning.budget_limit).toFixed(2)} over budget!`
+          : `⚠️ BUDGET LIMIT REACHED!\n\n${warning.message}`;
+        alert(message);
+      }
+      
       setShowAddTransaction(false);
       setTransactionForm({
         amount: '',
