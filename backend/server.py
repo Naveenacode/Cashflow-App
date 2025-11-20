@@ -482,14 +482,20 @@ async def get_monthly_trend(
 
 # ============= BUDGET ENDPOINTS =============
 @api_router.get("/budget/status")
-async def get_budget_status(month: Optional[int] = None, year: Optional[int] = None):
+async def get_budget_status(
+    month: Optional[int] = None,
+    year: Optional[int] = None,
+    current_user: dict = Depends(get_current_user)
+):
+    """Get budget status. Only shows shared categories (managed by admin)."""
     if not month:
         month = datetime.now().month
     if not year:
         year = datetime.now().year
     
-    # Get all expense categories with budget limits
+    # Get all expense categories with budget limits for this family
     categories = await db.categories.find({
+        "family_id": current_user["family_id"],
         "type": "expense",
         "budget_limit": {"$exists": True, "$ne": None}
     }, {"_id": 0}).to_list(1000)
