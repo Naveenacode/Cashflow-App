@@ -459,6 +459,20 @@ function App() {
         {/* Dashboard Tab */}
         {activeTab === 'dashboard' && stats && (
           <div className="space-y-6" data-testid="dashboard-view">
+            {/* Dashboard Title */}
+            <div className="text-center mb-6">
+              <h2 className="text-3xl font-bold text-gray-900">
+                Dashboard for {
+                  periodType === 'monthly' ? `${months[selectedMonth - 1]} ${selectedYear}` :
+                  periodType === 'quarterly' ? `Q${selectedQuarter} ${selectedYear}` :
+                  periodType === 'half-yearly' ? `H${selectedHalf} ${selectedYear}` :
+                  periodType === 'annual' ? `Year ${selectedYear}` :
+                  periodType === 'custom' && customStartDate && customEndDate ? `${customStartDate} to ${customEndDate}` :
+                  `${months[selectedMonth - 1]} ${selectedYear}`
+                }
+              </h2>
+            </div>
+
             {/* PIE CHARTS FIRST - HOME VIEW */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <Card data-testid="income-pie-chart" className="border-2 border-green-200">
