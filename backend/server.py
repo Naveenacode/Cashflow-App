@@ -443,11 +443,17 @@ async def get_dashboard_stats(
 
 
 @api_router.get("/dashboard/monthly-trend")
-async def get_monthly_trend(year: Optional[int] = None):
+async def get_monthly_trend(
+    year: Optional[int] = None,
+    current_user: dict = Depends(get_current_user)
+):
     if not year:
         year = datetime.now().year
     
-    transactions = await db.transactions.find({}, {"_id": 0}).to_list(10000)
+    transactions = await db.transactions.find(
+        {"family_id": current_user["family_id"]},
+        {"_id": 0}
+    ).to_list(10000)
     
     # Convert dates
     for trans in transactions:
