@@ -158,6 +158,73 @@ export default function FamilyManagement() {
         </CardContent>
       </Card>
 
+      {/* Pending Join Requests (Admin Only) */}
+      {isAdmin && pendingRequests.length > 0 && (
+        <Card className="border-2 border-amber-200">
+          <CardHeader className="bg-amber-50">
+            <CardTitle className="flex items-center space-x-2">
+              <Clock className="h-5 w-5 text-amber-600" />
+              <span>Pending Join Requests</span>
+              <Badge className="bg-amber-600">{pendingRequests.length}</Badge>
+            </CardTitle>
+            <CardDescription>Review and approve family members</CardDescription>
+          </CardHeader>
+          <CardContent className="pt-6">
+            <div className="space-y-3">
+              {pendingRequests.map((request) => (
+                <div 
+                  key={request.id}
+                  className="flex items-center justify-between p-4 border-2 border-amber-200 rounded-lg bg-amber-50"
+                >
+                  <div className="flex items-center space-x-4">
+                    {/* Profile Icon */}
+                    <div className="text-4xl">
+                      {PROFILE_ICONS[request.user_icon] || '👤'}
+                    </div>
+                    
+                    {/* User Info */}
+                    <div>
+                      <div className="flex items-center space-x-2">
+                        <span className="font-semibold text-gray-900">{request.user_name}</span>
+                        <Badge className="bg-amber-100 text-amber-800">Pending</Badge>
+                      </div>
+                      <p className="text-sm text-gray-500">{request.user_email}</p>
+                      <p className="text-xs text-gray-400 mt-1">
+                        Requested {new Date(request.created_at).toLocaleDateString()}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Actions */}
+                  <div className="flex space-x-2">
+                    <Button
+                      variant="default"
+                      size="sm"
+                      onClick={() => handleApproveRequest(request.id)}
+                      disabled={loading}
+                      className="bg-green-600 hover:bg-green-700"
+                    >
+                      <CheckCircle className="h-4 w-4 mr-1" />
+                      Approve
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handleRejectRequest(request.id)}
+                      disabled={loading}
+                      className="text-red-600 hover:text-red-700"
+                    >
+                      <X className="h-4 w-4 mr-1" />
+                      Reject
+                    </Button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
       {/* Family Members Card */}
       <Card>
         <CardHeader>
