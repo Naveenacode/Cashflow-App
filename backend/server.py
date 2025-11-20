@@ -195,7 +195,7 @@ async def create_transaction(
             {"$inc": {"current_balance": transaction_data.amount}}
         )
     else:
-        # Verify category exists for non-transfer transactions
+        # Verify category exists for income and expense transactions
         if not transaction_data.category_id:
             raise HTTPException(status_code=400, detail="Category required for this transaction type")
         
@@ -203,13 +203,13 @@ async def create_transaction(
         if not category:
             raise HTTPException(status_code=404, detail="Category not found")
         
-        # Update account balance for non-transfer transactions
+        # Update account balance for income and expense transactions
         if transaction_data.account_id:
             account = await db.accounts.find_one({"id": transaction_data.account_id})
             if not account:
                 raise HTTPException(status_code=404, detail="Account not found")
             
-            # Income increases balance, expense/investment decreases balance
+            # Income increases balance, expense decreases balance
             balance_change = transaction_data.amount if transaction_data.type == "income" else -transaction_data.amount
             await db.accounts.update_one(
                 {"id": transaction_data.account_id},
