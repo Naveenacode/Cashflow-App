@@ -79,3 +79,65 @@ class PeriodStats(BaseModel):
     loan_amount: float
     income_by_category: dict
     expense_by_category: dict
+
+
+# ============= AUTH & USER MODELS =============
+class UserBase(BaseModel):
+    name: str
+    email: EmailStr
+    profile_icon: Optional[str] = "user-circle"  # Icon identifier
+
+class UserCreate(UserBase):
+    password: str
+
+class UserLogin(BaseModel):
+    email: EmailStr
+    password: str
+
+class User(UserBase):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+
+class UserInDB(User):
+    password_hash: str
+
+
+# ============= FAMILY MODELS =============
+class FamilyBase(BaseModel):
+    name: str
+
+class FamilyCreate(FamilyBase):
+    pass
+
+class Family(FamilyBase):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    admin_user_id: str
+    family_code: str = Field(default_factory=lambda: str(uuid.uuid4())[:8].upper())
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+
+
+# ============= FAMILY MEMBER MODELS =============
+class FamilyMemberBase(BaseModel):
+    family_id: str
+    user_id: str
+    role: Literal["admin", "member"] = "member"
+
+class FamilyMemberCreate(FamilyMemberBase):
+    pass
+
+class FamilyMember(FamilyMemberBase):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    joined_at: datetime = Field(default_factory=datetime.utcnow)
+
+
+# ============= TOKEN MODELS =============
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+
+class TokenData(BaseModel):
+    user_id: Optional[str] = None
+    family_id: Optional[str] = None
