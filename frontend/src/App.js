@@ -204,7 +204,7 @@ function App() {
           </div>
 
           {/* Navigation */}
-          <div className="flex space-x-4 mt-4">
+          <div className="flex flex-wrap gap-2 mt-4">
             <button
               onClick={() => setActiveTab('dashboard')}
               className={`px-4 py-2 rounded-md ${activeTab === 'dashboard' ? 'bg-blue-600 text-white' : 'bg-gray-200'}`}
@@ -225,6 +225,20 @@ function App() {
               data-testid="categories-tab"
             >
               Categories
+            </button>
+            <button
+              onClick={() => setActiveTab('periods')}
+              className={`px-4 py-2 rounded-md ${activeTab === 'periods' ? 'bg-blue-600 text-white' : 'bg-gray-200'}`}
+              data-testid="periods-tab"
+            >
+              Time Periods
+            </button>
+            <button
+              onClick={() => setActiveTab('compare')}
+              className={`px-4 py-2 rounded-md ${activeTab === 'compare' ? 'bg-blue-600 text-white' : 'bg-gray-200'}`}
+              data-testid="compare-tab"
+            >
+              Compare
             </button>
           </div>
         </div>
