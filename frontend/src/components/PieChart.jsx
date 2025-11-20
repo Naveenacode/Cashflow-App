@@ -84,7 +84,11 @@ const PieChart = ({ data, title, colors, onSliceClick }) => {
         {/* Legend */}
         <div className="space-y-2">
           {slices.map((slice, index) => (
-            <div key={index} className="flex items-center space-x-2 text-sm">
+            <div 
+              key={index} 
+              className="flex items-center space-x-2 text-sm cursor-pointer hover:bg-gray-100 p-2 rounded transition-colors"
+              onClick={() => onSliceClick && onSliceClick(slice.label)}
+            >
               <div
                 className="w-4 h-4 rounded"
                 style={{ backgroundColor: slice.color }}
