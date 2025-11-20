@@ -495,7 +495,13 @@ function App() {
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold text-green-600">${stats.total_income.toLocaleString()}</div>
-                  <p className="text-xs text-gray-500 mt-1">{months[selectedMonth - 1]} {selectedYear}</p>
+                  <p className="text-xs text-gray-500 mt-1">
+                    {periodType === 'monthly' && `${months[selectedMonth - 1]} ${selectedYear}`}
+                    {periodType === 'quarterly' && `Q${selectedQuarter} ${selectedYear}`}
+                    {periodType === 'half-yearly' && `H${selectedHalf} ${selectedYear}`}
+                    {periodType === 'annual' && `Year ${selectedYear}`}
+                    {periodType === 'custom' && customStartDate && customEndDate && `${customStartDate} to ${customEndDate}`}
+                  </p>
                 </CardContent>
               </Card>
 
