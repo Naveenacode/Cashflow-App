@@ -1130,7 +1130,27 @@ function App() {
                       </div>
                     </div>
 
-                    {categoryForm.type === 'expense' && (
+                    {/* Shared Category Toggle (Admin Only) */}
+                    {isAdmin && (
+                      <div className="space-y-2">
+                        <Label>Category Type</Label>
+                        <Select 
+                          value={categoryForm.is_shared ? 'shared' : 'personal'} 
+                          onValueChange={(value) => setCategoryForm({...categoryForm, is_shared: value === 'shared'})}
+                        >
+                          <SelectTrigger>
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="shared">Shared (All family members)</SelectItem>
+                            <SelectItem value="personal">Personal (Only for me)</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <p className="text-xs text-gray-500">Shared categories can be used by all family members.</p>
+                      </div>
+                    )}
+
+                    {categoryForm.type === 'expense' && isAdmin && categoryForm.is_shared && (
                       <div>
                         <Label>Monthly Budget Limit (Optional)</Label>
                         <Input
