@@ -749,7 +749,8 @@ class SpendTrackerTester:
             self.test_5_transfer_between_accounts,
             self.test_6_dashboard_stats_with_investments,
             self.test_7_investment_targets,
-            self.test_8_budget_status
+            self.test_8_budget_status,
+            self.test_9_budget_alert_ticker_feature
         ]
         
         passed = 0
