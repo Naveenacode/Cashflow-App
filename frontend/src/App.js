@@ -231,9 +231,11 @@ function App() {
       try {
         await categoryAPI.deleteCategory(id);
         fetchData();
+        alert('Category deleted successfully!');
       } catch (error) {
         console.error('Error deleting category:', error);
-        alert('Cannot delete category that has transactions');
+        const errorMessage = error.response?.data?.detail || 'Failed to delete category. It may have associated transactions or you may not have permission.';
+        alert(errorMessage);
       }
     }
   };
