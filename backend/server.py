@@ -758,7 +758,7 @@ async def get_period_stats(
     total_income = sum(t['amount'] for t in filtered if t['type'] == 'income')
     total_expense = sum(t['amount'] for t in filtered if t['type'] == 'expense')
     total_investment = sum(t['amount'] for t in filtered if t['type'] == 'investment')
-    profit = total_income - total_expense - total_investment
+    profit = total_income - total_expense  # Investment doesn't reduce profit
     
     # Group by category
     income_by_category = defaultdict(float)
