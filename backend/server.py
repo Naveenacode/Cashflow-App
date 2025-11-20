@@ -163,6 +163,15 @@ async def create_transaction(
             }
     
     transaction = Transaction(**transaction_data.model_dump())
+    transaction.family_id = current_user["family_id"]
+    transaction.user_id = current_user["user_id"]
+    
+    # Get user details for display
+    user = await db.users.find_one({"id": current_user["user_id"]}, {"_id": 0})
+    if user:
+        transaction.user_name = user.get("name")
+        transaction.user_icon = user.get("profile_icon", "user-circle")
+    
     transaction_doc = transaction.model_dump()
     transaction_doc["date"] = transaction_doc["date"].isoformat()
     transaction_doc["created_at"] = transaction_doc["created_at"].isoformat()
