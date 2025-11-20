@@ -525,6 +525,21 @@ function App() {
                       </div>
                     </div>
 
+                    {categoryForm.type === 'expense' && (
+                      <div>
+                        <Label>Monthly Budget Limit (Optional)</Label>
+                        <Input
+                          type="number"
+                          step="0.01"
+                          value={categoryForm.budget_limit}
+                          onChange={(e) => setCategoryForm({...categoryForm, budget_limit: e.target.value})}
+                          placeholder="e.g., 1000"
+                          data-testid="category-budget-input"
+                        />
+                        <p className="text-xs text-gray-500 mt-1">Set a monthly spending limit for this category. You'll get alerts when approaching or exceeding this limit.</p>
+                      </div>
+                    )}
+
                     <div className="flex space-x-2">
                       <Button type="submit" data-testid="save-category-btn">Save</Button>
                       <Button type="button" variant="outline" onClick={() => setShowAddCategory(false)}>Cancel</Button>
