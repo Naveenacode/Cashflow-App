@@ -227,6 +227,10 @@ function App() {
   };
 
   const handleDeleteCategory = async (id) => {
+    if (!isAdmin) {
+      alert('Only admin can delete categories');
+      return;
+    }
     if (window.confirm('Are you sure you want to delete this category?')) {
       try {
         await categoryAPI.deleteCategory(id);
@@ -234,7 +238,7 @@ function App() {
         alert('Category deleted successfully!');
       } catch (error) {
         console.error('Error deleting category:', error);
-        const errorMessage = error.response?.data?.detail || 'Failed to delete category. It may have associated transactions or you may not have permission.';
+        const errorMessage = error.response?.data?.detail || 'Failed to delete category. You may not have permission or it may have associated transactions.';
         alert(errorMessage);
       }
     }
