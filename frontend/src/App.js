@@ -223,9 +223,6 @@ function App() {
   };
 
   const handleDeleteTransaction = async (id) => {
-    alert(`Delete handler called! ID: ${id}, isAdmin: ${isAdmin}`);
-    console.log('Delete transaction called:', { id, isAdmin });
-    
     if (!isAdmin) {
       alert('Only admin can delete transactions');
       return;
@@ -233,16 +230,11 @@ function App() {
     
     if (window.confirm('Are you sure you want to delete this transaction?')) {
       try {
-        console.log('Calling API to delete transaction:', id);
-        const response = await transactionAPI.deleteTransaction(id);
-        console.log('Delete response:', response);
-        
+        await transactionAPI.deleteTransaction(id);
         await fetchData();
         alert('Transaction deleted successfully!');
       } catch (error) {
         console.error('Error deleting transaction:', error);
-        console.error('Error response:', error.response);
-        
         const errorMessage = error.response?.data?.detail || 
           error.message || 
           'Failed to delete transaction. You may not have permission.';
