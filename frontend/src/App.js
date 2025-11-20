@@ -322,9 +322,9 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50" data-testid="spend-tracker-app">
+    <div className="min-h-screen bg-gray-900" data-testid="spend-tracker-app">
       {/* Header */}
-      <div className="bg-white border-b">
+      <div className="bg-gray-800 border-b border-gray-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex flex-col space-y-4">
             {/* Top Row: Title, User Info, View Toggle */}
