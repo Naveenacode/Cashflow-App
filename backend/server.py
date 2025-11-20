@@ -233,10 +233,22 @@ async def get_transactions(
 
 
 @api_router.put("/transactions/{transaction_id}", response_model=Transaction)
-async def update_transaction(transaction_id: str, transaction_data: TransactionCreate):
+async def update_transaction(
+    transaction_id: str,
+    transaction_data: TransactionCreate,
+    current_user: dict = Depends(get_current_user)
+):
+    """Update transaction. Admin can edit any, members can only edit their own."""
     existing = await db.transactions.find_one({"id": transaction_id})
     if not existing:
         raise HTTPException(status_code=404, detail="Transaction not found")
+    
+    # Check permissions: members can only edit their own transactions
+    if current_user["role"] != "admin" and existing.get("user_id") != current_user["user_id"]:
+        raise HTTPException(
+            status_code=403,
+            detail="You can only edit your own transactions"
+        )
     
     update_data = transaction_data.model_dump()
     update_data["date"] = update_data["date"].isoformat()
