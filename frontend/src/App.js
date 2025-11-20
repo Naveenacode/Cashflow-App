@@ -1507,7 +1507,7 @@ function App() {
                             {category.budget_limit && (
                               <div className="mt-1">
                                 <span className="text-xs text-gray-500">
-                                  Budget: ${category.budget_limit.toLocaleString()}/month
+                                  Budget: ₹{category.budget_limit.toLocaleString()}/month
                                 </span>
                               </div>
                             )}
