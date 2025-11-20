@@ -23,10 +23,58 @@ export default function FamilyManagement() {
   const [pendingRequests, setPendingRequests] = useState([]);
   const [loading, setLoading] = useState(false);
 
+  useEffect(() => {
+    if (isAdmin) {
+      loadPendingRequests();
+    }
+  }, [isAdmin]);
+
+  const loadPendingRequests = async () => {
+    try {
+      const response = await authAPI.getPendingRequests();
+      setPendingRequests(response.data.requests || []);
+    } catch (error) {
+      console.error('Error loading pending requests:', error);
+    }
+  };
+
   const copyFamilyCode = () => {
     navigator.clipboard.writeText(family.family_code);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
+  };
+
+  const handleApproveRequest = async (requestId) => {
+    setLoading(true);
+    try {
+      await authAPI.approveRequest(requestId);
+      alert('Request approved! The user can now access your family.');
+      loadPendingRequests();
+      window.location.reload(); // Refresh to show new member
+    } catch (error) {
+      console.error('Error approving request:', error);
+      alert('Failed to approve request');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleRejectRequest = async (requestId) => {
+    if (!window.confirm('Are you sure you want to reject this join request?')) {
+      return;
+    }
+    
+    setLoading(true);
+    try {
+      await authAPI.rejectRequest(requestId);
+      alert('Request rejected');
+      loadPendingRequests();
+    } catch (error) {
+      console.error('Error rejecting request:', error);
+      alert('Failed to reject request');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleRemoveMember = async (userId) => {
