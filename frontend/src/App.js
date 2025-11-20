@@ -1485,15 +1485,14 @@ function App() {
                     {categories.filter(c => c.type === 'income').map(category => (
                       <div key={category.id} className="flex items-center justify-between border rounded p-3" data-testid={`category-${category.id}`}>
                         <span className="font-medium">{category.name}</span>
-                        {isAdmin && (
-                          <button
-                            onClick={() => handleDeleteCategory(category.id)}
-                            className="text-red-600 hover:text-red-800"
-                            data-testid={`delete-category-${category.id}`}
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </button>
-                        )}
+                        <button
+                          onClick={() => handleDeleteCategory(category.id)}
+                          className={`${isAdmin ? 'text-red-600 hover:text-red-800' : 'text-gray-500 cursor-not-allowed'}`}
+                          data-testid={`delete-category-${category.id}`}
+                          title={isAdmin ? 'Delete category' : 'Only admin can delete'}
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </button>
                       </div>
                     ))}
                     {categories.filter(c => c.type === 'income').length === 0 && (
