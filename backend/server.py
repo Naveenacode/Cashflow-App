@@ -168,40 +168,81 @@ async def create_transaction(
     transaction_data: TransactionCreate,
     current_user: dict = Depends(get_current_user)
 ):
-    # Verify category exists
-    category = await db.categories.find_one({"id": transaction_data.category_id})
-    if not category:
-        raise HTTPException(status_code=404, detail="Category not found")
+    # Handle transfer transactions
+    if transaction_data.type == "transfer":
+        if not transaction_data.account_id or not transaction_data.to_account_id:
+            raise HTTPException(status_code=400, detail="Transfer requires both account_id and to_account_id")
+        
+        # Update account balances
+        from_account = await db.accounts.find_one({"id": transaction_data.account_id})
+        to_account = await db.accounts.find_one({"id": transaction_data.to_account_id})
+        
+        if not from_account or not to_account:
+            raise HTTPException(status_code=404, detail="Account not found")
+        
+        # Deduct from source account
+        await db.accounts.update_one(
+            {"id": transaction_data.account_id},
+            {"$inc": {"current_balance": -transaction_data.amount}}
+        )
+        
+        # Add to destination account
+        await db.accounts.update_one(
+            {"id": transaction_data.to_account_id},
+            {"$inc": {"current_balance": transaction_data.amount}}
+        )
+    else:
+        # Verify category exists for non-transfer transactions
+        if not transaction_data.category_id:
+            raise HTTPException(status_code=400, detail="Category required for this transaction type")
+        
+        category = await db.categories.find_one({"id": transaction_data.category_id})
+        if not category:
+            raise HTTPException(status_code=404, detail="Category not found")
+        
+        # Update account balance for non-transfer transactions
+        if transaction_data.account_id:
+            account = await db.accounts.find_one({"id": transaction_data.account_id})
+            if not account:
+                raise HTTPException(status_code=404, detail="Account not found")
+            
+            # Income increases balance, expense/investment decreases balance
+            balance_change = transaction_data.amount if transaction_data.type == "income" else -transaction_data.amount
+            await db.accounts.update_one(
+                {"id": transaction_data.account_id},
+                {"$inc": {"current_balance": balance_change}}
+            )
     
     # Check budget limit for expense categories
     budget_warning = None
-    if transaction_data.type == "expense" and category.get("budget_limit"):
-        # Get current month's spending for this category
-        now = datetime.now()
-        month_transactions = await db.transactions.find({
-            "category_id": transaction_data.category_id,
-            "type": "expense"
-        }, {"_id": 0}).to_list(10000)
-        
-        current_spent = 0
-        for trans in month_transactions:
-            trans_date = trans.get('date')
-            if isinstance(trans_date, str):
-                trans_date = datetime.fromisoformat(trans_date)
-            if trans_date.month == now.month and trans_date.year == now.year:
-                current_spent += trans['amount']
-        
-        new_total = current_spent + transaction_data.amount
-        budget_limit = category["budget_limit"]
-        
-        if new_total >= budget_limit:
-            budget_warning = {
-                "message": f"Budget limit reached! Spending ₹{new_total:.2f} of ₹{budget_limit:.2f} budget for {category['name']}",
-                "current_spent": current_spent,
-                "new_total": new_total,
-                "budget_limit": budget_limit,
-                "exceeded": new_total > budget_limit
-            }
+    if transaction_data.type == "expense" and transaction_data.category_id:
+        category = await db.categories.find_one({"id": transaction_data.category_id})
+        if category and category.get("budget_limit"):
+            now = datetime.now()
+            month_transactions = await db.transactions.find({
+                "category_id": transaction_data.category_id,
+                "type": "expense"
+            }, {"_id": 0}).to_list(10000)
+            
+            current_spent = 0
+            for trans in month_transactions:
+                trans_date = trans.get('date')
+                if isinstance(trans_date, str):
+                    trans_date = datetime.fromisoformat(trans_date)
+                if trans_date.month == now.month and trans_date.year == now.year:
+                    current_spent += trans['amount']
+            
+            new_total = current_spent + transaction_data.amount
+            budget_limit = category["budget_limit"]
+            
+            if new_total >= budget_limit:
+                budget_warning = {
+                    "message": f"Budget limit reached! Spending ₹{new_total:.2f} of ₹{budget_limit:.2f} budget for {category['name']}",
+                    "current_spent": current_spent,
+                    "new_total": new_total,
+                    "budget_limit": budget_limit,
+                    "exceeded": new_total > budget_limit
+                }
     
     transaction = Transaction(**transaction_data.model_dump())
     transaction.family_id = current_user["family_id"]
@@ -221,7 +262,6 @@ async def create_transaction(
     
     # Return transaction with budget warning if exists
     if budget_warning:
-        # Create a response that includes both transaction and warning
         return {
             **transaction.model_dump(),
             "budget_warning": budget_warning
