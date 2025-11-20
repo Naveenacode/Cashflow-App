@@ -986,31 +986,84 @@ function App() {
                       </div>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-4">
+                    {transactionForm.type !== 'transfer' && (
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <Label>Category</Label>
+                          <Select value={transactionForm.category_id} onValueChange={(value) => setTransactionForm({...transactionForm, category_id: value})}>
+                            <SelectTrigger data-testid="transaction-category-select">
+                              <SelectValue placeholder="Select category" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {categories.filter(c => c.type === transactionForm.type).map(cat => (
+                                <SelectItem key={cat.id} value={cat.id}>{cat.name}</SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        <div>
+                          <Label>Date</Label>
+                          <Input
+                            type="date"
+                            value={transactionForm.date}
+                            onChange={(e) => setTransactionForm({...transactionForm, date: e.target.value})}
+                            required
+                            data-testid="transaction-date-input"
+                          />
+                        </div>
+                      </div>
+                    )}
+
+                    {transactionForm.type === 'transfer' ? (
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <Label>From Account</Label>
+                          <Select value={transactionForm.account_id} onValueChange={(value) => setTransactionForm({...transactionForm, account_id: value})}>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select account" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {accounts.map(acc => (
+                                <SelectItem key={acc.id} value={acc.id}>
+                                  {acc.name} (₹{acc.current_balance?.toLocaleString()})
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        <div>
+                          <Label>To Account</Label>
+                          <Select value={transactionForm.to_account_id} onValueChange={(value) => setTransactionForm({...transactionForm, to_account_id: value})}>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select account" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {accounts.map(acc => (
+                                <SelectItem key={acc.id} value={acc.id}>
+                                  {acc.name} (₹{acc.current_balance?.toLocaleString()})
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      </div>
+                    ) : (
                       <div>
-                        <Label>Category</Label>
-                        <Select value={transactionForm.category_id} onValueChange={(value) => setTransactionForm({...transactionForm, category_id: value})}>
-                          <SelectTrigger data-testid="transaction-category-select">
-                            <SelectValue placeholder="Select category" />
+                        <Label>Account</Label>
+                        <Select value={transactionForm.account_id} onValueChange={(value) => setTransactionForm({...transactionForm, account_id: value})}>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select account" />
                           </SelectTrigger>
                           <SelectContent>
-                            {categories.filter(c => c.type === transactionForm.type).map(cat => (
-                              <SelectItem key={cat.id} value={cat.id}>{cat.name}</SelectItem>
+                            {accounts.map(acc => (
+                              <SelectItem key={acc.id} value={acc.id}>
+                                {acc.name} (₹{acc.current_balance?.toLocaleString()})
+                              </SelectItem>
                             ))}
                           </SelectContent>
                         </Select>
                       </div>
-                      <div>
-                        <Label>Date</Label>
-                        <Input
-                          type="date"
-                          value={transactionForm.date}
-                          onChange={(e) => setTransactionForm({...transactionForm, date: e.target.value})}
-                          required
-                          data-testid="transaction-date-input"
-                        />
-                      </div>
-                    </div>
+                    )}
 
                     <div>
                       <Label>Description</Label>
