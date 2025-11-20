@@ -268,6 +268,36 @@ function App() {
     }
   };
 
+  const loadMemberComparison = async () => {
+    if (!compareMember1 || !compareMember2) {
+      alert('Please select two family members to compare');
+      return;
+    }
+    
+    try {
+      const [member1Data, member2Data] = await Promise.all([
+        dashboardAPI.getStats({ 
+          month: selectedMonth, 
+          year: selectedYear,
+          user_id: compareMember1 
+        }),
+        dashboardAPI.getStats({ 
+          month: selectedMonth, 
+          year: selectedYear,
+          user_id: compareMember2 
+        })
+      ]);
+      
+      setMemberComparison({
+        member1: member1Data.data,
+        member2: member2Data.data
+      });
+    } catch (error) {
+      console.error('Error loading member comparison:', error);
+      alert('Failed to load member comparison data');
+    }
+  };
+
   const months = [
     'January', 'February', 'March', 'April', 'May', 'June',
     'July', 'August', 'September', 'October', 'November', 'December'
