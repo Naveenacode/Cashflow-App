@@ -138,7 +138,7 @@ function App() {
             ...periodStatsRes.data,
             total_income_with_carryover: periodStatsRes.data.total_income,
             opening_balance: 0,
-            closing_balance: periodStatsRes.data.profit > 0 ? periodStatsRes.data.profit : 0,
+            closing_balance: periodStatsRes.data.closing_balance > 0 ? periodStatsRes.data.closing_balance : 0,
             loan_amount: 0,
             inherited_loan: 0,
             has_deficit: periodStatsRes.data.profit < 0
