@@ -1012,8 +1012,8 @@ function App() {
                 <CardContent>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {/* Period 1 */}
-                  <div className="space-y-4 p-4 border border-blue-600 rounded-lg bg-gray-800">
-                    <h3 className="font-semibold text-blue-400">Period 1</h3>
+                  <div className="space-y-4 p-4 border border-blue-600 rounded-lg bg-blue-50">
+                    <h3 className="font-semibold text-blue-700">Period 1</h3>
                     <div className="grid grid-cols-2 gap-4">
                       <div>
                         <Label>Month</Label>
