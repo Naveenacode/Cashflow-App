@@ -40,7 +40,7 @@ export default function PendingApproval() {
               <Clock className="h-8 w-8 text-white" />
             </div>
           </div>
-          <CardTitle className="text-2xl font-bold">Waiting for Approval</CardTitle>
+          <CardTitle className="text-2xl font-bold text-white">Waiting for Approval</CardTitle>
         </CardHeader>
 
         <CardContent className="pt-6 space-y-6">
