@@ -600,7 +600,11 @@ async def get_period_stats(
         raise HTTPException(status_code=400, detail="Invalid period type")
     
     # Get transactions in range
-    transactions = await db.transactions.find({}, {"_id": 0}).to_list(10000)
+    trans_query = {"family_id": current_user["family_id"]}
+    if user_id:
+        trans_query["user_id"] = user_id
+    
+    transactions = await db.transactions.find(trans_query, {"_id": 0}).to_list(10000)
     
     filtered = []
     for trans in transactions:
