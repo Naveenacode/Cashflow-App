@@ -288,8 +288,8 @@ async def delete_transaction(
 
 
 # ============= DASHBOARD STATS =============
-async def get_previous_month_balance(month: int, year: int):
-    """Get the closing balance from previous month"""
+async def get_previous_month_balance(month: int, year: int, family_id: str, user_id: Optional[str] = None):
+    """Get the closing balance from previous month for a family or specific user"""
     prev_month = month - 1
     prev_year = year
     if prev_month == 0:
@@ -297,16 +297,25 @@ async def get_previous_month_balance(month: int, year: int):
         prev_year = year - 1
     
     # Check if balance exists
-    balance = await db.monthly_balances.find_one({
+    balance_query = {
         "month": prev_month,
-        "year": prev_year
-    })
+        "year": prev_year,
+        "family_id": family_id
+    }
+    if user_id:
+        balance_query["user_id"] = user_id
+    
+    balance = await db.monthly_balances.find_one(balance_query)
     
     if balance:
         return balance.get("closing_balance", 0), balance.get("loan_amount", 0)
     
     # Calculate if not exists
-    transactions = await db.transactions.find({}, {"_id": 0}).to_list(10000)
+    trans_query = {"family_id": family_id}
+    if user_id:
+        trans_query["user_id"] = user_id
+    
+    transactions = await db.transactions.find(trans_query, {"_id": 0}).to_list(10000)
     prev_income = 0
     prev_expense = 0
     
