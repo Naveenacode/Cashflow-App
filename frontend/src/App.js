@@ -45,6 +45,7 @@ function App() {
   const [comparisonPeriod2, setComparisonPeriod2] = useState(null);
   const [showAddTransaction, setShowAddTransaction] = useState(false);
   const [showAddCategory, setShowAddCategory] = useState(false);
+  const [showAddAccount, setShowAddAccount] = useState(false);
   const [loading, setLoading] = useState(true);
   const [selectedCategoryFilter, setSelectedCategoryFilter] = useState(null);
   const [showFilteredTransactions, setShowFilteredTransactions] = useState(false);
