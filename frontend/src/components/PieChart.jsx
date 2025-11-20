@@ -129,7 +129,7 @@ const PieChart = ({ data, title, colors, onSliceClick }) => {
                 style={{ backgroundColor: slice.color }}
               ></div>
               <span className="flex-1">{slice.label}</span>
-              <span className="font-semibold">${slice.value.toLocaleString()}</span>
+              <span className="font-semibold">₹{slice.value.toLocaleString()}</span>
               <span className="text-gray-500">({slice.percentage}%)</span>
             </div>
           ))}
