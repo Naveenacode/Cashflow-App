@@ -1510,13 +1510,15 @@ function App() {
                               </div>
                             )}
                           </div>
-                          <button
-                            onClick={() => handleDeleteCategory(category.id)}
-                            className="text-red-600 hover:text-red-800"
-                            data-testid={`delete-category-${category.id}`}
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </button>
+                          {isAdmin && (
+                            <button
+                              onClick={() => handleDeleteCategory(category.id)}
+                              className="text-red-600 hover:text-red-800"
+                              data-testid={`delete-category-${category.id}`}
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </button>
+                          )}
                         </div>
                       </div>
                     ))}
