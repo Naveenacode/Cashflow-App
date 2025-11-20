@@ -1521,15 +1521,14 @@ function App() {
                               </div>
                             )}
                           </div>
-                          {isAdmin && (
-                            <button
-                              onClick={() => handleDeleteCategory(category.id)}
-                              className="text-red-600 hover:text-red-800"
-                              data-testid={`delete-category-${category.id}`}
-                            >
-                              <Trash2 className="h-4 w-4" />
-                            </button>
-                          )}
+                          <button
+                            onClick={() => handleDeleteCategory(category.id)}
+                            className={`${isAdmin ? 'text-red-600 hover:text-red-800' : 'text-gray-500 cursor-not-allowed'}`}
+                            data-testid={`delete-category-${category.id}`}
+                            title={isAdmin ? 'Delete category' : 'Only admin can delete'}
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </button>
                         </div>
                       </div>
                     ))}
