@@ -1381,14 +1381,14 @@ function App() {
                   <CardContent className="pt-6">
                     <LineChart 
                       data1={{
-                        'Profit': comparisonPeriod1.profit
+                        'Closing Balance': comparisonPeriod1.closing_balance
                       }}
                       data2={{
-                        'Profit': comparisonPeriod2.profit
+                        'Closing Balance': comparisonPeriod2.closing_balance
                       }}
                       label1={`${months[compareMonth1 - 1]} ${compareYear1}`}
                       label2={`${months[compareMonth2 - 1]} ${compareYear2}`}
-                      title="Net Profit Comparison"
+                      title="Closing Balance Comparison"
                       color1="#8B5CF6"
                       color2="#EC4899"
                     />
