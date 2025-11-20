@@ -30,6 +30,13 @@ const PROFILE_ICONS = {
 function App() {
   const { user, family, logout, isAdmin } = useAuth();
   const [activeTab, setActiveTab] = useState('dashboard');
+  
+  // Debug: Log admin status
+  console.log('User role check:', { 
+    isAdmin, 
+    familyRole: family?.current_user_role,
+    userName: user?.name 
+  });
   const [transactions, setTransactions] = useState([]);
   const [categories, setCategories] = useState([]);
   const [stats, setStats] = useState(null);
