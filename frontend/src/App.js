@@ -99,9 +99,15 @@ function App() {
   const handleAddCategory = async (e) => {
     e.preventDefault();
     try {
-      await categoryAPI.createCategory(categoryForm);
+      const data = {
+        ...categoryForm,
+        budget_limit: categoryForm.budget_limit && categoryForm.type === 'expense' 
+          ? parseFloat(categoryForm.budget_limit) 
+          : null
+      };
+      await categoryAPI.createCategory(data);
       setShowAddCategory(false);
-      setCategoryForm({ name: '', type: 'expense', color: '#3B82F6' });
+      setCategoryForm({ name: '', type: 'expense', color: '#3B82F6', budget_limit: '' });
       fetchData();
     } catch (error) {
       console.error('Error adding category:', error);
