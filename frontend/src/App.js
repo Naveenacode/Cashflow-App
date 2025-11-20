@@ -329,7 +329,7 @@ function App() {
           <div className="flex flex-col space-y-4">
             {/* Top Row: Title, User Info, View Toggle */}
             <div className="flex items-center justify-between flex-wrap gap-4">
-              <h1 className="text-3xl font-bold text-gray-900">Spend Tracker</h1>
+              <h1 className="text-3xl font-bold text-white">Spend Tracker</h1>
               
               <div className="flex items-center space-x-4">
                 {/* View Toggle */}
