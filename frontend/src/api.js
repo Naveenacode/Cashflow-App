@@ -33,11 +33,19 @@ export const transactionAPI = {
   deleteTransaction: (id) => api.delete(`/transactions/${id}`),
 };
 
+// Account API
+export const accountAPI = {
+  getAccounts: () => api.get('/accounts'),
+  createAccount: (data) => api.post('/accounts', data),
+  deleteAccount: (id) => api.delete(`/accounts/${id}`),
+};
+
 // Dashboard API
 export const dashboardAPI = {
   getStats: (params) => api.get('/dashboard/stats', { params }),
   getMonthlyTrend: (params) => api.get('/dashboard/monthly-trend', { params }),
   getBudgetStatus: (params) => api.get('/budget/status', { params }),
+  getInvestmentTargets: (params) => api.get('/dashboard/investment-targets', { params }),
   getPeriodStats: (params) => api.get('/dashboard/period-stats', { params }),
 };
 
