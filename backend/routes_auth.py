@@ -349,10 +349,14 @@ async def get_pending_requests(current_user: dict = Depends(get_admin_user)):
 
 @router.post("/approve-request")
 async def approve_join_request(
-    request_id: str,
+    request_data: dict,
     current_user: dict = Depends(get_admin_user)
 ):
     """Approve a pending join request (admin only)"""
+    request_id = request_data.get("request_id")
+    if not request_id:
+        raise HTTPException(status_code=400, detail="request_id is required")
+    
     # Find the request
     request = await db.join_requests.find_one({
         "id": request_id,
