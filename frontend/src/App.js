@@ -990,35 +990,25 @@ function App() {
                       </div>
                     </div>
 
+                    {/* Category field for income, expense, and investment */}
                     {transactionForm.type !== 'transfer' && (
-                      <div className="grid grid-cols-2 gap-4">
-                        <div>
-                          <Label>Category</Label>
-                          <Select value={transactionForm.category_id} onValueChange={(value) => setTransactionForm({...transactionForm, category_id: value})}>
-                            <SelectTrigger data-testid="transaction-category-select">
-                              <SelectValue placeholder="Select category" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {categories.filter(c => c.type === transactionForm.type).map(cat => (
-                                <SelectItem key={cat.id} value={cat.id}>{cat.name}</SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                        </div>
-                        <div>
-                          <Label>Date</Label>
-                          <Input
-                            type="date"
-                            value={transactionForm.date}
-                            onChange={(e) => setTransactionForm({...transactionForm, date: e.target.value})}
-                            required
-                            data-testid="transaction-date-input"
-                          />
-                        </div>
+                      <div>
+                        <Label>Category</Label>
+                        <Select value={transactionForm.category_id} onValueChange={(value) => setTransactionForm({...transactionForm, category_id: value})}>
+                          <SelectTrigger data-testid="transaction-category-select">
+                            <SelectValue placeholder="Select category" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {categories.filter(c => c.type === transactionForm.type).map(cat => (
+                              <SelectItem key={cat.id} value={cat.id}>{cat.name}</SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
                       </div>
                     )}
 
-                    {transactionForm.type === 'transfer' ? (
+                    {/* For Transfer and Investment: Show From/To accounts */}
+                    {(transactionForm.type === 'transfer' || transactionForm.type === 'investment') ? (
                       <div className="grid grid-cols-2 gap-4">
                         <div>
                           <Label>From Account</Label>
@@ -1036,7 +1026,7 @@ function App() {
                           </Select>
                         </div>
                         <div>
-                          <Label>To Account</Label>
+                          <Label>To Account {transactionForm.type === 'investment' && '(Investment Account)'}</Label>
                           <Select value={transactionForm.to_account_id} onValueChange={(value) => setTransactionForm({...transactionForm, to_account_id: value})}>
                             <SelectTrigger>
                               <SelectValue placeholder="Select account" />
@@ -1052,6 +1042,7 @@ function App() {
                         </div>
                       </div>
                     ) : (
+                      /* For Income and Expense: Show single account */
                       <div>
                         <Label>Account</Label>
                         <Select value={transactionForm.account_id} onValueChange={(value) => setTransactionForm({...transactionForm, account_id: value})}>
@@ -1068,6 +1059,17 @@ function App() {
                         </Select>
                       </div>
                     )}
+
+                    <div>
+                      <Label>Date</Label>
+                      <Input
+                        type="date"
+                        value={transactionForm.date}
+                        onChange={(e) => setTransactionForm({...transactionForm, date: e.target.value})}
+                        required
+                        data-testid="transaction-date-input"
+                      />
+                    </div>
 
                     <div>
                       <Label>Description</Label>
