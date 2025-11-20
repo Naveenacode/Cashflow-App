@@ -258,6 +258,54 @@ function App() {
               </Card>
             </div>
 
+            {/* Budget Status */}
+            {budgetStatuses.length > 0 && (
+              <Card data-testid="budget-status-card">
+                <CardHeader>
+                  <CardTitle>Budget Status</CardTitle>
+                  <CardDescription>Track your spending limits</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    {budgetStatuses.map(budget => (
+                      <div key={budget.category_id} className="space-y-2">
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm font-medium">{budget.category_name}</span>
+                          <span className={`text-sm font-semibold ${
+                            budget.status === 'exceeded' ? 'text-red-600' :
+                            budget.status === 'warning' ? 'text-yellow-600' :
+                            'text-green-600'
+                          }`}>
+                            ${budget.spent.toLocaleString()} / ${budget.budget_limit.toLocaleString()}
+                          </span>
+                        </div>
+                        <div className="relative w-full bg-gray-200 rounded-full h-2">
+                          <div 
+                            className={`h-2 rounded-full transition-all ${
+                              budget.status === 'exceeded' ? 'bg-red-600' :
+                              budget.status === 'warning' ? 'bg-yellow-500' :
+                              'bg-green-500'
+                            }`}
+                            style={{ width: `${Math.min(budget.percentage, 100)}%` }}
+                          ></div>
+                        </div>
+                        <div className="flex items-center justify-between text-xs">
+                          <span className="text-gray-500">{budget.percentage.toFixed(1)}% used</span>
+                          {budget.status === 'exceeded' ? (
+                            <span className="text-red-600 font-semibold">⚠️ Over by ${Math.abs(budget.remaining).toLocaleString()}</span>
+                          ) : budget.status === 'warning' ? (
+                            <span className="text-yellow-600 font-semibold">⚠️ ${budget.remaining.toLocaleString()} remaining</span>
+                          ) : (
+                            <span className="text-green-600">${budget.remaining.toLocaleString()} remaining</span>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <Card data-testid="income-breakdown">
                 <CardHeader>
