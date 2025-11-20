@@ -999,8 +999,8 @@ function App() {
                   </div>
 
                   {/* Period 2 */}
-                  <div className="space-y-4 p-4 border rounded-lg bg-green-50">
-                    <h3 className="font-semibold text-green-900">Period 2</h3>
+                  <div className="space-y-4 p-4 border border-green-600 rounded-lg bg-gray-800">
+                    <h3 className="font-semibold text-green-400">Period 2</h3>
                     <div className="grid grid-cols-2 gap-4">
                       <div>
                         <Label>Month</Label>
